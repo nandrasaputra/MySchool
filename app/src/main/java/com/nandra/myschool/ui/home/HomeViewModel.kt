@@ -1,7 +1,7 @@
-package com.nandra.myschool.ui.main
+package com.nandra.myschool.ui.home
 
 import androidx.lifecycle.ViewModel
 
-class MainViewModel : ViewModel() {
+class HomeViewModel : ViewModel() {
     // TODO: Implement the ViewModel
 }
