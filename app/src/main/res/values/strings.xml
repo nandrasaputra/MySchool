@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">MySchool</string>
     <string name="cd_image">Image</string>
+
+    <string name="menu_home_title">"Home"</string>
+    <string name="menu_chat_title">"Chat"</string>
+    <string name="menu_classroom_title">"Classroom"</string>
+    <string name="menu_profile_title">"Profile"</string>
 </resources>

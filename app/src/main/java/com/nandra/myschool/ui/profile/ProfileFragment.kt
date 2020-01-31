@@ -1,4 +1,4 @@
-package com.nandra.myschool.ui.chat
+package com.nandra.myschool.ui.profile
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,9 +7,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.nandra.myschool.R
 
-class ChatFragment : Fragment() {
+class ProfileFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.chat_fragment, container, false)
+        return inflater.inflate(R.layout.profile_fragment, container, false)
     }
 }

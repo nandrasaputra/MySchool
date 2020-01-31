@@ -1,5 +1,6 @@
 package com.nandra.myschool.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -7,6 +8,7 @@ import com.ale.rainbowsdk.RainbowSdk
 import com.nandra.myschool.R
 import com.nandra.myschool.RainbowConnection
 import com.nandra.myschool.RainbowConnectionListener
+import com.nandra.myschool.utils.Const.EXTRA_MESSAGE
 import kotlinx.android.synthetic.main.login_activity.*
 
 class LoginActivity : AppCompatActivity(), RainbowConnectionListener.Login, RainbowConnectionListener.Connection {
@@ -38,6 +40,12 @@ class LoginActivity : AppCompatActivity(), RainbowConnectionListener.Login, Rain
 
     override fun onSignInSuccess() {
         Toast.makeText(this, "Sign In Success", Toast.LENGTH_SHORT).show()
+
+        //TODO: FIX THIS
+        val intent = Intent(this, MainActivity::class.java).apply {
+            putExtra(EXTRA_MESSAGE, "Name")
+        }
+        startActivity(intent)
     }
 
     override fun onSignInFailed(error: String) {
