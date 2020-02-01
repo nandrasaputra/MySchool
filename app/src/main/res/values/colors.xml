@@ -7,4 +7,5 @@
     <color name="colorPureWhite">#FFFFFF</color>
     <color name="colorPureBlack">#000000</color>
     <color name="iconColor">@color/colorPureBlack</color>
+    <color name="iconColorSecondary">@color/colorPureWhite</color>
 </resources>

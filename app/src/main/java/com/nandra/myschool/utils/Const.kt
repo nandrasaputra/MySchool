@@ -1,5 +1,5 @@
 package com.nandra.myschool.utils
 
 object Const {
-    val EXTRA_MESSAGE = "message"
+    const val EXTRA_MESSAGE = "message"
 }

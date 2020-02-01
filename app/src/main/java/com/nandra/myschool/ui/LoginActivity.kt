@@ -8,7 +8,6 @@ import com.ale.rainbowsdk.RainbowSdk
 import com.nandra.myschool.R
 import com.nandra.myschool.RainbowConnection
 import com.nandra.myschool.RainbowConnectionListener
-import com.nandra.myschool.utils.Const.EXTRA_MESSAGE
 import kotlinx.android.synthetic.main.login_activity.*
 
 class LoginActivity : AppCompatActivity(), RainbowConnectionListener.Login, RainbowConnectionListener.Connection {
@@ -43,7 +42,7 @@ class LoginActivity : AppCompatActivity(), RainbowConnectionListener.Login, Rain
 
         //TODO: FIX THIS
         val intent = Intent(this, MainActivity::class.java).apply {
-            putExtra(EXTRA_MESSAGE, "Name")
+            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
         }
         startActivity(intent)
     }
