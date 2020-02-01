@@ -4,10 +4,15 @@ import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.viewpager.widget.ViewPager
+import com.google.android.material.tabs.TabLayout
 import com.nandra.myschool.R
+import com.nandra.myschool.adapter.ChatViewPagerAdapter
 import kotlinx.android.synthetic.main.chat_fragment.*
 
 class ChatFragment : Fragment() {
+
+    private lateinit var chatViewPagerAdapter: ChatViewPagerAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.chat_fragment, container, false)
@@ -18,6 +23,7 @@ class ChatFragment : Fragment() {
         (activity as AppCompatActivity).apply {
             setSupportActionBar(fragment_chat_toolbar)
         }
+        setupViewPager()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,5 +34,35 @@ class ChatFragment : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.chat_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    private fun setupViewPager() {
+        chatViewPagerAdapter = ChatViewPagerAdapter(
+            childFragmentManager,
+            fragment_chat_tab_layout.tabCount
+        )
+        fragment_chat_viewpager.adapter = chatViewPagerAdapter
+
+        fragment_chat_tab_layout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabReselected(tab: TabLayout.Tab?) {}
+            override fun onTabUnselected(tab: TabLayout.Tab?) {}
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                fragment_chat_viewpager.currentItem = tab!!.position
+            }
+        })
+        fragment_chat_viewpager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(fragment_chat_tab_layout))
+        fragment_chat_viewpager.addOnPageChangeListener(object : ViewPager.SimpleOnPageChangeListener() {
+            override fun onPageSelected(position: Int) {
+                handleFabAppearance(position)
+            }
+        })
+        handleFabAppearance(fragment_chat_tab_layout.selectedTabPosition)
+    }
+
+    private fun handleFabAppearance(position: Int) {
+        when(position) {
+            0 -> {fragment_chat_fab.show()}
+            1 -> {fragment_chat_fab.hide()}
+        }
     }
 }
