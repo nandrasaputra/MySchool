@@ -17,6 +17,8 @@ class ClassroomFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         (activity as AppCompatActivity).apply {
             setSupportActionBar(fragment_classroom_toolbar)
+        }.apply {
+            supportActionBar?.setDisplayShowTitleEnabled(false)
         }
     }
 

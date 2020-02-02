@@ -13,7 +13,7 @@ import com.nandra.myschool.R
 class ContactAdapter(private val context: Context) : ListAdapter<IRainbowContact, ContactAdapter.ContactAdapterViewHolder>(chatDiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContactAdapterViewHolder {
-        val view = LayoutInflater.from(context).inflate(R.layout.chat_fragment_item, parent, false)
+        val view = LayoutInflater.from(context).inflate(R.layout.chat_conversation_fragment_item, parent, false)
         return ContactAdapterViewHolder(view)
     }
 

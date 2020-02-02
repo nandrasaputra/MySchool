@@ -17,6 +17,8 @@ class ProfileFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         (activity as AppCompatActivity).apply {
             setSupportActionBar(fragment_profile_toolbar)
+        }.apply {
+            supportActionBar?.setDisplayShowTitleEnabled(false)
         }
     }
 

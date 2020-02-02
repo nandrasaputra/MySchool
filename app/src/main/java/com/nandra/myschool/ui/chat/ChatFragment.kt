@@ -22,6 +22,8 @@ class ChatFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         (activity as AppCompatActivity).apply {
             setSupportActionBar(fragment_chat_toolbar)
+        }.apply {
+            supportActionBar?.setDisplayShowTitleEnabled(false)
         }
         setupViewPager()
     }
