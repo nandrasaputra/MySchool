@@ -40,7 +40,6 @@ class LoginActivity : AppCompatActivity(), RainbowConnectionListener.Login, Rain
     override fun onSignInSuccess() {
         Toast.makeText(this, "Sign In Success", Toast.LENGTH_SHORT).show()
 
-        //TODO: FIX THIS
         val intent = Intent(this, MainActivity::class.java).apply {
             addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
         }
