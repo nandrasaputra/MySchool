@@ -1,7 +1,6 @@
 package com.nandra.myschool.ui.chat
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +15,6 @@ import com.ale.rainbowsdk.RainbowSdk
 import com.nandra.myschool.R
 import com.nandra.myschool.adapter.ContactListAdapter
 import com.nandra.myschool.ui.MainActivityViewModel
-import com.nandra.myschool.utils.Utility.LOG_DEBUG_TAG
 import com.nandra.myschool.utils.Utility.LoadingState
 import kotlinx.android.synthetic.main.chat_contact_fragment.*
 
@@ -33,12 +31,6 @@ class ChatContactFragment : Fragment(), IRainbowContact.IContactListener {
         return inflater.inflate(R.layout.chat_contact_fragment, container, false)
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        unregisterListeners()
-        RainbowSdk.instance().contacts().rainbowContacts.unregisterChangeListener(changeListener)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mainViewModel.loadingState.observe(viewLifecycleOwner, Observer {
@@ -48,25 +40,24 @@ class ChatContactFragment : Fragment(), IRainbowContact.IContactListener {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        contactListAdapter = ContactListAdapter(activity!!)
+        contactListAdapter = ContactListAdapter()
         fragment_chat_contact_recycler_view.apply {
             layoutManager = LinearLayoutManager(activity)
             adapter = contactListAdapter
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        unregisterListeners()
+        RainbowSdk.instance().contacts().rainbowContacts.unregisterChangeListener(changeListener)
+    }
+
     private fun handleLoadingState(state: LoadingState) {
         when(state) {
-            LoadingState.LOADING -> {
-                Log.d(LOG_DEBUG_TAG, "STATE LOADING")
-            }
-            LoadingState.SUCCESS -> {
-                Log.d(LOG_DEBUG_TAG, "STATE FINISHED")
-                getContactList()
-            }
-            else -> {
-                Log.d(LOG_DEBUG_TAG, "STATE ERROR")
-            }
+            LoadingState.LOADING -> { }
+            LoadingState.SUCCESS -> { getContactList() }
+            else -> { }
         }
     }
 
@@ -77,17 +68,18 @@ class ChatContactFragment : Fragment(), IRainbowContact.IContactListener {
 
         activity?.runOnUiThread {
             contactListAdapter.submitList(contactList)
+            contactListAdapter.notifyDataSetChanged()
         }
     }
 
-    // Unregister listener to all contacts
+    // Unregister IRainbowContact.IContactListener to all contacts
     private fun unregisterListeners() {
         for (contact in contactList) {
             contact.unregisterChangeListener(this)
         }
     }
 
-    // Register listener for all contacts
+    // Register IRainbowContact.IContactListener for all contacts
     private fun registerListeners() {
         for (contact in contactList) {
             contact.registerChangeListener(this)
@@ -107,6 +99,6 @@ class ChatContactFragment : Fragment(), IRainbowContact.IContactListener {
     }
 
     override fun contactUpdated(p0: IRainbowContact?) {
-
+        getContactList()
     }
 }

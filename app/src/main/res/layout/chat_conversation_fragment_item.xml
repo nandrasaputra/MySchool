@@ -46,10 +46,14 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toStartOf="@id/fragment_chat_conversation_unread_count_tv"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/fragment_chat_conversation_item_name_tv"
-            app:layout_constraintEnd_toStartOf="@id/fragment_chat_conversation_unread_count_tv"
-            android:text="Hi, Wassup?"/>
+            android:text="Hi, Wassup?"
+            android:ellipsize="end"
+            android:lines="1"
+            />
 
         <TextView
             android:id="@+id/fragment_chat_conversation_sent_date_tv"

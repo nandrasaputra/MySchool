@@ -1,6 +1,5 @@
 package com.nandra.myschool.adapter
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,28 +11,28 @@ import com.bumptech.glide.Glide
 import com.nandra.myschool.R
 import kotlinx.android.synthetic.main.chat_contact_fragment_item.view.*
 
-class ContactListAdapter(private val context: Context) : ListAdapter<IRainbowContact, ContactListAdapter.ContactAdapterViewHolder>(chatContactDiffCallback) {
+class ContactListAdapter : ListAdapter<IRainbowContact, ContactListAdapter.ContactViewHolder>(chatContactDiffCallback) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContactAdapterViewHolder {
-        val view = LayoutInflater.from(context).inflate(R.layout.chat_contact_fragment_item, parent, false)
-        return ContactAdapterViewHolder(view)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContactViewHolder {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.chat_contact_fragment_item, parent, false)
+        return ContactViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: ContactAdapterViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ContactViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
 
-    inner class ContactAdapterViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
+    inner class ContactViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         fun bind(contact: IRainbowContact) {
             val userFullName = "${contact.firstName} ${contact.lastName}"
             val userCompany = contact.companyName
 
-            view.fragment_chat_contact_item_name_tv.text = userFullName
-            view.fragment_chat_contact_item_company_tv.text = userCompany
+            itemView.fragment_chat_contact_item_name_tv.text = userFullName
+            itemView.fragment_chat_contact_item_company_tv.text = userCompany
 
-            Glide.with(view.context)
+            Glide.with(itemView.context)
                 .load(contact.photo)
-                .into(view.fragment_chat_contact_item_profile_picture)
+                .into(itemView.fragment_chat_contact_item_profile_picture)
         }
     }
 
