@@ -13,4 +13,11 @@ class MainActivityViewModel(app: Application) : AndroidViewModel(app) {
     fun setLoadingState(state: LoadingState) {
         _loadingState.postValue(state)
     }
+
+    /*val networkState: LiveData<Utility.NetworkState>
+        get() = _networkState
+    private val _networkState = MutableLiveData<Utility.NetworkState>(Utility.NetworkState.CONNECTED)
+    fun setNetworkState(state: Utility.NetworkState) {
+        _networkState.postValue(state)
+    }*/
 }

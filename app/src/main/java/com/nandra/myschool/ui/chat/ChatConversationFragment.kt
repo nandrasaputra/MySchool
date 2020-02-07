@@ -1,6 +1,7 @@
 package com.nandra.myschool.ui.chat
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -109,15 +110,15 @@ class ChatConversationFragment : Fragment(), IRainbowContact.IContactListener {
     }
 
     override fun onCompanyChanged(p0: String?) {
-
+        Log.d(Utility.LOG_DEBUG_TAG,"OnPresenceChanged")
     }
 
     override fun onPresenceChanged(p0: IRainbowContact?, p1: RainbowPresence?) {
-
+        Log.d(Utility.LOG_DEBUG_TAG,"OnPresenceChanged")
     }
 
     override fun onActionInProgress(p0: Boolean) {
-
+        Log.d(Utility.LOG_DEBUG_TAG,"OnActionInProgress")
     }
 
     override fun contactUpdated(p0: IRainbowContact?) {

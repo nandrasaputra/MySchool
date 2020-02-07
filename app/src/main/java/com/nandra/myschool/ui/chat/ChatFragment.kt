@@ -50,21 +50,38 @@ class ChatFragment : Fragment() {
             override fun onTabUnselected(tab: TabLayout.Tab?) {}
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 fragment_chat_viewpager.currentItem = tab!!.position
+                fragment_chat_fab.hide()
+                handleFabAppearance(tab!!.position)
+                fragment_chat_fab.show()
             }
         })
         fragment_chat_viewpager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(fragment_chat_tab_layout))
         fragment_chat_viewpager.addOnPageChangeListener(object : ViewPager.SimpleOnPageChangeListener() {
             override fun onPageSelected(position: Int) {
-                handleFabAppearance(position)
+                //handleFabAppearance(position)
+            }
+
+            override fun onPageScrollStateChanged(state: Int) {
+                when(state) {
+                    ViewPager.SCROLL_STATE_IDLE -> {
+                        fragment_chat_fab.show()
+                    }
+                    ViewPager.SCROLL_STATE_DRAGGING -> {
+                        fragment_chat_fab.hide()
+                    }
+                }
             }
         })
-        handleFabAppearance(fragment_chat_tab_layout.selectedTabPosition)
     }
 
     private fun handleFabAppearance(position: Int) {
         when(position) {
-            0 -> {fragment_chat_fab.show()}
-            1 -> {fragment_chat_fab.hide()}
+            0 -> {
+                fragment_chat_fab.setImageResource(R.drawable.ic_add_new_chat)
+            }
+            1 -> {
+                fragment_chat_fab.setImageResource(R.drawable.ic_classroom)
+            }
         }
     }
 }

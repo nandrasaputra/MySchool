@@ -32,6 +32,11 @@
 
         </activity>
 
+        <activity android:name=".ui.ChatDetailActivity"
+            android:parentActivityName=".ui.MainActivity">
+
+        </activity>
+
     </application>
 
 </manifest>

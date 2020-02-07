@@ -6,8 +6,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.ale.rainbowsdk.RainbowSdk
 import com.nandra.myschool.R
-import com.nandra.myschool.RainbowConnection
-import com.nandra.myschool.RainbowConnectionListener
+import com.nandra.myschool.utils.RainbowConnection
+import com.nandra.myschool.utils.RainbowConnectionListener
 import kotlinx.android.synthetic.main.login_activity.*
 
 class LoginActivity : AppCompatActivity(), RainbowConnectionListener.Login, RainbowConnectionListener.Connection {

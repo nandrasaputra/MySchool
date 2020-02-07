@@ -3,6 +3,7 @@ package com.nandra.myschool.ui
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -12,6 +13,7 @@ import androidx.navigation.NavController
 import com.ale.listener.IConnectionChanged
 import com.ale.rainbowsdk.RainbowSdk
 import com.nandra.myschool.R
+import com.nandra.myschool.utils.Utility.LOG_DEBUG_TAG
 import com.nandra.myschool.utils.Utility.LoadingState
 import com.nandra.myschool.utils.setupWithNavController
 import kotlinx.android.synthetic.main.main_activity.*
@@ -20,10 +22,37 @@ class MainActivity : AppCompatActivity(), IConnectionChanged {
 
     private var currentNavController: LiveData<NavController>? = null
     private val viewModel: MainActivityViewModel by viewModels()
+    /*private val networkRequest = NetworkRequest.Builder()
+        .build()
+    lateinit var connectivityManager: ConnectivityManager
+    private var networkCallback = object : ConnectivityManager.NetworkCallback() {
+        override fun onLost(network: Network) {
+            Log.d(LOG_DEBUG_TAG, "OnLost")
+            viewModel.setNetworkState(NetworkState.DISCONNECTED)
+        }
+
+        override fun onAvailable(network: Network) {
+            Log.d(LOG_DEBUG_TAG, "OnAvailable")
+            viewModel.setNetworkState(NetworkState.CONNECTED)
+        }
+
+        override fun onUnavailable() {
+            Log.d(LOG_DEBUG_TAG, "OnUnAvailable")
+            viewModel.setNetworkState(NetworkState.UNAVAILABLE)
+        }
+
+        override fun onLosing(network: Network, maxMsToLive: Int) {
+            Log.d(LOG_DEBUG_TAG, "OnLosing")
+        }
+    }*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        Log.d(LOG_DEBUG_TAG, "OnCreate")
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
+
+        /*connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        connectivityManager.registerNetworkCallback(networkRequest, networkCallback)*/
 
         if (savedInstanceState == null) {
             setupBottomNavigationBar()
@@ -31,6 +60,9 @@ class MainActivity : AppCompatActivity(), IConnectionChanged {
         viewModel.loadingState.observe(this, Observer {
             handleLoadingState(it)
         })
+        /*viewModel.networkState.observe(this, Observer {
+            handleNetworkState(it)
+        })*/
         RainbowSdk.instance().connection().registerConnectionChangedListener(this)
     }
 
@@ -64,6 +96,20 @@ class MainActivity : AppCompatActivity(), IConnectionChanged {
         }
     }
 
+    /*private fun handleNetworkState(state: NetworkState) {
+        when(state) {
+            NetworkState.CONNECTED -> {
+                main_activity_connection_state.text = "CONNECTED"
+            }
+            NetworkState.DISCONNECTED -> {
+                main_activity_connection_state.text = "LOST"
+            }
+            else -> {
+                main_activity_connection_state.text = "UNAVAILABLE"
+            }
+        }
+    }*/
+
     override fun onConnectionLost() {
         Handler(Looper.getMainLooper()).post {
                 viewModel.setLoadingState(LoadingState.CONNECTION_ERROR)
@@ -72,5 +118,10 @@ class MainActivity : AppCompatActivity(), IConnectionChanged {
 
     override fun onConnectionSucceed() {
         viewModel.setLoadingState(LoadingState.SUCCESS)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        //connectivityManager.unregisterNetworkCallback(networkCallback)
     }
 }
