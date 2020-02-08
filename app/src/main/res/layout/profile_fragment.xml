@@ -23,6 +23,52 @@
 
     </androidx.appcompat.widget.Toolbar>
 
+    <ImageView
+        android:id="@+id/fragment_profile_company_backdrop"
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/img_shujin_company_back"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fragment_profile_toolbar" />
+
+    <ImageView
+        android:id="@+id/fragment_profile_company_backdrop_veil"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="@id/fragment_profile_company_backdrop"
+        app:layout_constraintEnd_toEndOf="@id/fragment_profile_company_backdrop"
+        app:layout_constraintTop_toTopOf="@id/fragment_profile_company_backdrop"
+        app:layout_constraintBottom_toBottomOf="@id/fragment_profile_company_backdrop"
+        android:src="#80000000" />
+
+    <LinearLayout
+        android:id="@+id/fragment_profile_company_layout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="@id/fragment_profile_company_backdrop"
+        app:layout_constraintBottom_toBottomOf="@id/fragment_profile_company_backdrop"
+        app:layout_constraintStart_toStartOf="@id/fragment_profile_company_backdrop"
+        app:layout_constraintEnd_toEndOf="@id/fragment_profile_company_backdrop">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/fragment_profile_company_logo"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/img_shujin_logo" />
+
+        <TextView
+            android:id="@+id/fragment_profile_company_name"
+            style="@style/MySchool.TextAppearance.GrandTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Shujin Academy"
+            android:layout_marginTop="8dp"
+            android:textColor="@color/colorPureWhite" />
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

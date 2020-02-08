@@ -17,6 +17,11 @@
 
     </style>
 
+    <style name="MySchool.TextAppearance.GrandTitle" parent="TextAppearance.AppCompat.Title">
+        <item name="android:fontFamily">@font/avenir_next_medium</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
     <style name="MySchool.TextAppearance.Title1" parent="TextAppearance.AppCompat.Title">
         <item name="android:fontFamily">@font/avenir_next_medium</item>
         <item name="android:textSize">16sp</item>
