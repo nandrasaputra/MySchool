@@ -71,6 +71,7 @@ class ChatConversationFragment : Fragment(), IRainbowContact.IContactListener {
     private fun getConversationList() {
 
         unregisterListeners()
+        chatViewModel.updateConversationList()
         conversationList = chatViewModel.getConversationList()
         getContactFromConversation(conversationList)
         registerListeners()

@@ -8,12 +8,32 @@ import com.ale.rainbowsdk.RainbowSdk
 
 class ChatViewModel(app: Application) : AndroidViewModel(app) {
 
+    private var cachedConversationList: List<IRainbowConversation>? = null
+    private var cachedContactList: List<IRainbowContact>? = null
+
     fun getContactList() : List<IRainbowContact> {
-        return RainbowSdk.instance().contacts().rainbowContacts.copyOfDataList
+        return if(cachedContactList != null) {
+            cachedContactList!!
+        } else {
+            updateContactList()
+            cachedContactList!!
+        }
     }
 
     fun getConversationList() : List<IRainbowConversation> {
-        return RainbowSdk.instance().conversations().allConversations.copyOfDataList
+        return if(cachedConversationList != null) {
+            cachedConversationList!!
+        } else {
+            updateConversationList()
+            cachedConversationList!!
+        }
     }
 
+    fun updateContactList() {
+        cachedContactList = RainbowSdk.instance().contacts().rainbowContacts.copyOfDataList
+    }
+
+    fun updateConversationList() {
+        cachedConversationList = RainbowSdk.instance().conversations().allConversations.copyOfDataList
+    }
 }

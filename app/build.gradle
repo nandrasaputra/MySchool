@@ -80,4 +80,6 @@ dependencies {
     annotationProcessor "com.github.bumptech.glide:compiler:$glide_version"
     //Rounded ImageView
     implementation "com.makeramen:roundedimageview:$roundImageViewVersion"
+    //FancyButton
+    implementation 'com.github.medyo:fancybuttons:1.9.1'
 }

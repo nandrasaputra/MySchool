@@ -63,6 +63,7 @@ class ChatContactFragment : Fragment(), IRainbowContact.IContactListener {
 
     private fun getContactList() {
         unregisterListeners()
+        chatViewModel.updateContactList()
         contactList = chatViewModel.getContactList()
         registerListeners()
 

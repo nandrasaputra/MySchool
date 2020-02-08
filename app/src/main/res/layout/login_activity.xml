@@ -4,7 +4,8 @@
     android:layout_height="match_parent"
     android:paddingBottom="24dp"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fancy="http://schemas.android.com/apk/res-auto">
 
     <ImageView
         android:id="@+id/activity_header_image"
@@ -55,14 +56,23 @@
         android:inputType="textPassword"
         android:importantForAutofill="no" />
 
-    <Button
+    <mehdi.sakout.fancybuttons.FancyButton
         android:id="@+id/activity_login_btn"
+        style="@style/MySchool.TextAppearance.Title1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/activity_login_password_text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
         android:layout_marginTop="20dp"
-        android:text="Login"
-        app:layout_constraintTop_toBottomOf="@id/activity_login_password_text"
-        tools:layout_editor_absoluteX="24dp" />
+        fancy:fb_text="Sign In"
+        fancy:fb_radius="36dp"
+        fancy:fb_defaultColor="#4CAF50"
+        fancy:fb_focusColor="#80000000"
+        android:paddingBottom="8dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:paddingTop="8dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

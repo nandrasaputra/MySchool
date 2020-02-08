@@ -2,6 +2,7 @@ package com.nandra.myschool.ui.profile
 
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.nandra.myschool.R
@@ -19,6 +20,10 @@ class ProfileFragment : Fragment() {
             setSupportActionBar(fragment_profile_toolbar)
         }.apply {
             supportActionBar?.setDisplayShowTitleEnabled(false)
+        }
+
+        fragment_profile_my_logout_button.setOnClickListener {
+            Toast.makeText(activity, "Logout Clicked", Toast.LENGTH_SHORT).show()
         }
     }
 
