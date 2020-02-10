@@ -7,4 +7,5 @@
     <string name="menu_classroom_title">"Classroom"</string>
     <string name="menu_profile_title">"Profile"</string>
     <string name="menu_channel_title">"Channel"</string>
+    <string name="add_channel_title">Add Channel</string>
 </resources>

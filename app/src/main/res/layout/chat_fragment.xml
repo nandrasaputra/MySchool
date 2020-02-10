@@ -32,13 +32,13 @@
         android:elevation="4dp">
 
         <com.google.android.material.tabs.TabItem
-            android:id="@+id/fragment_chat_tab_conversations"
+            android:id="@+id/fragment_chat_tab_conversation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Conversations" />
 
         <com.google.android.material.tabs.TabItem
-            android:id="@+id/fragment_chat_tab_contacts"
+            android:id="@+id/fragment_chat_tab_contact"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Contacts"/>

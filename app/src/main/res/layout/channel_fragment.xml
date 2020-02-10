@@ -19,7 +19,41 @@
         android:text="Channel"
         android:textColor="@color/colorPureBlack"
         android:fontFamily="@font/airbnb_cereal_medium" />
-
     </androidx.appcompat.widget.Toolbar>
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/fragment_channel_tab_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/fragment_channel_toolbar"
+        android:background="@android:color/white"
+        android:outlineProvider="bounds"
+        android:elevation="4dp">
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/fragment_channel_tab_all"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="All" />
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/fragment_channel_tab_subscribed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Subscribed"/>
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/fragment_channel_tab_owned"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Owned"/>
+    </com.google.android.material.tabs.TabLayout>
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/fragment_channel_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/fragment_channel_tab_layout"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
