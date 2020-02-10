@@ -14,7 +14,7 @@ import com.ale.listener.IConnectionChanged
 import com.ale.rainbowsdk.RainbowSdk
 import com.nandra.myschool.R
 import com.nandra.myschool.utils.Utility.LOG_DEBUG_TAG
-import com.nandra.myschool.utils.Utility.LoadingState
+import com.nandra.myschool.utils.Utility.ConnectServerState
 import com.nandra.myschool.utils.setupWithNavController
 import kotlinx.android.synthetic.main.main_activity.*
 
@@ -57,7 +57,7 @@ class MainActivity : AppCompatActivity(), IConnectionChanged {
         if (savedInstanceState == null) {
             setupBottomNavigationBar()
         }
-        viewModel.loadingState.observe(this, Observer {
+        viewModel.connectServerState.observe(this, Observer {
             handleLoadingState(it)
         })
         /*viewModel.networkState.observe(this, Observer {
@@ -72,7 +72,7 @@ class MainActivity : AppCompatActivity(), IConnectionChanged {
     }
 
     private fun setupBottomNavigationBar() {
-        val navGraphIds = listOf(R.navigation.home_nav, R.navigation.chat_nav, R.navigation.classroom_nav, R.navigation.profile_nav)
+        val navGraphIds = listOf(R.navigation.home_nav, R.navigation.chat_nav, R.navigation.channel_nav, R.navigation.classroom_nav, R.navigation.profile_nav)
 
         val controller = main_activity_bottom_navigation_bar.setupWithNavController(
             navGraphIds = navGraphIds,
@@ -84,12 +84,12 @@ class MainActivity : AppCompatActivity(), IConnectionChanged {
         currentNavController = controller
     }
 
-    private fun handleLoadingState(state: LoadingState) {
+    private fun handleLoadingState(state: ConnectServerState) {
         when(state) {
-            LoadingState.SUCCESS -> {
+            ConnectServerState.SUCCESS -> {
                 main_activity_progress_bar.visibility = View.GONE
             }
-            LoadingState.LOADING -> {
+            ConnectServerState.LOADING -> {
                 main_activity_progress_bar.visibility = View.VISIBLE
             }
             else -> { }
@@ -112,12 +112,12 @@ class MainActivity : AppCompatActivity(), IConnectionChanged {
 
     override fun onConnectionLost() {
         Handler(Looper.getMainLooper()).post {
-                viewModel.setLoadingState(LoadingState.CONNECTION_ERROR)
+                viewModel.setLoadingState(ConnectServerState.CONNECTION_ERROR)
             }
     }
 
     override fun onConnectionSucceed() {
-        viewModel.setLoadingState(LoadingState.SUCCESS)
+        viewModel.setLoadingState(ConnectServerState.SUCCESS)
     }
 
     override fun onDestroy() {

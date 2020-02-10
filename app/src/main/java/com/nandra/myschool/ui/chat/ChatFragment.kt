@@ -80,7 +80,7 @@ class ChatFragment : Fragment() {
                 fragment_chat_fab.setImageResource(R.drawable.ic_add_new_chat)
             }
             1 -> {
-                fragment_chat_fab.setImageResource(R.drawable.ic_classroom)
+                fragment_chat_fab.setImageResource(R.drawable.ic_person_add)
             }
         }
     }

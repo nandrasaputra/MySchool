@@ -13,9 +13,9 @@ import com.nandra.myschool.R
 import com.nandra.myschool.ui.ChatDetailActivity
 import com.nandra.myschool.utils.Utility.EXTRA_JID
 import com.nandra.myschool.utils.Utility.nameBuilder
+import com.nandra.myschool.utils.Utility.convertToString
+
 import kotlinx.android.synthetic.main.chat_conversation_fragment_item.view.*
-import java.text.SimpleDateFormat
-import java.util.*
 
 class ConversationListAdapter(
     val clickCallback: (IRainbowConversation) -> Unit
@@ -72,11 +72,6 @@ class ConversationListAdapter(
                 itemView.fragment_home_item_publish_date.visibility = View.GONE
             }
         }
-    }
-
-    private fun Date.convertToString() : String {
-        val simpleDateFormat = SimpleDateFormat("hh:mm a")
-        return simpleDateFormat.format(this)
     }
 
     companion object {

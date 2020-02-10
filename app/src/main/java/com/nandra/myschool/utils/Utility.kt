@@ -1,22 +1,36 @@
 package com.nandra.myschool.utils
 
 import com.ale.infra.contact.IRainbowContact
+import java.text.SimpleDateFormat
+import java.util.*
 
 object Utility {
     const val EXTRA_MESSAGE = "message"
     const val EXTRA_JID = "jid"
     const val LOG_DEBUG_TAG = "MySchool"
 
-    enum class LoadingState {
+    enum class ConnectServerState {
         LOADING,
         SUCCESS,
         CONNECTION_ERROR
+    }
+
+    enum class DataLoadState {
+        LOADED,
+        UNLOADED,
+        LOADING,
+        ERROR
     }
 
     enum class NetworkState {
         CONNECTED,
         DISCONNECTED,
         UNAVAILABLE
+    }
+
+    fun Date.convertToString() : String {
+        val simpleDateFormat = SimpleDateFormat("hh:mm a")
+        return simpleDateFormat.format(this)
     }
 
     fun nameBuilder(contact: IRainbowContact) : String {

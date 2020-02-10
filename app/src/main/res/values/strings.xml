@@ -6,4 +6,5 @@
     <string name="menu_chat_title">"Chat"</string>
     <string name="menu_classroom_title">"Classroom"</string>
     <string name="menu_profile_title">"Profile"</string>
+    <string name="menu_channel_title">"Channel"</string>
 </resources>

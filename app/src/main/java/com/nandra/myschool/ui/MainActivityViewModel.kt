@@ -4,13 +4,13 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.nandra.myschool.utils.Utility.LoadingState
+import com.nandra.myschool.utils.Utility.ConnectServerState
 
 class MainActivityViewModel(app: Application) : AndroidViewModel(app) {
-    val loadingState: LiveData<LoadingState>
+    val connectServerState: LiveData<ConnectServerState>
         get() = _loadingState
-    private val _loadingState = MutableLiveData<LoadingState>(LoadingState.LOADING)
-    fun setLoadingState(state: LoadingState) {
+    private val _loadingState = MutableLiveData<ConnectServerState>(ConnectServerState.LOADING)
+    fun setLoadingState(state: ConnectServerState) {
         _loadingState.postValue(state)
     }
 

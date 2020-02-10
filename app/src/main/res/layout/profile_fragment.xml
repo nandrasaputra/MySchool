@@ -132,4 +132,24 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <mehdi.sakout.fancybuttons.FancyButton
+        android:id="@+id/fragment_profile_my_edit_profile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/fragment_profile_profile_layout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        fancy:fb_defaultColor="@color/colorPureWhite"
+        fancy:fb_borderColor="@color/colorGrey"
+        fancy:fb_text="Edit Profile"
+        fancy:fb_textColor="@color/colorPureBlack"
+        fancy:fb_focusColor="#80000000"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        fancy:fb_borderWidth="2dp"
+        />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

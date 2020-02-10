@@ -36,8 +36,8 @@ class ChatConversationFragment : Fragment(), IRainbowContact.IContactListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mainViewModel.loadingState.observe(viewLifecycleOwner, Observer {
-            handleLoadingState(it)
+        mainViewModel.connectServerState.observe(viewLifecycleOwner, Observer {
+            handleConnectServerState(it)
         })
     }
 
@@ -60,10 +60,10 @@ class ChatConversationFragment : Fragment(), IRainbowContact.IContactListener {
         //TODO: Implement This
     }
 
-    private fun handleLoadingState(state: Utility.LoadingState) {
+    private fun handleConnectServerState(state: Utility.ConnectServerState) {
         when(state) {
-            Utility.LoadingState.LOADING -> { }
-            Utility.LoadingState.SUCCESS -> { getConversationList() }
+            Utility.ConnectServerState.LOADING -> { }
+            Utility.ConnectServerState.SUCCESS -> { getConversationList() }
             else -> { }
         }
     }

@@ -9,6 +9,10 @@
         android:icon="@drawable/ic_chat"
         android:title="@string/menu_chat_title" />
     <item
+        android:id="@+id/channel"
+        android:icon="@drawable/ic_channel"
+        android:title="@string/menu_channel_title" />
+    <item
         android:id="@+id/classroom"
         android:icon="@drawable/ic_classroom"
         android:title="@string/menu_classroom_title" />

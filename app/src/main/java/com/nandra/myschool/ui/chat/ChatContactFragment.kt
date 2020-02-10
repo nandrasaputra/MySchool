@@ -15,7 +15,7 @@ import com.ale.rainbowsdk.RainbowSdk
 import com.nandra.myschool.R
 import com.nandra.myschool.adapter.ContactListAdapter
 import com.nandra.myschool.ui.MainActivityViewModel
-import com.nandra.myschool.utils.Utility.LoadingState
+import com.nandra.myschool.utils.Utility.ConnectServerState
 import kotlinx.android.synthetic.main.chat_contact_fragment.*
 
 class ChatContactFragment : Fragment(), IRainbowContact.IContactListener {
@@ -33,8 +33,8 @@ class ChatContactFragment : Fragment(), IRainbowContact.IContactListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mainViewModel.loadingState.observe(viewLifecycleOwner, Observer {
-            handleLoadingState(it)
+        mainViewModel.connectServerState.observe(viewLifecycleOwner, Observer {
+            handleConnectServerState(it)
         })
     }
 
@@ -53,10 +53,10 @@ class ChatContactFragment : Fragment(), IRainbowContact.IContactListener {
         RainbowSdk.instance().contacts().rainbowContacts.unregisterChangeListener(changeListener)
     }
 
-    private fun handleLoadingState(state: LoadingState) {
+    private fun handleConnectServerState(state: ConnectServerState) {
         when(state) {
-            LoadingState.LOADING -> { }
-            LoadingState.SUCCESS -> { getContactList() }
+            ConnectServerState.LOADING -> { }
+            ConnectServerState.SUCCESS -> { getContactList() }
             else -> { }
         }
     }
