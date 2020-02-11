@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item
-        android:id="@+id/channel_add"
-        android:icon="@drawable/ic_channel_add"
-        android:title="@string/add_channel_title"
-        app:showAsAction="always" />
+
+    <group android:checkableBehavior="single">
+        <item android:id="@+id/channel_all"
+            android:checked="true"
+            android:title="All"
+            />
+        <item android:id="@+id/channel_subcribed"
+            android:title="Subcribed" />
+        <item android:id="@+id/channel_owned"
+            android:title="Owned" />
+
+    </group>
+
     <item
         android:id="@+id/channel_search"
         android:icon="@drawable/ic_search"

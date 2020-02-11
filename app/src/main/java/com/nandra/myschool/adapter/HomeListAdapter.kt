@@ -38,13 +38,19 @@ class HomeListAdapter : ListAdapter<ChannelItem, HomeListAdapter.HomeViewHolder>
             } else {
                 itemView.fragment_home_item_content_title.visibility = View.GONE
             }
-            itemView.fragment_home_item_content_body.text = Html.fromHtml(channelItem.message).toString()
+            if (!channelItem.message.isNullOrEmpty()) {
+                itemView.fragment_home_item_content_body.visibility = View.VISIBLE
+                itemView.fragment_home_item_content_body.text = Html.fromHtml(channelItem.message).toString()
+            } else {
+                itemView.fragment_home_item_content_body.visibility = View.GONE
+            }
             itemView.fragment_home_item_publish_date.text = channelItem.creationDate.convertToString()
 
             if(channelItem.imageList.size > 0) {
                 itemView.fragment_home_item_content_photo.visibility = View.VISIBLE
+                //TODO: FIX THIS
                 Glide.with(itemView.context)
-                    .load(channelItem.imageList[0])
+                    .load(channelItem.imageList[0].image)
                     .into(itemView.fragment_home_item_content_photo)
             } else {
                 itemView.fragment_home_item_content_photo.visibility = View.GONE

@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ale.infra.list.IItemListChangeListener
 import com.ale.infra.manager.channel.ChannelItem
@@ -43,6 +44,7 @@ class HomeFragment : Fragment() {
         fragment_home_recycler_view.apply {
             layoutManager = LinearLayoutManager(activity)
             adapter = homeListAdapter
+            addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL))
         }
     }
 
