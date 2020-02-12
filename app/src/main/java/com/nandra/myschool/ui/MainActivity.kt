@@ -47,7 +47,6 @@ class MainActivity : AppCompatActivity(), IConnectionChanged {
     }*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        Log.d(LOG_DEBUG_TAG, "OnCreate")
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
 
