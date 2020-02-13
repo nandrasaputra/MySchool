@@ -47,7 +47,7 @@ class ContactListAdapter : ListAdapter<IRainbowContact, ContactListAdapter.Conta
     }
 
     companion object {
-        val chatContactDiffCallback = object :DiffUtil.ItemCallback<IRainbowContact>() {
+        private val chatContactDiffCallback = object :DiffUtil.ItemCallback<IRainbowContact>() {
             override fun areItemsTheSame(oldItem: IRainbowContact, newItem: IRainbowContact): Boolean {
                 return oldItem == newItem
             }

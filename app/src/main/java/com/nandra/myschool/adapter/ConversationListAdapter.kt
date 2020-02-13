@@ -75,7 +75,7 @@ class ConversationListAdapter(
     }
 
     companion object {
-        val chatConversationDiffCallback = object : DiffUtil.ItemCallback<IRainbowConversation>() {
+        private val chatConversationDiffCallback = object : DiffUtil.ItemCallback<IRainbowConversation>() {
             override fun areItemsTheSame(oldItem: IRainbowConversation, newItem: IRainbowConversation): Boolean {
                 return oldItem == newItem
             }

@@ -64,7 +64,7 @@ class ChannelItemListAdapter : ListAdapter<ChannelItem, ChannelItemListAdapter.H
 
 
     companion object {
-        val homeDiffCallback = object : DiffUtil.ItemCallback<ChannelItem>() {
+        private val homeDiffCallback = object : DiffUtil.ItemCallback<ChannelItem>() {
             override fun areItemsTheSame(oldItem: ChannelItem, newItem: ChannelItem): Boolean {
                 return oldItem == newItem
             }
