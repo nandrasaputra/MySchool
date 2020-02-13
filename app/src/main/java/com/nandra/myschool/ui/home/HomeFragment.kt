@@ -13,7 +13,7 @@ import com.ale.infra.list.IItemListChangeListener
 import com.ale.infra.manager.channel.ChannelItem
 import com.ale.rainbowsdk.RainbowSdk
 import com.nandra.myschool.R
-import com.nandra.myschool.adapter.HomeListAdapter
+import com.nandra.myschool.adapter.ChannelItemListAdapter
 import com.nandra.myschool.ui.MainActivityViewModel
 import com.nandra.myschool.utils.Utility.ConnectServerState
 import com.nandra.myschool.utils.Utility.DataLoadState
@@ -22,7 +22,7 @@ import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
 
-    private lateinit var homeListAdapter: HomeListAdapter
+    private lateinit var channelItemListAdapter: ChannelItemListAdapter
     private val mainViewModel: MainActivityViewModel by activityViewModels()
     private val homeViewModel: HomeViewModel by activityViewModels()
     private val changeListener = IItemListChangeListener(::updateHomeData)
@@ -40,10 +40,10 @@ class HomeFragment : Fragment() {
         }.apply {
             supportActionBar?.setDisplayShowTitleEnabled(false)
         }
-        homeListAdapter = HomeListAdapter()
+        channelItemListAdapter = ChannelItemListAdapter()
         fragment_home_recycler_view.apply {
             layoutManager = LinearLayoutManager(activity)
-            adapter = homeListAdapter
+            adapter = channelItemListAdapter
             addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL))
         }
     }
@@ -81,8 +81,8 @@ class HomeFragment : Fragment() {
 
     private fun setHomeData() {
         channelItemList = homeViewModel.channelItemList
-        homeListAdapter.submitList(channelItemList)
-        homeListAdapter.notifyDataSetChanged()
+        channelItemListAdapter.submitList(channelItemList)
+        channelItemListAdapter.notifyDataSetChanged()
     }
 
     private fun handleConnectServerState(state: ConnectServerState) {

@@ -15,7 +15,7 @@ import com.nandra.myschool.utils.Utility
 import com.nandra.myschool.utils.Utility.convertToString
 import kotlinx.android.synthetic.main.home_fragment_item.view.*
 
-class HomeListAdapter : ListAdapter<ChannelItem, HomeListAdapter.HomeViewHolder>(homeDiffCallback) {
+class ChannelItemListAdapter : ListAdapter<ChannelItem, ChannelItemListAdapter.HomeViewHolder>(homeDiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.home_fragment_item, parent, false)

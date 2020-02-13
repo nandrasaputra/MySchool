@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/activity_detail_chat_toolbar"
+        android:id="@+id/activity_channel_detail_toolbar"
         android:theme="@style/MySchoolToolbarTheme"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
@@ -17,7 +17,7 @@
             android:layout_height="match_parent">
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/activity_chat_detail_photo"
+                android:id="@+id/activity_channel_detail_photo"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:src="@color/colorPrimary"
@@ -28,36 +28,42 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:layout_marginStart="8dp"
-                app:layout_constraintStart_toEndOf="@id/activity_chat_detail_photo"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="@id/activity_channel_detail_photo"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/activity_chat_detail_photo"
-                app:layout_constraintBottom_toBottomOf="@id/activity_chat_detail_photo">
+                app:layout_constraintStart_toEndOf="@id/activity_channel_detail_photo"
+                app:layout_constraintTop_toTopOf="@id/activity_channel_detail_photo">
 
                 <TextView
-                    android:id="@+id/activity_chat_detail_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:id="@+id/activity_channel_detail_name"
                     style="@style/MySchool.TextAppearance.Title1"
-                    android:text="Nandra Saputra"
-                    android:lines="1"
-                    android:ellipsize="end"/>
-
-                <TextView
-                    android:id="@+id/activity_chat_detail_name_status"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:text="The Phantom Thieves"
+                    android:ellipsize="end"
+                    android:lines="1"/>
+
+                <TextView
+                    android:id="@+id/activity_channel_detail_description"
                     style="@style/MySchool.TextAppearance.SubTitle2"
-                    android:text="Online"
-                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
                     android:lines="1"
-                    android:ellipsize="end"/>
+                    android:text="We steal distorted hearts" />
 
             </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.appcompat.widget.Toolbar>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/activity_channel_detail_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/activity_channel_detail_toolbar"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

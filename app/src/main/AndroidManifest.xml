@@ -37,6 +37,10 @@
 
         </activity>
 
+        <activity android:name=".ui.ChannelDetailActivity">
+
+        </activity>
+
     </application>
 
 </manifest>
