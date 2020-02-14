@@ -1,9 +1,6 @@
 package com.nandra.myschool.ui
 
 import android.os.Bundle
-import android.util.Log
-import android.widget.LinearLayout
-import android.widget.ListAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ale.infra.list.IItemListChangeListener
@@ -14,7 +11,6 @@ import com.bumptech.glide.Glide
 import com.nandra.myschool.R
 import com.nandra.myschool.adapter.ChatDetailListAdapter
 import com.nandra.myschool.utils.Utility.EXTRA_JID
-import com.nandra.myschool.utils.Utility.LOG_DEBUG_TAG
 import com.nandra.myschool.utils.Utility.nameBuilder
 import kotlinx.android.synthetic.main.chat_detail_activity.*
 
@@ -38,7 +34,7 @@ class ChatDetailActivity : AppCompatActivity() {
 
         conversation.messages.registerChangeListener(changeListener)
 
-        retriveMessage()
+        retrieveMessage()
     }
 
     override fun onDestroy() {
@@ -52,6 +48,10 @@ class ChatDetailActivity : AppCompatActivity() {
         activity_chat_detail_recycler_view.apply {
             adapter = chatDetailListAdapter
             layoutManager = LinearLayoutManager(this@ChatDetailActivity)
+        }
+
+        activity_chat_message_send_button.setOnClickListener {
+            sendMessage()
         }
 
         if (!conversation.isRoomType) {
@@ -84,8 +84,12 @@ class ChatDetailActivity : AppCompatActivity() {
         }
     }
 
-    private fun retriveMessage() {
+    private fun retrieveMessage() {
         RainbowSdk.instance().im().getMessagesFromConversation(conversation, 50)
+    }
+
+    private fun retrieveMoreMessage() {
+        RainbowSdk.instance().im().getMoreMessagesFromConversation(conversation, 50)
     }
 
     private fun updateMessageList() {
@@ -95,7 +99,18 @@ class ChatDetailActivity : AppCompatActivity() {
         runOnUiThread {
             chatDetailListAdapter.submitList(messageList)
             chatDetailListAdapter.notifyDataSetChanged()
+            scrollToBottom()
+            RainbowSdk.instance().im().markMessagesFromConversationAsRead(conversation)
         }
+    }
+
+    private fun sendMessage() {
+        RainbowSdk.instance().im().sendMessageToConversation(conversation, activity_chat_message_edit_text.text.toString())
+        activity_chat_message_edit_text.setText("")
+    }
+
+    private fun scrollToBottom() {
+        activity_chat_detail_recycler_view.scrollToPosition(chatDetailListAdapter.itemCount - 1)
     }
 
 }
