@@ -2,6 +2,7 @@ package com.nandra.myschool.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.ale.rainbowsdk.RainbowSdk
@@ -16,19 +17,25 @@ class LoginActivity : AppCompatActivity(), RainbowConnectionListener.Login, Rain
     private lateinit var firebaseAuth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
+        setTheme(R.style.AppTheme)
         setContentView(R.layout.login_activity)
 
         firebaseAuth = FirebaseAuth.getInstance()
 
-        if (!RainbowSdk.instance().myProfile().userLoginInCache.isNullOrEmpty())
-            activity_login_email_text.setText(RainbowSdk.instance().myProfile().userLoginInCache)
+        activity_login_button.setOnClickListener {
+            setViewOnLoading(true)
+            RainbowConnection.startConnection(this)
+        }
 
-        if (!RainbowSdk.instance().myProfile().userPasswordInCache.isNullOrEmpty())
+        if (!RainbowSdk.instance().myProfile().userLoginInCache.isNullOrEmpty() and
+            !RainbowSdk.instance().myProfile().userPasswordInCache.isNullOrEmpty() and
+            (firebaseAuth.currentUser != null)) {
+
+            activity_login_email_text.setText(RainbowSdk.instance().myProfile().userLoginInCache)
             activity_login_password_text.setText(RainbowSdk.instance().myProfile().userPasswordInCache)
 
-        activity_login_btn.setOnClickListener {
+            setViewOnLoading(true)
             RainbowConnection.startConnection(this)
         }
     }
@@ -44,6 +51,7 @@ class LoginActivity : AppCompatActivity(), RainbowConnectionListener.Login, Rain
     }
 
     override fun onConnectionFailed(error: String) {
+        setViewOnLoading(false)
         Toast.makeText(this, "Rainbow Connection Failed: $error", Toast.LENGTH_SHORT).show()
     }
 
@@ -52,6 +60,7 @@ class LoginActivity : AppCompatActivity(), RainbowConnectionListener.Login, Rain
     }
 
     override fun onSignInFailed(error: String) {
+        setViewOnLoading(false)
         Toast.makeText(this, "Rainbow Sign In Failed: $error", Toast.LENGTH_SHORT).show()
     }
 
@@ -74,6 +83,7 @@ class LoginActivity : AppCompatActivity(), RainbowConnectionListener.Login, Rain
             if (it.isSuccessful) {
                 proceedToMainActivity()
             } else {
+                setViewOnLoading(false)
                 Toast.makeText(this, "Firebase Sign In Failed: ${it.exception?.message}", Toast.LENGTH_SHORT).show()
             }
         }
@@ -88,4 +98,18 @@ class LoginActivity : AppCompatActivity(), RainbowConnectionListener.Login, Rain
 
     private fun getTypedEmail() = activity_login_email_text.text.toString()
     private fun getTypedPassword() = activity_login_password_text.text.toString()
+
+    private fun setViewOnLoading(state: Boolean) {
+        if (state) {
+            activity_login_email_text.isEnabled = false
+            activity_login_password_text.isEnabled = false
+            activity_login_button.visibility = View.GONE
+            activity_login_progress_bar.visibility = View.VISIBLE
+        } else {
+            activity_login_email_text.isEnabled = true
+            activity_login_password_text.isEnabled = true
+            activity_login_button.visibility = View.VISIBLE
+            activity_login_progress_bar.visibility = View.GONE
+        }
+    }
 }
