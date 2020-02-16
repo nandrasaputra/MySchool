@@ -5,16 +5,22 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.ale.rainbowsdk.RainbowSdk
+import com.google.firebase.auth.FirebaseAuth
 import com.nandra.myschool.R
 import com.nandra.myschool.utils.RainbowConnection
 import com.nandra.myschool.utils.RainbowConnectionListener
 import kotlinx.android.synthetic.main.login_activity.*
 
 class LoginActivity : AppCompatActivity(), RainbowConnectionListener.Login, RainbowConnectionListener.Connection {
+
+    private lateinit var firebaseAuth: FirebaseAuth
+
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.login_activity)
+
+        firebaseAuth = FirebaseAuth.getInstance()
 
         if (!RainbowSdk.instance().myProfile().userLoginInCache.isNullOrEmpty())
             activity_login_email_text.setText(RainbowSdk.instance().myProfile().userLoginInCache)
@@ -28,25 +34,58 @@ class LoginActivity : AppCompatActivity(), RainbowConnectionListener.Login, Rain
     }
 
     override fun onConnectionSuccess() {
-        val email = activity_login_email_text.text.toString()
-        val password = activity_login_password_text.text.toString()
-        RainbowConnection.startSignIn(email, password, this)
+        val typedEmail = getTypedEmail()
+        val typedPassword = getTypedPassword()
+        if (typedEmail.isNotEmpty() and typedPassword.isNotEmpty()) {
+            RainbowConnection.startSignIn(typedEmail, typedPassword, this)
+        } else {
+            Toast.makeText(this, "Email or Password Cannot Empty!", Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun onConnectionFailed(error: String) {
-        Toast.makeText(this, "Connection Failed: $error", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "Rainbow Connection Failed: $error", Toast.LENGTH_SHORT).show()
     }
 
     override fun onSignInSuccess() {
-        Toast.makeText(this, "Sign In Success", Toast.LENGTH_SHORT).show()
+        startFirebaseAuthentication()
+    }
 
+    override fun onSignInFailed(error: String) {
+        Toast.makeText(this, "Rainbow Sign In Failed: $error", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun startFirebaseAuthentication() {
+        val user = firebaseAuth.currentUser
+        if (user != null) {
+            if (user.email == getTypedEmail()) {
+                proceedToMainActivity()
+            } else {
+                firebaseAuth.signOut()
+                firebaseSignIn(getTypedEmail(), getTypedPassword())
+            }
+        } else {
+            firebaseSignIn(getTypedEmail(), getTypedPassword())
+        }
+    }
+
+    private fun firebaseSignIn(email: String, password: String) {
+        firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
+            if (it.isSuccessful) {
+                proceedToMainActivity()
+            } else {
+                Toast.makeText(this, "Firebase Sign In Failed: ${it.exception?.message}", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun proceedToMainActivity() {
         val intent = Intent(this, MainActivity::class.java).apply {
             addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
         }
         startActivity(intent)
     }
 
-    override fun onSignInFailed(error: String) {
-        Toast.makeText(this, "Sign In Failed: $error", Toast.LENGTH_SHORT).show()
-    }
+    private fun getTypedEmail() = activity_login_email_text.text.toString()
+    private fun getTypedPassword() = activity_login_password_text.text.toString()
 }

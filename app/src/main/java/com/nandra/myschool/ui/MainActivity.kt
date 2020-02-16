@@ -10,6 +10,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
+import com.ale.infra.manager.fileserver.IFileProxy
+import com.ale.infra.manager.fileserver.RainbowFileDescriptor
 import com.ale.listener.IConnectionChanged
 import com.ale.rainbowsdk.RainbowSdk
 import com.nandra.myschool.R
@@ -116,6 +118,7 @@ class MainActivity : AppCompatActivity(), IConnectionChanged {
     }
 
     override fun onConnectionSucceed() {
+        viewModel.updateFileStorage()
         viewModel.setLoadingState(ConnectServerState.SUCCESS)
     }
 

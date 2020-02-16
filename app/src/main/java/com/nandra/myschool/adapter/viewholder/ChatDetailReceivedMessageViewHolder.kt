@@ -1,17 +1,28 @@
 package com.nandra.myschool.adapter.viewholder
 
+import android.graphics.Bitmap
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.ale.infra.http.GetFileResponse
 import com.ale.infra.manager.IMMessage
+import com.ale.infra.manager.fileserver.IFileProxy
+import com.ale.infra.manager.fileserver.RainbowFileDescriptor
+import com.ale.rainbowsdk.RainbowSdk
 import com.bumptech.glide.Glide
 import com.nandra.myschool.R
+import com.nandra.myschool.utils.Utility
 import kotlinx.android.synthetic.main.chat_detail_activity.view.*
 import kotlinx.android.synthetic.main.chat_detail_received_item.view.*
 import kotlinx.android.synthetic.main.chat_detail_sent_item.view.*
 
-class ChatDetailReceivedMessageViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+class ChatDetailReceivedMessageViewHolder(
+    view: View,
+    private val listReceivedItem: List<RainbowFileDescriptor>
+)
+    : RecyclerView.ViewHolder(view) {
 
     fun bindView(message: IMMessage) {
         if (!message.isFileDescriptorAvailable) {
@@ -36,8 +47,11 @@ class ChatDetailReceivedMessageViewHolder(view: View) : RecyclerView.ViewHolder(
             MessageType.IMAGE -> {
                 itemView.chat_detail_received_item_media_layout.visibility = View.VISIBLE
                 itemView.chat_detail_received_item_message.visibility = View.GONE
+                val image = listReceivedItem.find {
+                    it.id == message.fileDescriptor.id
+                }
                 Glide.with(itemView.context)
-                    .load(message.fileDescriptor.image)
+                    .load(image?.thumbnailFile)
                     .into(itemView.chat_detail_received_item_photo)
                 itemView.chat_detail_received_item_description.text = "${message.messageContent} is shared"
             }
@@ -59,10 +73,10 @@ class ChatDetailReceivedMessageViewHolder(view: View) : RecyclerView.ViewHolder(
     }
 
     companion object {
-        fun create(parent: ViewGroup) : ChatDetailReceivedMessageViewHolder {
+        fun create(parent: ViewGroup, listReceivedItem: List<RainbowFileDescriptor>) : ChatDetailReceivedMessageViewHolder {
             val view = LayoutInflater.from(parent.context)
                 .inflate(R.layout.chat_detail_received_item, parent, false)
-            return ChatDetailReceivedMessageViewHolder(view)
+            return ChatDetailReceivedMessageViewHolder(view, listReceivedItem)
         }
     }
 }

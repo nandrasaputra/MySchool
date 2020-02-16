@@ -34,20 +34,20 @@ class ConversationListAdapter(
         fun bind(conversation: IRainbowConversation) {
             if(!conversation.isRoomType) {
                 val contact = conversation.contact
-                itemView.fragment_home_item_channel_name.text = nameBuilder(contact)
+                itemView.channel_detail_item_channel_name.text = nameBuilder(contact)
 
                 Glide.with(itemView.context)
                     .load(conversation.contact.photo)
-                    .into(itemView.fragment_home_item_photo)
+                    .into(itemView.channel_detail_item_photo)
             } else {
                 val roomName = conversation.room.name
-                itemView.fragment_home_item_channel_name.text = roomName
+                itemView.channel_detail_item_channel_name.text = roomName
 
                 Glide.with(itemView.context)
                     .load(conversation.room.photo)
-                    .into(itemView.fragment_home_item_photo)
+                    .into(itemView.channel_detail_item_photo)
             }
-            itemView.fragment_home_item_publisher_name.text = conversation.lastMessage.messageContent
+            itemView.channel_detail_item_publisher_name.text = conversation.lastMessage.messageContent
 
             view.setOnClickListener {
                 val jid = conversation.jid
@@ -67,9 +67,9 @@ class ConversationListAdapter(
             }
 
             if (conversation.lastMessage.messageDate != null) {
-                itemView.fragment_home_item_publish_date.text = conversation.lastMessage.messageDate.convertToString()
+                itemView.channel_detail_item_publish_date.text = conversation.lastMessage.messageDate.convertToString()
             } else {
-                itemView.fragment_home_item_publish_date.visibility = View.GONE
+                itemView.channel_detail_item_publish_date.visibility = View.GONE
             }
         }
     }

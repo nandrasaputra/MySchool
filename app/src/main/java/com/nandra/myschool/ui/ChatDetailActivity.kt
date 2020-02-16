@@ -1,16 +1,20 @@
 package com.nandra.myschool.ui
 
 import android.os.Bundle
+import android.util.Log
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ale.infra.list.IItemListChangeListener
 import com.ale.infra.manager.IMMessage
+import com.ale.infra.manager.fileserver.RainbowFileDescriptor
 import com.ale.infra.proxy.conversation.IRainbowConversation
 import com.ale.rainbowsdk.RainbowSdk
 import com.bumptech.glide.Glide
 import com.nandra.myschool.R
 import com.nandra.myschool.adapter.ChatDetailListAdapter
 import com.nandra.myschool.utils.Utility.EXTRA_JID
+import com.nandra.myschool.utils.Utility.LOG_DEBUG_TAG
 import com.nandra.myschool.utils.Utility.nameBuilder
 import kotlinx.android.synthetic.main.chat_detail_activity.*
 
@@ -20,6 +24,9 @@ class ChatDetailActivity : AppCompatActivity() {
     private lateinit var chatDetailListAdapter: ChatDetailListAdapter
     private val changeListener = IItemListChangeListener(::updateMessageList)
     private var messageList = listOf<IMMessage>()
+    private var sentFileStorage = listOf<RainbowFileDescriptor>()
+    private var receivedFileStorage = listOf<RainbowFileDescriptor>()
+    private val mainViewModel: MainActivityViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,8 +40,11 @@ class ChatDetailActivity : AppCompatActivity() {
         setupView(conversation)
 
         conversation.messages.registerChangeListener(changeListener)
-
         retrieveMessage()
+
+        /*btn_dummy_chat.setOnClickListener {
+            dummy()
+        }*/
     }
 
     override fun onDestroy() {
@@ -93,10 +103,13 @@ class ChatDetailActivity : AppCompatActivity() {
     }
 
     private fun updateMessageList() {
+        reloadFileStorage()
+
         val newMessages = conversation.messages.copyOfDataList
         messageList = newMessages
 
         runOnUiThread {
+            chatDetailListAdapter.updateListSentItem(sentFileStorage, receivedFileStorage)
             chatDetailListAdapter.submitList(messageList)
             chatDetailListAdapter.notifyDataSetChanged()
             scrollToBottom()
@@ -104,7 +117,14 @@ class ChatDetailActivity : AppCompatActivity() {
         }
     }
 
+    private fun reloadFileStorage() {
+        mainViewModel.updateFileStorage()
+        sentFileStorage = mainViewModel.sentFileStorage
+        receivedFileStorage = mainViewModel.receivedFileStorage
+    }
+
     private fun sendMessage() {
+        if (activity_chat_message_edit_text.text.toString().isNotEmpty())
         RainbowSdk.instance().im().sendMessageToConversation(conversation, activity_chat_message_edit_text.text.toString())
         activity_chat_message_edit_text.setText("")
     }
@@ -113,4 +133,7 @@ class ChatDetailActivity : AppCompatActivity() {
         activity_chat_detail_recycler_view.scrollToPosition(chatDetailListAdapter.itemCount - 1)
     }
 
+    /*private fun dummy() {
+        Log.d(LOG_DEBUG_TAG, "HAHA")
+    }*/
 }
