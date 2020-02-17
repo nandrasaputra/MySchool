@@ -47,6 +47,7 @@ class LoginActivity : AppCompatActivity(), RainbowConnectionListener.Login, Rain
             RainbowConnection.startSignIn(typedEmail, typedPassword, this)
         } else {
             Toast.makeText(this, "Email or Password Cannot Empty!", Toast.LENGTH_SHORT).show()
+            setViewOnLoading(false)
         }
     }
 

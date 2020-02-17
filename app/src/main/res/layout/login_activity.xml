@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -58,7 +58,7 @@
     <mehdi.sakout.fancybuttons.FancyButton
         android:id="@+id/activity_login_button"
         style="@style/MySchool.TextAppearance.Title1"
-        android:layout_width="match_parent"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/activity_login_password_text"
         app:layout_constraintStart_toStartOf="parent"

@@ -1,11 +1,16 @@
 package com.nandra.myschool.ui.profile
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.ale.rainbowsdk.RainbowSdk
+import com.google.firebase.auth.FirebaseAuth
 import com.nandra.myschool.R
+import com.nandra.myschool.ui.LoginActivity
+import com.nandra.myschool.ui.MainActivity
 import kotlinx.android.synthetic.main.profile_fragment.*
 
 class ProfileFragment : Fragment() {
@@ -23,7 +28,11 @@ class ProfileFragment : Fragment() {
         }
 
         fragment_profile_my_logout_button.setOnClickListener {
-            Toast.makeText(activity, "Logout Clicked", Toast.LENGTH_SHORT).show()
+            FirebaseAuth.getInstance().signOut()
+            val intent = Intent(activity, LoginActivity::class.java).apply {
+                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
+            startActivity(intent)
         }
     }
 
