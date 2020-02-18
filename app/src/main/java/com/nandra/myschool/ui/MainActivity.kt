@@ -73,7 +73,7 @@ class MainActivity : AppCompatActivity(), IConnectionChanged {
     }
 
     private fun setupBottomNavigationBar() {
-        val navGraphIds = listOf(R.navigation.home_nav, R.navigation.chat_nav, R.navigation.channel_nav, R.navigation.classroom_nav, R.navigation.profile_nav)
+        val navGraphIds = listOf(R.navigation.classroom_nav,R.navigation.chat_nav, R.navigation.profile_nav)
 
         val controller = main_activity_bottom_navigation_bar.setupWithNavController(
             navGraphIds = navGraphIds,

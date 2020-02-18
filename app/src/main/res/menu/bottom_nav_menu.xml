@@ -1,21 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/home"
-        android:icon="@drawable/ic_home"
-        android:title="@string/menu_home_title" />
+        android:id="@+id/classroom"
+        android:icon="@drawable/ic_classroom"
+        android:title="@string/menu_classroom_title" />
     <item
         android:id="@+id/chat"
         android:icon="@drawable/ic_chat"
         android:title="@string/menu_chat_title" />
-    <item
-        android:id="@+id/channel"
-        android:icon="@drawable/ic_channel"
-        android:title="@string/menu_channel_title" />
-    <item
-        android:id="@+id/classroom"
-        android:icon="@drawable/ic_classroom"
-        android:title="@string/menu_classroom_title" />
     <item
         android:id="@+id/profile"
         android:icon="@drawable/ic_profile"
