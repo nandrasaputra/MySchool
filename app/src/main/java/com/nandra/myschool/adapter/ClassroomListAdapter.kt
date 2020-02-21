@@ -35,9 +35,6 @@ class ClassroomListAdapter : ListAdapter<Subject, ClassroomListAdapter.Classroom
                 .load(storage.getReferenceFromUrl(subject.cover_path))
                 .into(itemView.fragment_classroom_item_class_image)
             val teachers = subject.teachers
-            for (teacher in teachers) {
-                Log.d(Utility.LOG_DEBUG_TAG, teacher.profile_picture_storage_path)
-            }
             when (teachers.size) {
                 1 -> {
                     itemView.fragment_classroom_item_teacher_1.visibility = View.VISIBLE

@@ -64,14 +64,10 @@ class ClassroomFragment : Fragment() {
     private fun handleDataLoadState(state: DataLoadState) {
         when(state) {
             DataLoadState.UNLOADED -> {
-                Log.d(LOG_DEBUG_TAG, "Unloaded")
                 classroomViewModel.getSubjectDatabaseReference()
             }
-            DataLoadState.LOADING -> {
-                Log.d(LOG_DEBUG_TAG, "Loading")
-            }
+            DataLoadState.LOADING -> { }
             DataLoadState.LOADED -> {
-                Log.d(LOG_DEBUG_TAG, "Loaded")
                 classroomListAdapter.submitList(classroomViewModel.subjectList)
             }
             else -> {}
