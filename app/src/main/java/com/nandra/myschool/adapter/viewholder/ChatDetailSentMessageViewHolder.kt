@@ -10,21 +10,13 @@ import com.bumptech.glide.Glide
 import com.nandra.myschool.R
 import kotlinx.android.synthetic.main.chat_detail_sent_item.view.*
 
-class ChatDetailSentMessageViewHolder(
-    view: View,
-    private val listSentItem: List<RainbowFileDescriptor>
-) : RecyclerView.ViewHolder(view) {
+class ChatDetailSentMessageViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
     fun bindView(message: IMMessage) {
         if (!message.isFileDescriptorAvailable) {
             setupView(message, MessageType.NORMAL)
         } else {
-            //TODO: ISSUE, CANNOT LOAD IMAGE
-            if (message.fileDescriptor.isImageType) {
-                setupView(message, MessageType.IMAGE)
-            } else {
-                setupView(message, MessageType.OTHER)
-            }
+            setupView(message, MessageType.FILE)
         }
     }
 
@@ -35,39 +27,24 @@ class ChatDetailSentMessageViewHolder(
                 itemView.chat_detail_sent_item_message.visibility = View.VISIBLE
                 itemView.chat_detail_sent_item_message.text = message.messageContent
             }
-            MessageType.IMAGE -> {
+            MessageType.FILE -> {
                 itemView.chat_detail_sent_item_media_layout.visibility = View.VISIBLE
                 itemView.chat_detail_sent_item_message.visibility = View.GONE
-                val image = listSentItem.find {
-                    it.id == message.fileDescriptor.id
-                }
-                Glide.with(itemView.context)
-                    .load(image?.thumbnailFile)
-                    .into(itemView.chat_detail_sent_item_photo)
-                itemView.chat_detail_sent_item_description.text = "${message.messageContent} is shared"
-            }
-            else -> {
-                itemView.chat_detail_sent_item_media_layout.visibility = View.VISIBLE
-                itemView.chat_detail_sent_item_message.visibility = View.GONE
-                Glide.with(itemView.context)
-                    .load(R.drawable.ic_attachment)
-                    .into(itemView.chat_detail_sent_item_photo)
-                itemView.chat_detail_sent_item_description.text = "${message.messageContent} is shared"
+                itemView.chat_detail_sent_item_description.text = "${message.messageContent} was shared"
             }
         }
     }
 
     private enum class MessageType{
         NORMAL,
-        IMAGE,
-        OTHER
+        FILE
     }
 
     companion object {
-        fun create(parent: ViewGroup, listSentItem: List<RainbowFileDescriptor>) : ChatDetailSentMessageViewHolder {
+        fun create(parent: ViewGroup) : ChatDetailSentMessageViewHolder {
             val view = LayoutInflater.from(parent.context)
                 .inflate(R.layout.chat_detail_sent_item, parent, false)
-            return ChatDetailSentMessageViewHolder(view, listSentItem)
+            return ChatDetailSentMessageViewHolder(view)
         }
     }
 }

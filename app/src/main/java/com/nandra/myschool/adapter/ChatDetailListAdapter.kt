@@ -14,18 +14,10 @@ import java.lang.IllegalArgumentException
 
 class ChatDetailListAdapter : ListAdapter<IMMessage, RecyclerView.ViewHolder>(channelDetailDiffUtilCallback) {
 
-    private var listSentItem = listOf<RainbowFileDescriptor>()
-    private var listReceivedItem = listOf<RainbowFileDescriptor>()
-
-    fun updateListSentItem(newSentList: List<RainbowFileDescriptor>, newReceivedList: List<RainbowFileDescriptor>) {
-        listSentItem = newSentList
-        listReceivedItem = newReceivedList
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when(viewType) {
-            VIEW_TYPE_MESSAGE_SENT -> { ChatDetailSentMessageViewHolder.create(parent, listSentItem) }
-            VIEW_TYPE_MESSAGE_RECEIVE -> { ChatDetailReceivedMessageViewHolder.create(parent, listReceivedItem)}
+            VIEW_TYPE_MESSAGE_SENT -> { ChatDetailSentMessageViewHolder.create(parent) }
+            VIEW_TYPE_MESSAGE_RECEIVE -> { ChatDetailReceivedMessageViewHolder.create(parent)}
             else -> throw IllegalArgumentException("Unknown View Type $viewType")
         }
     }

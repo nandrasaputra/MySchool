@@ -118,7 +118,7 @@ class MainActivity : AppCompatActivity(), IConnectionChanged {
     }
 
     override fun onConnectionSucceed() {
-        viewModel.updateFileStorage()
+        //viewModel.updateFileStorage()
         viewModel.setLoadingState(ConnectServerState.SUCCESS)
     }
 

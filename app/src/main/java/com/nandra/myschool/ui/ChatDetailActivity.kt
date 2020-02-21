@@ -26,7 +26,6 @@ class ChatDetailActivity : AppCompatActivity() {
     private var messageList = listOf<IMMessage>()
     private var sentFileStorage = listOf<RainbowFileDescriptor>()
     private var receivedFileStorage = listOf<RainbowFileDescriptor>()
-    private val mainViewModel: MainActivityViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -103,13 +102,12 @@ class ChatDetailActivity : AppCompatActivity() {
     }
 
     private fun updateMessageList() {
-        reloadFileStorage()
+        //reloadFileStorage()
 
         val newMessages = conversation.messages.copyOfDataList
         messageList = newMessages
 
         runOnUiThread {
-            chatDetailListAdapter.updateListSentItem(sentFileStorage, receivedFileStorage)
             chatDetailListAdapter.submitList(messageList)
             chatDetailListAdapter.notifyDataSetChanged()
             scrollToBottom()
@@ -117,11 +115,11 @@ class ChatDetailActivity : AppCompatActivity() {
         }
     }
 
-    private fun reloadFileStorage() {
+    /*private fun reloadFileStorage() {
         mainViewModel.updateFileStorage()
         sentFileStorage = mainViewModel.sentFileStorage
         receivedFileStorage = mainViewModel.receivedFileStorage
-    }
+    }*/
 
     private fun sendMessage() {
         if (activity_chat_message_edit_text.text.toString().isNotEmpty())
