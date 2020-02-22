@@ -6,6 +6,8 @@ import java.util.*
 
 object Utility {
     const val EXTRA_MESSAGE = "message"
+    const val EXTRA_SUBJECT_NAME = "subject_name"
+    const val EXTRA_SUBJECT_ID = "subject_code"
     const val EXTRA_JID = "jid"
     const val LOG_DEBUG_TAG = "MySchool"
 

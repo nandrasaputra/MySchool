@@ -1,6 +1,6 @@
 package com.nandra.myschool.adapter
 
-import android.util.Log
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide
 import com.google.firebase.storage.FirebaseStorage
 import com.nandra.myschool.R
 import com.nandra.myschool.model.Subject
+import com.nandra.myschool.ui.ClassroomDetailActivity
 import com.nandra.myschool.utils.Utility
 import kotlinx.android.synthetic.main.classroom_fragment_item.view.*
 
@@ -69,6 +70,13 @@ class ClassroomListAdapter : ListAdapter<Subject, ClassroomListAdapter.Classroom
                         .load(storage.getReferenceFromUrl(teachers[2].profile_picture_storage_path))
                         .into(itemView.fragment_classroom_item_teacher_3)
                 }
+            }
+            itemView.setOnClickListener {
+                val intent = Intent(itemView.context, ClassroomDetailActivity::class.java).apply {
+                    putExtra(Utility.EXTRA_SUBJECT_NAME, subject.subject_name)
+                    putExtra(Utility.EXTRA_SUBJECT_ID, subject.subject_id)
+                }
+                itemView.context.startActivity(intent)
             }
         }
     }

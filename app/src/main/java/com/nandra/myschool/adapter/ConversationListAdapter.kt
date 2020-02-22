@@ -49,7 +49,7 @@ class ConversationListAdapter(
             }
             itemView.channel_detail_item_publisher_name.text = conversation.lastMessage.messageContent
 
-            view.setOnClickListener {
+            itemView.setOnClickListener {
                 val jid = conversation.jid
                 val intent = Intent(view.context, ChatDetailActivity::class.java).apply {
                     putExtra(EXTRA_JID, jid)

@@ -41,6 +41,10 @@
 
         </activity>
 
+        <activity android:name=".ui.ClassroomDetailActivity">
+
+        </activity>
+
     </application>
 
 </manifest>
