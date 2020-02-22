@@ -37,10 +37,6 @@
 
         </activity>
 
-        <activity android:name=".ui.ChannelDetailActivity">
-
-        </activity>
-
         <activity android:name=".ui.classroom_detail.ClassroomDetailActivity">
 
         </activity>

@@ -18,7 +18,6 @@ import com.nandra.myschool.R
 import com.nandra.myschool.adapter.ChannelItemListAdapter
 import com.nandra.myschool.ui.classroom_detail.ClassroomDetailViewModel
 import com.nandra.myschool.utils.Utility
-import kotlinx.android.synthetic.main.channel_detail_activity.*
 import kotlinx.android.synthetic.main.classroom_feed_fragment.*
 
 class ClassroomFeedFragment : Fragment(), IChannelProxy.IChannelFetchItemsListener {
