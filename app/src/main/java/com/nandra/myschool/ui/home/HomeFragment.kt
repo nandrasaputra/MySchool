@@ -14,7 +14,7 @@ import com.ale.infra.manager.channel.ChannelItem
 import com.ale.rainbowsdk.RainbowSdk
 import com.nandra.myschool.R
 import com.nandra.myschool.adapter.ChannelItemListAdapter
-import com.nandra.myschool.ui.MainActivityViewModel
+import com.nandra.myschool.ui.main.MainActivityViewModel
 import com.nandra.myschool.utils.Utility.ConnectServerState
 import com.nandra.myschool.utils.Utility.DataLoadState
 import kotlinx.android.synthetic.main.home_fragment.*

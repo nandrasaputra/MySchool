@@ -1,4 +1,4 @@
-package com.nandra.myschool.ui.chat
+package com.nandra.myschool.ui.main.chat
 
 import android.os.Bundle
 import android.view.*

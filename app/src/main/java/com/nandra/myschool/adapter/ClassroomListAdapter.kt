@@ -11,7 +11,7 @@ import com.bumptech.glide.Glide
 import com.google.firebase.storage.FirebaseStorage
 import com.nandra.myschool.R
 import com.nandra.myschool.model.Subject
-import com.nandra.myschool.ui.ClassroomDetailActivity
+import com.nandra.myschool.ui.classroom_detail.ClassroomDetailActivity
 import com.nandra.myschool.utils.Utility
 import kotlinx.android.synthetic.main.classroom_fragment_item.view.*
 

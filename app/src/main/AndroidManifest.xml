@@ -28,12 +28,12 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.MainActivity">
+        <activity android:name=".ui.main.MainActivity">
 
         </activity>
 
-        <activity android:name=".ui.ChatDetailActivity"
-            android:parentActivityName=".ui.MainActivity">
+        <activity android:name=".ui.chat_detail.ChatDetailActivity"
+            android:parentActivityName=".ui.main.MainActivity">
 
         </activity>
 
@@ -41,7 +41,7 @@
 
         </activity>
 
-        <activity android:name=".ui.ClassroomDetailActivity">
+        <activity android:name=".ui.classroom_detail.ClassroomDetailActivity">
 
         </activity>
 

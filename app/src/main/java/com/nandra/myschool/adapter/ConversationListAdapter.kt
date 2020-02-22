@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ale.infra.proxy.conversation.IRainbowConversation
 import com.bumptech.glide.Glide
 import com.nandra.myschool.R
-import com.nandra.myschool.ui.ChatDetailActivity
+import com.nandra.myschool.ui.chat_detail.ChatDetailActivity
 import com.nandra.myschool.utils.Utility.EXTRA_JID
 import com.nandra.myschool.utils.Utility.nameBuilder
 import com.nandra.myschool.utils.Utility.convertToString

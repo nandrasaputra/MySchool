@@ -1,15 +1,15 @@
-package com.nandra.myschool.ui
+package com.nandra.myschool.ui.classroom_detail
 
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.viewpager.widget.ViewPager
+import androidx.lifecycle.Observer
 import com.google.android.material.tabs.TabLayout
 import com.nandra.myschool.R
-import com.nandra.myschool.adapter.ChatViewPagerAdapter
 import com.nandra.myschool.adapter.ClassroomDetailViewPagerAdapter
-import com.nandra.myschool.utils.Utility
-import kotlinx.android.synthetic.main.chat_detail_activity.*
-import kotlinx.android.synthetic.main.chat_fragment.*
+import com.nandra.myschool.utils.Utility.DataLoadState
+import com.nandra.myschool.utils.Utility.EXTRA_SUBJECT_ID
+import com.nandra.myschool.utils.Utility.EXTRA_SUBJECT_NAME
 import kotlinx.android.synthetic.main.classroom_detail_activity.*
 
 class ClassroomDetailActivity : AppCompatActivity() {
@@ -17,16 +17,21 @@ class ClassroomDetailActivity : AppCompatActivity() {
     private lateinit var classroomDetailViewPagerAdapter: ClassroomDetailViewPagerAdapter
     private var subjectID: Int = -1
     private lateinit var subjectName: String
+    private val classroomDetailViewModel: ClassroomDetailViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.classroom_detail_activity)
 
-        subjectID = intent.getIntExtra(Utility.EXTRA_SUBJECT_ID, -1)
-        subjectName = intent.getStringExtra(Utility.EXTRA_SUBJECT_NAME) ?: "Classroom Detail"
+        subjectID = intent.getIntExtra(EXTRA_SUBJECT_ID, -1)
+        subjectName = intent.getStringExtra(EXTRA_SUBJECT_NAME) ?: "Classroom Detail"
 
         setupToolbar()
         setupViewPager()
+
+        classroomDetailViewModel.detailSubjectDataLoadState.observe(this, Observer {
+            handleDetailLoadState(it)
+        })
     }
 
     private fun setupViewPager() {
@@ -57,5 +62,18 @@ class ClassroomDetailActivity : AppCompatActivity() {
             onBackPressed()
         }
         activity_classroom_detail_toolbar_title.text = subjectName
+    }
+
+    private fun handleDetailLoadState(state: DataLoadState) {
+        when (state) {
+            DataLoadState.UNLOADED -> {
+                classroomDetailViewModel.getDetailSubject(subjectID)
+            }
+            DataLoadState.LOADING -> { }
+            DataLoadState.LOADED -> {
+                //DO SOMETHING
+            }
+            else -> {}
+        }
     }
 }

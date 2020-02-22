@@ -11,7 +11,6 @@ import com.ale.infra.manager.channel.Channel
 import com.bumptech.glide.Glide
 import com.nandra.myschool.R
 import com.nandra.myschool.ui.ChannelDetailActivity
-import com.nandra.myschool.ui.ChatDetailActivity
 import com.nandra.myschool.utils.Utility
 import kotlinx.android.synthetic.main.channel_fragment_item.view.*
 

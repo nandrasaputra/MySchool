@@ -3,11 +3,9 @@ package com.nandra.myschool.adapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
-import com.nandra.myschool.ui.chat.ChatContactFragment
-import com.nandra.myschool.ui.chat.ChatConversationFragment
-import com.nandra.myschool.ui.classroom.ClassroomFeedFragment
-import com.nandra.myschool.ui.classroom.ClassroomMaterialFragment
-import com.nandra.myschool.ui.classroom.ClassroomSessionFragment
+import com.nandra.myschool.ui.classroom_detail.classroom_feed.ClassroomFeedFragment
+import com.nandra.myschool.ui.classroom_detail.classroom_material.ClassroomMaterialFragment
+import com.nandra.myschool.ui.classroom_detail.classroom_session.ClassroomSessionFragment
 
 class ClassroomDetailViewPagerAdapter(
     fragmentManager: FragmentManager,

@@ -1,4 +1,4 @@
-package com.nandra.myschool.ui.profile
+package com.nandra.myschool.ui.main.profile
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel

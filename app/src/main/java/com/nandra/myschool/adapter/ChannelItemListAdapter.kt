@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.ale.infra.manager.channel.ChannelItem
-import com.ale.infra.manager.fileserver.RainbowFileDescriptor
 import com.ale.rainbowsdk.RainbowSdk
 import com.bumptech.glide.Glide
 import com.nandra.myschool.R

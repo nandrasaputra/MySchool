@@ -1,7 +1,6 @@
-package com.nandra.myschool.ui.classroom
+package com.nandra.myschool.ui.main.classroom
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -9,7 +8,6 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.database.*
 import com.nandra.myschool.model.Subject
 import com.nandra.myschool.repository.MySchoolRepository
-import com.nandra.myschool.utils.Utility
 import com.nandra.myschool.utils.Utility.DataLoadState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -25,19 +23,19 @@ class ClassroomViewModel(app: Application) : AndroidViewModel(app) {
     private var subjectDatabaseReference: DatabaseReference? = null
     var subjectList = listOf<Subject>()
 
-    fun getSubjectDatabaseReference() {
+    fun getSubjectList() {
         //HandleInternetConnectionHere
         viewModelScope.launch(Dispatchers.IO) {
-            fetchSubjectDatabaseReference()
+            fetchSubjectList()
         }
     }
 
-    private suspend fun fetchSubjectDatabaseReference() {
+    private suspend fun fetchSubjectList() {
         fetchSubjectDatabaseReferenceJob?.run {
             this.join()
         }
         _subjectDataLoadState.postValue(DataLoadState.LOADING)
-        subjectDatabaseReference = repository.getSubjectList()
+        subjectDatabaseReference = repository.getThirdGradeSubjectListReference()
         subjectDatabaseReference?.addValueEventListener(object : ValueEventListener{
             override fun onCancelled(p0: DatabaseError) {
                 _subjectDataLoadState.postValue(DataLoadState.ERROR)

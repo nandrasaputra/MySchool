@@ -2,7 +2,6 @@ package com.nandra.myschool.ui
 
 import android.os.Bundle
 import android.util.Log
-import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ale.infra.http.adapter.concurrent.RainbowServiceException

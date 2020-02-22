@@ -1,8 +1,6 @@
-package com.nandra.myschool.ui
+package com.nandra.myschool.ui.chat_detail
 
 import android.os.Bundle
-import android.util.Log
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ale.infra.list.IItemListChangeListener
@@ -14,7 +12,6 @@ import com.bumptech.glide.Glide
 import com.nandra.myschool.R
 import com.nandra.myschool.adapter.ChatDetailListAdapter
 import com.nandra.myschool.utils.Utility.EXTRA_JID
-import com.nandra.myschool.utils.Utility.LOG_DEBUG_TAG
 import com.nandra.myschool.utils.Utility.nameBuilder
 import kotlinx.android.synthetic.main.chat_detail_activity.*
 

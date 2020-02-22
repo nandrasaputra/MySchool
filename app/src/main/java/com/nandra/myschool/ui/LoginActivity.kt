@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.ale.rainbowsdk.RainbowSdk
 import com.google.firebase.auth.FirebaseAuth
 import com.nandra.myschool.R
+import com.nandra.myschool.ui.main.MainActivity
 import com.nandra.myschool.utils.RainbowConnection
 import com.nandra.myschool.utils.RainbowConnectionListener
 import kotlinx.android.synthetic.main.login_activity.*

@@ -11,7 +11,7 @@ import com.ale.infra.contact.IRainbowContact
 import com.ale.rainbowsdk.RainbowSdk
 import com.bumptech.glide.Glide
 import com.nandra.myschool.R
-import com.nandra.myschool.ui.ChatDetailActivity
+import com.nandra.myschool.ui.chat_detail.ChatDetailActivity
 import com.nandra.myschool.utils.Utility
 import com.nandra.myschool.utils.Utility.EXTRA_JID
 import kotlinx.android.synthetic.main.chat_contact_fragment_item.view.*

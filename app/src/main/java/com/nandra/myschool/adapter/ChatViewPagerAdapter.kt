@@ -3,8 +3,8 @@ package com.nandra.myschool.adapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
-import com.nandra.myschool.ui.chat.ChatContactFragment
-import com.nandra.myschool.ui.chat.ChatConversationFragment
+import com.nandra.myschool.ui.main.chat.ChatContactFragment
+import com.nandra.myschool.ui.main.chat.ChatConversationFragment
 
 class ChatViewPagerAdapter(
     fragmentManager: FragmentManager,

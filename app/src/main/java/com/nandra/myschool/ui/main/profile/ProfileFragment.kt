@@ -1,16 +1,13 @@
-package com.nandra.myschool.ui.profile
+package com.nandra.myschool.ui.main.profile
 
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.ale.rainbowsdk.RainbowSdk
 import com.google.firebase.auth.FirebaseAuth
 import com.nandra.myschool.R
 import com.nandra.myschool.ui.LoginActivity
-import com.nandra.myschool.ui.MainActivity
 import kotlinx.android.synthetic.main.profile_fragment.*
 
 class ProfileFragment : Fragment() {

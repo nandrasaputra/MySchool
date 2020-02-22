@@ -1,4 +1,4 @@
-package com.nandra.myschool.ui.chat
+package com.nandra.myschool.ui.main.chat
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -15,7 +15,7 @@ import com.ale.infra.proxy.conversation.IRainbowConversation
 import com.ale.rainbowsdk.RainbowSdk
 import com.nandra.myschool.R
 import com.nandra.myschool.adapter.ConversationListAdapter
-import com.nandra.myschool.ui.MainActivityViewModel
+import com.nandra.myschool.ui.main.MainActivityViewModel
 import com.nandra.myschool.utils.Utility
 import kotlinx.android.synthetic.main.chat_conversation_fragment.*
 

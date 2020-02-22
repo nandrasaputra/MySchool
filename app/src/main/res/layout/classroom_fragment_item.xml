@@ -4,10 +4,7 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:paddingStart="16dp"
-    android:paddingEnd="16dp"
-    android:paddingTop="8dp"
-    android:paddingBottom="8dp">
+    android:padding="16dp">
 
     <com.makeramen.roundedimageview.RoundedImageView
         android:id="@+id/fragment_classroom_item_class_image"

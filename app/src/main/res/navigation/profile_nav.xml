@@ -8,6 +8,6 @@
 
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.nandra.myschool.ui.profile.ProfileFragment"
+        android:name="com.nandra.myschool.ui.main.profile.ProfileFragment"
         android:label="ProfileFragment" />
 </navigation>

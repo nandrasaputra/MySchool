@@ -1,4 +1,4 @@
-package com.nandra.myschool.ui
+package com.nandra.myschool.ui.main
 
 import android.app.Application
 import android.util.Log

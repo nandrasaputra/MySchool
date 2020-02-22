@@ -8,6 +8,6 @@
 
     <fragment
         android:id="@+id/chatFragment"
-        android:name="com.nandra.myschool.ui.chat.ChatFragment"
+        android:name="com.nandra.myschool.ui.main.chat.ChatFragment"
         android:label="ChatFragment" />
 </navigation>

@@ -2,7 +2,6 @@ package com.nandra.myschool.ui.channel
 
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -15,10 +14,9 @@ import com.ale.infra.manager.channel.Channel
 import com.ale.rainbowsdk.RainbowSdk
 import com.nandra.myschool.R
 import com.nandra.myschool.adapter.ChannelListAdapter
-import com.nandra.myschool.ui.MainActivityViewModel
+import com.nandra.myschool.ui.main.MainActivityViewModel
 import com.nandra.myschool.utils.Utility
 import com.nandra.myschool.utils.Utility.ConnectServerState
-import com.nandra.myschool.utils.Utility.LOG_DEBUG_TAG
 import kotlinx.android.synthetic.main.channel_fragment.*
 
 class ChannelFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListener {
