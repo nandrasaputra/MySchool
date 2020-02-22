@@ -20,7 +20,7 @@ import com.nandra.myschool.ui.classroom_detail.ClassroomDetailViewModel
 import com.nandra.myschool.utils.Utility
 import kotlinx.android.synthetic.main.classroom_feed_fragment.*
 
-class ClassroomFeedFragment : Fragment(), IChannelProxy.IChannelFetchItemsListener {
+class ClassroomFeedFragment : Fragment() {
 
     private lateinit var channel: Channel
     private lateinit var channelItemListAdapter: ChannelItemListAdapter
@@ -37,6 +37,12 @@ class ClassroomFeedFragment : Fragment(), IChannelProxy.IChannelFetchItemsListen
         classroomDetailViewModel.detailSubjectDataLoadState.observe(viewLifecycleOwner, Observer {
             handleDetailLoadState(it)
         })
+        classroomDetailViewModel.channelFeedItemList.observe(viewLifecycleOwner, Observer {
+            if (classroomDetailViewModel.detailSubjectDataLoadState.value == Utility.DataLoadState.LOADED) {
+                channelItemListAdapter.submitList(it)
+                channelItemListAdapter.notifyDataSetChanged()
+            }
+        })
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -46,18 +52,8 @@ class ClassroomFeedFragment : Fragment(), IChannelProxy.IChannelFetchItemsListen
 
     override fun onDestroy() {
         super.onDestroy()
-        if (classroomFeedViewModel.isChannelItemListenerRegistered) {
-            channel.channelItems.unregisterChangeListener(this::updateChannelItemList)
-        }
+        classroomDetailViewModel.unregisterAnyChannelFetchItemListener()
         classroomDetailViewModel.changeSubjectDataLoadState(Utility.DataLoadState.UNLOADED)
-    }
-
-    override fun onFetchItemsFailed(p0: RainbowServiceException?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun onFetchItemsSuccess() {
-        updateChannelItemList()
     }
 
     private fun setupView() {
@@ -65,40 +61,6 @@ class ClassroomFeedFragment : Fragment(), IChannelProxy.IChannelFetchItemsListen
         fragment_classroom_feed_recycler_view.apply {
             adapter = channelItemListAdapter
             layoutManager = LinearLayoutManager(activity)
-        }
-    }
-
-    private fun updateChannelItemList() {
-        val newChannelItemList = channel.channelItems.copyOfDataList
-        channelItemList = newChannelItemList
-        activity?.runOnUiThread {
-            channelItemListAdapter.submitList(channelItemList)
-            channelItemListAdapter.notifyDataSetChanged()
-        }
-    }
-
-    private fun setupChannelView() {
-        if (!channel.isSubscribed) {
-            Log.d(Utility.LOG_DEBUG_TAG, "Not Subscribed")
-            RainbowSdk.instance().channels().subscribeToChannel(channel, object : IChannelProxy.IChannelSubscribeListener {
-                override fun onSubscribeSuccess(p0: Channel?) {
-                    Log.d(Utility.LOG_DEBUG_TAG, "Subscribe Success")
-                    RainbowSdk.instance().channels().fetchItems(channel, 20, this@ClassroomFeedFragment)
-                    channel.channelItems.registerChangeListener(this@ClassroomFeedFragment::updateChannelItemList)
-                    classroomFeedViewModel.isChannelItemListenerRegistered = true
-                }
-
-                override fun onSubscribeFailed(p0: RainbowServiceException?) {
-                    Log.d(Utility.LOG_DEBUG_TAG, "Subscribe Failed")
-                    classroomFeedViewModel.isChannelItemListenerRegistered = false
-                    //Show Error Message
-                }
-            })
-        } else {
-            Log.d(Utility.LOG_DEBUG_TAG, "Already Subscribed")
-            RainbowSdk.instance().channels().fetchItems(channel, 20, this@ClassroomFeedFragment)
-            channel.channelItems.registerChangeListener(this::updateChannelItemList)
-            classroomFeedViewModel.isChannelItemListenerRegistered = true
         }
     }
 
@@ -111,9 +73,7 @@ class ClassroomFeedFragment : Fragment(), IChannelProxy.IChannelFetchItemsListen
                 Log.d(Utility.LOG_DEBUG_TAG, "Loading")
             }
             Utility.DataLoadState.LOADED -> {
-                Log.d(Utility.LOG_DEBUG_TAG, "Data Loaded")
-                channel = RainbowSdk.instance().channels().getChannel(classroomDetailViewModel.detailSubject.channel_id)
-                setupChannelView()
+                Log.d(Utility.LOG_DEBUG_TAG, "Loaded")
             }
             else -> {
                 Log.d(Utility.LOG_DEBUG_TAG, "Error")

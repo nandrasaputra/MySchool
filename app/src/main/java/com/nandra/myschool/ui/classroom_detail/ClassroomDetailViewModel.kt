@@ -21,16 +21,28 @@ import kotlinx.coroutines.launch
 
 class ClassroomDetailViewModel(app: Application) : AndroidViewModel(app) {
 
+    private var fetchDetailSubjectDatabaseReferenceJob: Job? = null
+    private val repository = MySchoolRepository()
+    val detailSubjectDataLoadState: LiveData<Utility.DataLoadState>
+        get() = _detailSubjectDataLoadState
+    private val _detailSubjectDataLoadState = MutableLiveData<Utility.DataLoadState>(Utility.DataLoadState.UNLOADED)
+    private var detailSubjectQuery: Query? = null
+    var detailSubject = Subject()
+
     var isChannelItemListenerRegistered: Boolean = false
-    var channelFeedItemList: List<ChannelItem> = listOf()
+
+    val channelFeedItemList: LiveData<List<ChannelItem>>
+        get() = _channelFeedItemList
+    private val _channelFeedItemList = MutableLiveData<List<ChannelItem>>(listOf())
+
     var currentChannel: Channel? = null
     private val channelFetchItemListener = object : IChannelProxy.IChannelFetchItemsListener {
         override fun onFetchItemsFailed(p0: RainbowServiceException?) {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            throw Exception("LOLZ")
         }
 
         override fun onFetchItemsSuccess() {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            updateChannelListItem()
         }
     }
 
@@ -40,23 +52,16 @@ class ClassroomDetailViewModel(app: Application) : AndroidViewModel(app) {
             RainbowSdk.instance().channels().fetchItems(currentChannel, 20, channelFetchItemListener)
             currentChannel!!.channelItems.registerChangeListener(::updateChannelListItem)
             isChannelItemListenerRegistered = true
+            _detailSubjectDataLoadState.postValue(Utility.DataLoadState.LOADED)
         }
 
         override fun onSubscribeFailed(p0: RainbowServiceException?) {
             Log.d(Utility.LOG_DEBUG_TAG, "Subscribe Failed")
             isChannelItemListenerRegistered = false
+            _detailSubjectDataLoadState.postValue(Utility.DataLoadState.ERROR)
             //Show Error Message
         }
     }
-
-
-    private var fetchDetailSubjectDatabaseReferenceJob: Job? = null
-    private val repository = MySchoolRepository()
-    val detailSubjectDataLoadState: LiveData<Utility.DataLoadState>
-        get() = _detailSubjectDataLoadState
-    private val _detailSubjectDataLoadState = MutableLiveData<Utility.DataLoadState>(Utility.DataLoadState.UNLOADED)
-    private var detailSubjectQuery: Query? = null
-    var detailSubject = Subject()
 
     fun getDetailSubject(subjectID: Int) {
         //HandleInternetConnectionHere
@@ -85,22 +90,48 @@ class ClassroomDetailViewModel(app: Application) : AndroidViewModel(app) {
             override fun onChildMoved(p0: DataSnapshot, p1: String?) {}
 
             override fun onChildAdded(dataSnapshot: DataSnapshot, p1: String?) {
-                detailSubject = dataSnapshot.getValue(Subject::class.java) ?: Subject()
-                _detailSubjectDataLoadState.postValue(Utility.DataLoadState.LOADED)
+                val newDetailSubject = dataSnapshot.getValue(Subject::class.java)
+                if (newDetailSubject != null) {
+                    detailSubject = newDetailSubject
+                    fetchChannelFeedItemById(detailSubject.channel_id)
+                } else {
+                    //show error and retry
+                    Log.d(Utility.LOG_DEBUG_TAG, "subject is null")
+                    _detailSubjectDataLoadState.postValue(Utility.DataLoadState.ERROR)
+                }
             }
         })
     }
 
     private fun updateChannelListItem() {
-
+        val newChannelItemList = currentChannel!!.channelItems.copyOfDataList
+        newChannelItemList.sortByDescending {
+            it.date
+        }
+        _channelFeedItemList.postValue(newChannelItemList)
     }
 
     fun fetchChannelFeedItemById(id: String) {
         currentChannel = RainbowSdk.instance().channels().getChannel(id)
-        if (currentChannel!!.isSubscribed) {
-            RainbowSdk.instance().channels().subscribeToChannel(currentChannel, channelSubscriberListener)
+        if (currentChannel != null) {
+            if (currentChannel!!.isSubscribed) {
+                RainbowSdk.instance().channels().fetchItems(currentChannel, 20, channelFetchItemListener)
+                currentChannel!!.channelItems.registerChangeListener(this::updateChannelListItem)
+                isChannelItemListenerRegistered = true
+                _detailSubjectDataLoadState.postValue(Utility.DataLoadState.LOADED)
+            } else {
+                RainbowSdk.instance().channels().subscribeToChannel(currentChannel, channelSubscriberListener)
+            }
         } else {
+            //show error and ask retry
+            Log.d(Utility.LOG_DEBUG_TAG, "Channel From rainbow is null")
+            _detailSubjectDataLoadState.postValue(Utility.DataLoadState.ERROR)
+        }
+    }
 
+    fun unregisterAnyChannelFetchItemListener() {
+        if (isChannelItemListenerRegistered) {
+            currentChannel?.channelItems?.unregisterChangeListener(this::updateChannelListItem)
         }
     }
 

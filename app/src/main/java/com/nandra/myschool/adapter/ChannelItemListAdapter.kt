@@ -15,20 +15,25 @@ import com.nandra.myschool.utils.Utility
 import com.nandra.myschool.utils.Utility.convertToString
 import kotlinx.android.synthetic.main.channel_detail_item.view.*
 
-class ChannelItemListAdapter : ListAdapter<ChannelItem, ChannelItemListAdapter.HomeViewHolder>(homeDiffCallback) {
+class ChannelItemListAdapter : ListAdapter<ChannelItem, ChannelItemListAdapter.ChannelItemViewHolder>(homeDiffCallback) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChannelItemViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.channel_detail_item, parent, false)
-        return HomeViewHolder(view)
+        return ChannelItemViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: HomeViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ChannelItemViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
 
-    inner class HomeViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    inner class ChannelItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         fun bind(channelItem: ChannelItem) {
-            val contactName = Utility.nameBuilder(RainbowSdk.instance().contacts().getContactFromId(channelItem.contact.id))
+            val contactName = if (channelItem.contact != null) {
+                Utility.nameBuilder(RainbowSdk.instance().contacts().getContactFromId(channelItem.contact.id))
+            } else {
+                ""
+            }
+            //val contactName = Utility.nameBuilder(RainbowSdk.instance().contacts().getContactFromId(channelItem.contact.id))
             val channel = RainbowSdk.instance().channels().getChannel(channelItem.channelId)
             itemView.channel_detail_item_channel_name.text = channel.name
             itemView.channel_detail_item_publisher_name.text = contactName
@@ -55,10 +60,11 @@ class ChannelItemListAdapter : ListAdapter<ChannelItem, ChannelItemListAdapter.H
             } else {
                 itemView.channel_detail_item_content_photo.visibility = View.GONE
             }
-
-            Glide.with(itemView.context)
-                .load(channel.channelAvatar)
-                .into(itemView.channel_detail_item_photo)
+            if (channelItem.contact.photo != null) {
+                Glide.with(itemView.context)
+                    .load(channelItem.contact.photo)
+                    .into(itemView.channel_detail_item_photo)
+            }
         }
     }
 
