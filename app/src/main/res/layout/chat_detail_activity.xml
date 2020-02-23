@@ -106,12 +106,6 @@
             android:layout_marginTop="8dp"
             android:src="@drawable/ic_send"/>
 
-        <!--<Button
-            android:id="@+id/btn_dummy_chat"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            />-->
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

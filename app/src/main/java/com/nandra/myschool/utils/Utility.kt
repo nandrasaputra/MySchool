@@ -47,4 +47,9 @@ object Utility {
             "No Name"
         }
     }
+
+    interface IAddNewChannelItem {
+        fun onSendButtonClicked(message: String)
+        fun onCancelButtonClicked()
+    }
 }
