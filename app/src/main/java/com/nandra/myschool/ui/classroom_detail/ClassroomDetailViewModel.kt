@@ -135,4 +135,8 @@ class ClassroomDetailViewModel(app: Application) : AndroidViewModel(app) {
         }
     }
 
+    fun refreshChannelItemList() {
+        updateChannelListItem()
+    }
+
 }

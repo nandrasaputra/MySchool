@@ -15,7 +15,9 @@ import com.nandra.myschool.utils.Utility
 import com.nandra.myschool.utils.Utility.convertToString
 import kotlinx.android.synthetic.main.channel_detail_item.view.*
 
-class ChannelItemListAdapter : ListAdapter<ChannelItem, ChannelItemListAdapter.ChannelItemViewHolder>(homeDiffCallback) {
+class ChannelItemListAdapter(
+private val onFailureCallback: () -> Unit
+) : ListAdapter<ChannelItem, ChannelItemListAdapter.ChannelItemViewHolder>(homeDiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChannelItemViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.channel_detail_item, parent, false)
@@ -28,42 +30,42 @@ class ChannelItemListAdapter : ListAdapter<ChannelItem, ChannelItemListAdapter.C
 
     inner class ChannelItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         fun bind(channelItem: ChannelItem) {
-            val contactName = if (channelItem.contact != null) {
-                Utility.nameBuilder(RainbowSdk.instance().contacts().getContactFromId(channelItem.contact.id))
-            } else {
-                ""
-            }
-            //val contactName = Utility.nameBuilder(RainbowSdk.instance().contacts().getContactFromId(channelItem.contact.id))
-            val channel = RainbowSdk.instance().channels().getChannel(channelItem.channelId)
-            itemView.channel_detail_item_channel_name.text = channel.name
-            itemView.channel_detail_item_publisher_name.text = contactName
-            if (!channelItem.title.isNullOrEmpty()) {
-                itemView.channel_detail_item_content_title.visibility = View.VISIBLE
-                itemView.channel_detail_item_content_title.text = channelItem.title
-            } else {
-                itemView.channel_detail_item_content_title.visibility = View.GONE
-            }
-            if (!channelItem.message.isNullOrEmpty()) {
-                itemView.channel_detail_item_content_body.visibility = View.VISIBLE
-                itemView.channel_detail_item_content_body.text = Html.fromHtml(channelItem.message).toString()
-            } else {
-                itemView.channel_detail_item_content_body.visibility = View.GONE
-            }
-            itemView.channel_detail_item_publish_date.text = channelItem.creationDate.convertToString()
+            if (channelItem.contact != null) {
+                val contactName = Utility.nameBuilder(RainbowSdk.instance().contacts().getContactFromId(channelItem.contact.id))
+                val channel = RainbowSdk.instance().channels().getChannel(channelItem.channelId)
+                itemView.channel_detail_item_channel_name.text = channel.name
+                itemView.channel_detail_item_publisher_name.text = contactName
+                if (!channelItem.title.isNullOrEmpty()) {
+                    itemView.channel_detail_item_content_title.visibility = View.VISIBLE
+                    itemView.channel_detail_item_content_title.text = channelItem.title
+                } else {
+                    itemView.channel_detail_item_content_title.visibility = View.GONE
+                }
+                if (!channelItem.message.isNullOrEmpty()) {
+                    itemView.channel_detail_item_content_body.visibility = View.VISIBLE
+                    itemView.channel_detail_item_content_body.text = Html.fromHtml(channelItem.message).toString()
+                } else {
+                    itemView.channel_detail_item_content_body.visibility = View.GONE
+                }
+                itemView.channel_detail_item_publish_date.text = channelItem.creationDate.convertToString()
 
-            if(channelItem.imageList.size > 0) {
-                itemView.channel_detail_item_content_photo.visibility = View.VISIBLE
-                //TODO: FIX THIS
-                Glide.with(itemView.context)
-                    .load(channelItem.imageList[0].image)
-                    .into(itemView.channel_detail_item_content_photo)
+                if(channelItem.imageList.size > 0) {
+                    itemView.channel_detail_item_content_photo.visibility = View.VISIBLE
+                    //TODO: FIX THIS
+                    Glide.with(itemView.context)
+                        .load(channelItem.imageList[0].image)
+                        .into(itemView.channel_detail_item_content_photo)
+                } else {
+                    itemView.channel_detail_item_content_photo.visibility = View.GONE
+                }
+                if (channelItem.contact.photo != null) {
+                    Glide.with(itemView.context)
+                        .load(channelItem.contact.photo)
+                        .into(itemView.channel_detail_item_photo)
+                }
             } else {
-                itemView.channel_detail_item_content_photo.visibility = View.GONE
-            }
-            if (channelItem.contact.photo != null) {
-                Glide.with(itemView.context)
-                    .load(channelItem.contact.photo)
-                    .into(itemView.channel_detail_item_photo)
+                //Show Error
+                onFailureCallback.invoke()
             }
         }
     }

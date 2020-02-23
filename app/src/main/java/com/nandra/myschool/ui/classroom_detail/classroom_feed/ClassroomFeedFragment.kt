@@ -57,7 +57,7 @@ class ClassroomFeedFragment : Fragment() {
     }
 
     private fun setupView() {
-        channelItemListAdapter = ChannelItemListAdapter()
+        channelItemListAdapter = ChannelItemListAdapter(::onFeedItemFailureCallback)
         fragment_classroom_feed_recycler_view.apply {
             adapter = channelItemListAdapter
             layoutManager = LinearLayoutManager(activity)
@@ -79,5 +79,9 @@ class ClassroomFeedFragment : Fragment() {
                 Log.d(Utility.LOG_DEBUG_TAG, "Error")
             }
         }
+    }
+
+    private fun onFeedItemFailureCallback() {
+        classroomDetailViewModel.refreshChannelItemList()
     }
 }
