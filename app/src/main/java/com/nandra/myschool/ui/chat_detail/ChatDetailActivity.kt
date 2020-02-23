@@ -21,8 +21,6 @@ class ChatDetailActivity : AppCompatActivity() {
     private lateinit var chatDetailListAdapter: ChatDetailListAdapter
     private val changeListener = IItemListChangeListener(::updateMessageList)
     private var messageList = listOf<IMMessage>()
-    private var sentFileStorage = listOf<RainbowFileDescriptor>()
-    private var receivedFileStorage = listOf<RainbowFileDescriptor>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -94,9 +92,9 @@ class ChatDetailActivity : AppCompatActivity() {
         RainbowSdk.instance().im().getMessagesFromConversation(conversation, 50)
     }
 
-    private fun retrieveMoreMessage() {
+    /*private fun retrieveMoreMessage() {
         RainbowSdk.instance().im().getMoreMessagesFromConversation(conversation, 50)
-    }
+    }*/
 
     private fun updateMessageList() {
         //reloadFileStorage()

@@ -18,7 +18,7 @@ class ProfileViewModel(val app: Application) : AndroidViewModel(app) {
         }
     }
 
-    fun updateProfile() {
+    private fun updateProfile() {
         cachedProfile = RainbowSdk.instance().myProfile()
     }
 }

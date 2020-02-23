@@ -1,22 +1,12 @@
 package com.nandra.myschool.adapter.viewholder
 
-import android.graphics.Bitmap
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.ale.infra.http.GetFileResponse
 import com.ale.infra.manager.IMMessage
-import com.ale.infra.manager.fileserver.IFileProxy
-import com.ale.infra.manager.fileserver.RainbowFileDescriptor
-import com.ale.rainbowsdk.RainbowSdk
-import com.bumptech.glide.Glide
 import com.nandra.myschool.R
-import com.nandra.myschool.utils.Utility
-import kotlinx.android.synthetic.main.chat_detail_activity.view.*
 import kotlinx.android.synthetic.main.chat_detail_received_item.view.*
-import kotlinx.android.synthetic.main.chat_detail_sent_item.view.*
 
 class ChatDetailReceivedMessageViewHolder(view: View)
     : RecyclerView.ViewHolder(view) {

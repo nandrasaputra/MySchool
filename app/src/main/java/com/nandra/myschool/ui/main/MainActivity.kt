@@ -3,6 +3,7 @@ package com.nandra.myschool.ui.main
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -13,6 +14,7 @@ import com.ale.listener.IConnectionChanged
 import com.ale.rainbowsdk.RainbowSdk
 import com.nandra.myschool.R
 import com.nandra.myschool.utils.Utility.ConnectServerState
+import com.nandra.myschool.utils.Utility.LOG_DEBUG_TAG
 import com.nandra.myschool.utils.setupWithNavController
 import kotlinx.android.synthetic.main.main_activity.*
 
@@ -84,9 +86,11 @@ class MainActivity : AppCompatActivity(), IConnectionChanged {
     private fun handleLoadingState(state: ConnectServerState) {
         when(state) {
             ConnectServerState.SUCCESS -> {
+                Log.d(LOG_DEBUG_TAG, "Main Success")
                 main_activity_progress_bar.visibility = View.GONE
             }
             ConnectServerState.LOADING -> {
+                Log.d(LOG_DEBUG_TAG, "Main Loading")
                 main_activity_progress_bar.visibility = View.VISIBLE
             }
             else -> { }

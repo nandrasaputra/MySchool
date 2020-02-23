@@ -33,7 +33,6 @@ private val onFailureCallback: () -> Unit
             if (channelItem.contact != null) {
                 val contactName = Utility.nameBuilder(RainbowSdk.instance().contacts().getContactFromId(channelItem.contact.id))
                 val channel = RainbowSdk.instance().channels().getChannel(channelItem.channelId)
-                itemView.channel_detail_item_channel_name.text = channel.name
                 itemView.channel_detail_item_publisher_name.text = contactName
                 if (!channelItem.title.isNullOrEmpty()) {
                     itemView.channel_detail_item_content_title.visibility = View.VISIBLE
@@ -64,7 +63,7 @@ private val onFailureCallback: () -> Unit
                         .into(itemView.channel_detail_item_photo)
                 }
             } else {
-                //Show Error
+                //RetryLoad
                 onFailureCallback.invoke()
             }
         }

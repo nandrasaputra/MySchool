@@ -17,6 +17,7 @@ import com.nandra.myschool.repository.MySchoolRepository
 import com.nandra.myschool.utils.Utility
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class ClassroomDetailViewModel(app: Application) : AndroidViewModel(app) {
@@ -57,7 +58,6 @@ class ClassroomDetailViewModel(app: Application) : AndroidViewModel(app) {
 
         override fun onSubscribeFailed(p0: RainbowServiceException?) {
             Log.d(Utility.LOG_DEBUG_TAG, "Subscribe Failed")
-            isChannelItemListenerRegistered = false
             _detailSubjectDataLoadState.postValue(Utility.DataLoadState.ERROR)
             //Show Error Message
         }
@@ -93,7 +93,7 @@ class ClassroomDetailViewModel(app: Application) : AndroidViewModel(app) {
                 val newDetailSubject = dataSnapshot.getValue(Subject::class.java)
                 if (newDetailSubject != null) {
                     detailSubject = newDetailSubject
-                    fetchChannelFeedItemById(detailSubject.channel_id)
+                    fetchChannelById(detailSubject.channel_id)
                 } else {
                     //show error and retry
                     Log.d(Utility.LOG_DEBUG_TAG, "subject is null")
@@ -111,8 +111,28 @@ class ClassroomDetailViewModel(app: Application) : AndroidViewModel(app) {
         _channelFeedItemList.postValue(newChannelItemList)
     }
 
-    fun fetchChannelFeedItemById(id: String) {
-        currentChannel = RainbowSdk.instance().channels().getChannel(id)
+    private fun fetchChannelById(id: String) {
+        if (RainbowSdk.instance().channels() != null) {
+            currentChannel = RainbowSdk.instance().channels().getChannel(id)
+            fetchChannelItem()
+        } else {
+            if (true /*Internet Available*/) {
+                viewModelScope.launch {
+                    delay(500L)
+                    if (RainbowSdk.instance().channels() != null) {
+                        currentChannel = RainbowSdk.instance().channels().getChannel(id)
+                        fetchChannelItem()
+                    } else {
+                        _detailSubjectDataLoadState.postValue(Utility.DataLoadState.ERROR)
+                    }
+                }
+            } else {
+                _detailSubjectDataLoadState.postValue(Utility.DataLoadState.ERROR)
+            }
+        }
+    }
+
+    private fun fetchChannelItem() {
         if (currentChannel != null) {
             if (currentChannel!!.isSubscribed) {
                 RainbowSdk.instance().channels().fetchItems(currentChannel, 20, channelFetchItemListener)
@@ -123,8 +143,7 @@ class ClassroomDetailViewModel(app: Application) : AndroidViewModel(app) {
                 RainbowSdk.instance().channels().subscribeToChannel(currentChannel, channelSubscriberListener)
             }
         } else {
-            //show error and ask retry
-            Log.d(Utility.LOG_DEBUG_TAG, "Channel From rainbow is null")
+            //ERROR
             _detailSubjectDataLoadState.postValue(Utility.DataLoadState.ERROR)
         }
     }
@@ -132,6 +151,7 @@ class ClassroomDetailViewModel(app: Application) : AndroidViewModel(app) {
     fun unregisterAnyChannelFetchItemListener() {
         if (isChannelItemListenerRegistered) {
             currentChannel?.channelItems?.unregisterChangeListener(this::updateChannelListItem)
+            isChannelItemListenerRegistered = false
         }
     }
 

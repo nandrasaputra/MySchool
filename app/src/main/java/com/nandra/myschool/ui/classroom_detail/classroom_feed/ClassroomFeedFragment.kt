@@ -8,12 +8,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.ale.infra.http.adapter.concurrent.RainbowServiceException
 import com.ale.infra.manager.channel.Channel
 import com.ale.infra.manager.channel.ChannelItem
-import com.ale.infra.proxy.channel.IChannelProxy
-import com.ale.rainbowsdk.RainbowSdk
 import com.nandra.myschool.R
 import com.nandra.myschool.adapter.ChannelItemListAdapter
 import com.nandra.myschool.ui.classroom_detail.ClassroomDetailViewModel
@@ -22,11 +20,8 @@ import kotlinx.android.synthetic.main.classroom_feed_fragment.*
 
 class ClassroomFeedFragment : Fragment() {
 
-    private lateinit var channel: Channel
     private lateinit var channelItemListAdapter: ChannelItemListAdapter
-    private var channelItemList = listOf<ChannelItem>()
     private val classroomDetailViewModel: ClassroomDetailViewModel by activityViewModels()
-    private val classroomFeedViewModel: ClassroomFeedViewModel by activityViewModels()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.classroom_feed_fragment, container, false)
@@ -61,6 +56,7 @@ class ClassroomFeedFragment : Fragment() {
         fragment_classroom_feed_recycler_view.apply {
             adapter = channelItemListAdapter
             layoutManager = LinearLayoutManager(activity)
+            addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL))
         }
     }
 
@@ -82,6 +78,7 @@ class ClassroomFeedFragment : Fragment() {
     }
 
     private fun onFeedItemFailureCallback() {
+        Log.d(Utility.LOG_DEBUG_TAG, "Retry Load")
         classroomDetailViewModel.refreshChannelItemList()
     }
 }

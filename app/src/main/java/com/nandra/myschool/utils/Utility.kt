@@ -5,16 +5,10 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 object Utility {
-    const val EXTRA_MESSAGE = "message"
     const val EXTRA_SUBJECT_NAME = "subject_name"
     const val EXTRA_SUBJECT_ID = "subject_code"
     const val EXTRA_JID = "jid"
     const val LOG_DEBUG_TAG = "MySchool"
-
-    const val CHANNEL_CATEGORY_PREFERENCE_KEY = "channel_category"
-    const val CHANNEL_ALL_CATEGORY_VALUE = "all"
-    const val CHANNEL_SUBSCRIBED_CATEGORY_VALUE = "subscribed"
-    const val CHANNEL_OWNED_CATEGORY_VALUE = "owned"
 
     enum class ConnectServerState {
         LOADING,

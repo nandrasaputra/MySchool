@@ -51,7 +51,7 @@ class ChatFragment : Fragment() {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 fragment_chat_viewpager.currentItem = tab!!.position
                 fragment_chat_fab.hide()
-                handleFabAppearance(tab!!.position)
+                handleFabAppearance(tab.position)
                 fragment_chat_fab.show()
             }
         })

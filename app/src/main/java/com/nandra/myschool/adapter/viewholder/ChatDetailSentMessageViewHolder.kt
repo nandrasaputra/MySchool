@@ -5,8 +5,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ale.infra.manager.IMMessage
-import com.ale.infra.manager.fileserver.RainbowFileDescriptor
-import com.bumptech.glide.Glide
 import com.nandra.myschool.R
 import kotlinx.android.synthetic.main.chat_detail_sent_item.view.*
 

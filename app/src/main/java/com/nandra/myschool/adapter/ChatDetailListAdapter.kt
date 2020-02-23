@@ -1,16 +1,12 @@
 package com.nandra.myschool.adapter
 
-import android.util.Log
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.ale.infra.manager.IMMessage
-import com.ale.infra.manager.fileserver.RainbowFileDescriptor
 import com.nandra.myschool.adapter.viewholder.ChatDetailReceivedMessageViewHolder
 import com.nandra.myschool.adapter.viewholder.ChatDetailSentMessageViewHolder
-import com.nandra.myschool.utils.Utility
-import java.lang.IllegalArgumentException
 
 class ChatDetailListAdapter : ListAdapter<IMMessage, RecyclerView.ViewHolder>(channelDetailDiffUtilCallback) {
 
