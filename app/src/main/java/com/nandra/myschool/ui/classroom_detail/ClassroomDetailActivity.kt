@@ -1,8 +1,11 @@
 package com.nandra.myschool.ui.classroom_detail
 
+import android.app.Dialog
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.viewpager.widget.ViewPager
@@ -43,7 +46,9 @@ class ClassroomDetailActivity : AppCompatActivity(), IAddNewChannelItem {
             handleDetailLoadState(it)
         })
         activity_classroom_detail_fab.setOnClickListener {
-            AddNewChannelItemDialogFragment(this).show(supportFragmentManager, "DialogFragment")
+            AddNewChannelItemDialogFragment(this)
+                .show(supportFragmentManager, "DialogFragment")
+            //Dialog(this).setContentView(R.layout.add_new_channel_item_dialog_fragment)
         }
     }
 

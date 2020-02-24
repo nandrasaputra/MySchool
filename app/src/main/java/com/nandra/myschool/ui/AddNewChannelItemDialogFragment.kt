@@ -1,5 +1,7 @@
 package com.nandra.myschool.ui
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,16 +20,16 @@ class AddNewChannelItemDialogFragment(private val addNewChannelItemInterface: IA
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        dialog_fragment_add_new_channel_item_send_button.setOnClickListener {
+        add_new_channel_item_send_button.setOnClickListener {
             onSendButtonClicked()
         }
-        dialog_fragment_add_new_channel_item_cancel_button.setOnClickListener {
+        add_new_channel_item_cancel_button.setOnClickListener {
             onCancelButtonClicked()
         }
     }
 
     private fun onSendButtonClicked() {
-        val message = dialog_fragment_add_new_channel_item_text.text.toString()
+        val message = add_new_channel_item_edit_text.text.toString()
         if (message.isNotEmpty()) {
             addNewChannelItemInterface.onSendButtonClicked(message)
             dialog?.dismiss()
