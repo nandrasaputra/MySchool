@@ -20,13 +20,14 @@
             android:text="Classroom Detail"
             android:lines="1"
             android:ellipsize="end"
-            android:textColor="@color/colorPureBlack"
+            android:textColor="@color/toolbarFontColor"
             android:fontFamily="@font/airbnb_cereal_medium" />
 
     </androidx.appcompat.widget.Toolbar>
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/activity_classroom_detail_tab_layout"
+        app:tabTextAppearance="@style/MySchool.TabLayoutStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/activity_classroom_detail_toolbar"
@@ -67,6 +68,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginBottom="16dp"
-        android:layout_marginEnd="16dp"/>
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/ic_add"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

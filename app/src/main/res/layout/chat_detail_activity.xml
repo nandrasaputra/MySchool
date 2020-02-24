@@ -41,6 +41,7 @@
                     android:layout_height="wrap_content"
                     style="@style/MySchool.TextAppearance.Title1"
                     android:text="Nandra Saputra"
+                    android:textColor="@color/toolbarFontColor"
                     android:lines="1"
                     android:ellipsize="end"/>
 
@@ -51,6 +52,7 @@
                     style="@style/MySchool.TextAppearance.SubTitle2"
                     android:text="Online"
                     android:visibility="gone"
+                    android:textColor="@color/toolbarFontColor"
                     android:lines="1"
                     android:ellipsize="end"/>
 

@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
             android:text="Chat"
-            android:textColor="@color/colorPureBlack"
+            android:textColor="@color/toolbarFontColor"
             android:fontFamily="@font/airbnb_cereal_medium" />
 
     </androidx.appcompat.widget.Toolbar>

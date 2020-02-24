@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.nandra.myschool.R
 import com.nandra.myschool.adapter.ClassroomListAdapter
 import com.nandra.myschool.utils.Utility.DataLoadState
+import kotlinx.android.synthetic.main.chat_fragment.*
 import kotlinx.android.synthetic.main.classroom_fragment.*
 
 class ClassroomFragment : Fragment() {

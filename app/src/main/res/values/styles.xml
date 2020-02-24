@@ -14,7 +14,11 @@
     </style>
 
     <style name="MySchoolToolbarTheme" parent="ThemeOverlay.MaterialComponents.ActionBar">
+        <item name="android:background">#439CBB</item>
+    </style>
 
+    <style name="MySchool.BottomNavigationViewStyle" parent="ThemeOverlay.MaterialComponents">
+        <item name="android:background">@color/bottomNavigationViewBackground</item>
     </style>
 
     <style name="MySchool.TextAppearance.GrandTitle" parent="TextAppearance.AppCompat.Title">
@@ -25,6 +29,10 @@
     <style name="MySchool.TextAppearance.Title1" parent="TextAppearance.AppCompat.Title">
         <item name="android:fontFamily">@font/avenir_next_medium</item>
         <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="MySchool.TabLayoutStyle" parent="TextAppearance.Design.Tab">
+        <item name="android:fontFamily">@font/airbnb_cereal_medium</item>
     </style>
 
     <style name="MySchool.TextAppearance.Title2" parent="TextAppearance.AppCompat.Title">

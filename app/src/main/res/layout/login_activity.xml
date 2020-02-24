@@ -39,6 +39,7 @@
         android:layout_marginEnd="24dp"
         android:layout_marginTop="24dp"
         app:layout_constraintTop_toBottomOf="@id/activity_login_logo"
+        android:fontFamily="@font/airbnb_cereal_book"
         android:hint="Email"
         android:inputType="textEmailAddress"
         android:importantForAutofill="no" />
@@ -51,6 +52,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
+        android:fontFamily="@font/airbnb_cereal_book"
         android:hint="Password"
         android:inputType="textPassword"
         android:importantForAutofill="no" />
@@ -68,7 +70,7 @@
         android:layout_marginTop="20dp"
         fancy:fb_text="Sign In"
         fancy:fb_radius="36dp"
-        fancy:fb_defaultColor="#4CAF50"
+        fancy:fb_defaultColor="@color/colorAccent"
         fancy:fb_focusColor="#80000000"
         android:paddingBottom="8dp"
         android:paddingLeft="15dp"

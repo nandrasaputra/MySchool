@@ -57,10 +57,6 @@ class ChatFragment : Fragment() {
         })
         fragment_chat_viewpager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(fragment_chat_tab_layout))
         fragment_chat_viewpager.addOnPageChangeListener(object : ViewPager.SimpleOnPageChangeListener() {
-            override fun onPageSelected(position: Int) {
-                //handleFabAppearance(position)
-            }
-
             override fun onPageScrollStateChanged(state: Int) {
                 when(state) {
                     ViewPager.SCROLL_STATE_IDLE -> {
@@ -76,12 +72,8 @@ class ChatFragment : Fragment() {
 
     private fun handleFabAppearance(position: Int) {
         when(position) {
-            0 -> {
-                fragment_chat_fab.setImageResource(R.drawable.ic_add_new_chat)
-            }
-            1 -> {
-                fragment_chat_fab.setImageResource(R.drawable.ic_person_add)
-            }
+            0 -> { fragment_chat_fab.setImageResource(R.drawable.ic_add_new_chat) }
+            1 -> { fragment_chat_fab.setImageResource(R.drawable.ic_person_add) }
         }
     }
 }

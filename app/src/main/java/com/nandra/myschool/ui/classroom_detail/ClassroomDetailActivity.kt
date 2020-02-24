@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import androidx.viewpager.widget.ViewPager
 import com.ale.infra.http.adapter.concurrent.RainbowServiceException
 import com.ale.infra.manager.channel.ChannelItemBuilder
 import com.ale.infra.proxy.channel.IChannelProxy
@@ -18,6 +19,7 @@ import com.nandra.myschool.utils.Utility.DataLoadState
 import com.nandra.myschool.utils.Utility.EXTRA_SUBJECT_ID
 import com.nandra.myschool.utils.Utility.EXTRA_SUBJECT_NAME
 import com.nandra.myschool.utils.Utility.LOG_DEBUG_TAG
+import kotlinx.android.synthetic.main.chat_fragment.*
 import kotlinx.android.synthetic.main.classroom_detail_activity.*
 
 class ClassroomDetailActivity : AppCompatActivity(), IAddNewChannelItem {
@@ -76,9 +78,32 @@ class ClassroomDetailActivity : AppCompatActivity(), IAddNewChannelItem {
             override fun onTabUnselected(tab: TabLayout.Tab?) {}
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 activity_classroom_detail_viewpager.currentItem = tab!!.position
+                activity_classroom_detail_fab.hide()
+                handleFabAppearance(tab.position)
+                activity_classroom_detail_fab.show()
             }
         })
         activity_classroom_detail_viewpager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(activity_classroom_detail_tab_layout))
+        activity_classroom_detail_viewpager.addOnPageChangeListener(object : ViewPager.SimpleOnPageChangeListener() {
+            override fun onPageScrollStateChanged(state: Int) {
+                when(state) {
+                    ViewPager.SCROLL_STATE_IDLE -> {
+                        activity_classroom_detail_fab.show()
+                    }
+                    ViewPager.SCROLL_STATE_DRAGGING -> {
+                        activity_classroom_detail_fab.hide()
+                    }
+                }
+            }
+        })
+    }
+
+    private fun handleFabAppearance(position: Int) {
+        when(position) {
+            0 -> { activity_classroom_detail_fab.setImageResource(R.drawable.ic_add_new_chat) }
+            1 -> { activity_classroom_detail_fab.setImageResource(R.drawable.ic_cloud_upload) }
+            2 -> { activity_classroom_detail_fab.setImageResource(R.drawable.ic_add)}
+        }
     }
 
     private fun setupToolbar() {

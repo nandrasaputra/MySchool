@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/profile_setting"
-        android:icon="@drawable/ic_setting"
+        android:icon="@drawable/ic_setting_toolbar"
         android:title="Setting"
         app:showAsAction="always"/>
 

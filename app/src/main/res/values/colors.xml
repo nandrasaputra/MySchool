@@ -1,11 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorPrimary">@color/themeColor</color>
+    <color name="colorPrimaryDark">@color/themeColorDarker</color>
+    <color name="colorAccent">#FC3176</color>
+    <color name="themeColor">#439CBB</color>
+    <color name="themeColorDarker">#003A4D</color>
+
+    <color name="bottomNavigationViewItemSelectedColor">#FDE89B</color>
+    <color name="bottomNavigationViewItemColor">@color/colorPureWhite</color>
+    <color name="bottomNavigationViewBackground">@color/themeColor</color>
+
+    <color name="toolbarFontColor">@color/colorPureWhite</color>
 
     <color name="colorPureWhite">#FFFFFF</color>
     <color name="colorPureBlack">#000000</color>
+    <color name="colorPureBlack50">#80000000</color>
+    <color name="colorPureBlack75">#BF000000</color>
     <color name="colorGrey">#707070</color>
     <color name="iconColor">@color/colorPureBlack</color>
     <color name="iconColorSecondary">@color/colorPureWhite</color>
