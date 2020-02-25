@@ -5,8 +5,9 @@
     <color name="colorAccent">#FC3176</color>
     <color name="themeColor">#439CBB</color>
     <color name="themeColorDarker">#003A4D</color>
+    <color name="themeColorTertiary">#FDE89B</color>
 
-    <color name="bottomNavigationViewItemSelectedColor">#FDE89B</color>
+    <color name="bottomNavigationViewItemSelectedColor">@color/themeColorTertiary</color>
     <color name="bottomNavigationViewItemColor">@color/colorPureWhite</color>
     <color name="bottomNavigationViewBackground">@color/themeColor</color>
 

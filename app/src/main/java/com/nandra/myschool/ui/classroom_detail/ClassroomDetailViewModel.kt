@@ -81,7 +81,10 @@ class ClassroomDetailViewModel(app: Application) : AndroidViewModel(app) {
         _detailSubjectDataLoadState.postValue(Utility.DataLoadState.LOADING)
         detailSubjectQuery = repository.getThirdGradeSubjectById(subjectID)
         detailSubjectQuery?.addChildEventListener(object : ChildEventListener {
-            override fun onCancelled(p0: DatabaseError) { _detailSubjectDataLoadState.postValue(Utility.DataLoadState.ERROR) }
+            override fun onCancelled(p0: DatabaseError) {
+                Log.d(Utility.LOG_DEBUG_TAG, "Firebase Database OnCanceled")
+                _detailSubjectDataLoadState.postValue(Utility.DataLoadState.ERROR)
+            }
 
             override fun onChildChanged(dataSnapshot: DataSnapshot, p1: String?) {}
 
@@ -111,40 +114,50 @@ class ClassroomDetailViewModel(app: Application) : AndroidViewModel(app) {
         _channelFeedItemList.postValue(newChannelItemList)
     }
 
+    private fun retryFetchChannel(id: String) {
+        if (true /*Internet Available*/) {
+            viewModelScope.launch {
+                delay(500L)
+                if (RainbowSdk.instance().channels() != null) {
+                    currentChannel = RainbowSdk.instance().channels().getChannel(id)
+                    if (currentChannel != null) {
+                        fetchChannelItem()
+                    } else {
+                        Log.d(Utility.LOG_DEBUG_TAG, "currentChannel is null")
+                        _detailSubjectDataLoadState.postValue(Utility.DataLoadState.ERROR)
+                    }
+                } else {
+                    Log.d(Utility.LOG_DEBUG_TAG, "null channel")
+                    _detailSubjectDataLoadState.postValue(Utility.DataLoadState.ERROR)
+                }
+            }
+        } else {
+            Log.d(Utility.LOG_DEBUG_TAG, "Internet Not Available")
+            _detailSubjectDataLoadState.postValue(Utility.DataLoadState.ERROR)
+        }
+    }
+
     private fun fetchChannelById(id: String) {
         if (RainbowSdk.instance().channels() != null) {
             currentChannel = RainbowSdk.instance().channels().getChannel(id)
-            fetchChannelItem()
-        } else {
-            if (true /*Internet Available*/) {
-                viewModelScope.launch {
-                    delay(500L)
-                    if (RainbowSdk.instance().channels() != null) {
-                        currentChannel = RainbowSdk.instance().channels().getChannel(id)
-                        fetchChannelItem()
-                    } else {
-                        _detailSubjectDataLoadState.postValue(Utility.DataLoadState.ERROR)
-                    }
-                }
+            if (currentChannel != null) {
+                fetchChannelItem()
             } else {
-                _detailSubjectDataLoadState.postValue(Utility.DataLoadState.ERROR)
+                retryFetchChannel(id)
             }
+        } else {
+            retryFetchChannel(id)
         }
     }
 
     private fun fetchChannelItem() {
-        if (currentChannel != null) {
-            if (currentChannel!!.isSubscribed) {
-                RainbowSdk.instance().channels().fetchItems(currentChannel, 20, channelFetchItemListener)
-                currentChannel!!.channelItems.registerChangeListener(this::updateChannelListItem)
-                isChannelItemListenerRegistered = true
-                _detailSubjectDataLoadState.postValue(Utility.DataLoadState.LOADED)
-            } else {
-                RainbowSdk.instance().channels().subscribeToChannel(currentChannel, channelSubscriberListener)
-            }
+        if (currentChannel!!.isSubscribed) {
+            RainbowSdk.instance().channels().fetchItems(currentChannel, 20, channelFetchItemListener)
+            currentChannel!!.channelItems.registerChangeListener(this::updateChannelListItem)
+            isChannelItemListenerRegistered = true
+            _detailSubjectDataLoadState.postValue(Utility.DataLoadState.LOADED)
         } else {
-            //ERROR
-            _detailSubjectDataLoadState.postValue(Utility.DataLoadState.ERROR)
+            RainbowSdk.instance().channels().subscribeToChannel(currentChannel, channelSubscriberListener)
         }
     }
 

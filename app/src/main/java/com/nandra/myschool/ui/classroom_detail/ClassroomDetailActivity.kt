@@ -1,6 +1,8 @@
 package com.nandra.myschool.ui.classroom_detail
 
+import android.app.Activity
 import android.app.Dialog
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -31,6 +33,7 @@ class ClassroomDetailActivity : AppCompatActivity(), IAddNewChannelItem {
     private var subjectID: Int = -1
     private lateinit var subjectName: String
     private val classroomDetailViewModel: ClassroomDetailViewModel by viewModels()
+    private val filePickerRequest = 101
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,17 +42,8 @@ class ClassroomDetailActivity : AppCompatActivity(), IAddNewChannelItem {
         subjectID = intent.getIntExtra(EXTRA_SUBJECT_ID, -1)
         subjectName = intent.getStringExtra(EXTRA_SUBJECT_NAME) ?: "Classroom Detail"
 
-        setupToolbar()
-        setupViewPager()
-
-        classroomDetailViewModel.detailSubjectDataLoadState.observe(this, Observer {
-            handleDetailLoadState(it)
-        })
-        activity_classroom_detail_fab.setOnClickListener {
-            AddNewChannelItemDialogFragment(this)
-                .show(supportFragmentManager, "DialogFragment")
-            //Dialog(this).setContentView(R.layout.add_new_channel_item_dialog_fragment)
-        }
+        setupView()
+        observeViewModel()
     }
 
     override fun onCancelButtonClicked() {
@@ -134,6 +128,43 @@ class ClassroomDetailActivity : AppCompatActivity(), IAddNewChannelItem {
                 //DO SOMETHING
             }
             else -> {}
+        }
+    }
+
+    private fun handleOnFabClicked(tabPosition: Int) {
+        when(tabPosition) {
+            0 -> {AddNewChannelItemDialogFragment(this).show(supportFragmentManager, "DialogFragment")}
+            1 -> {
+                val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                    addCategory(Intent.CATEGORY_OPENABLE)
+                    type = "*/*"
+                }
+                startActivityForResult(intent, filePickerRequest)
+            }
+            2 -> {}
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == filePickerRequest && resultCode == Activity.RESULT_OK){
+            val uri = data?.data
+            Log.d(LOG_DEBUG_TAG, uri.toString())
+        }
+    }
+
+    private fun setupView() {
+        setupToolbar()
+        setupViewPager()
+        handleFabAppearance(activity_classroom_detail_tab_layout.selectedTabPosition)
+    }
+
+    private fun observeViewModel() {
+        classroomDetailViewModel.detailSubjectDataLoadState.observe(this, Observer {
+            handleDetailLoadState(it)
+        })
+        activity_classroom_detail_fab.setOnClickListener {
+            handleOnFabClicked(activity_classroom_detail_tab_layout.selectedTabPosition)
         }
     }
 }

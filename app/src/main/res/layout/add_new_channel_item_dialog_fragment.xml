@@ -38,6 +38,7 @@
             android:id="@+id/add_new_channel_item_edit_text"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_margin="16dp"
             app:layout_constraintTop_toBottomOf="@id/add_new_channel_item_title"
             app:layout_constraintBottom_toTopOf="@id/add_new_channel_item_cancel_button"
             android:hint="Enter a message"

@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.ale.rainbowsdk.RainbowSdk
 import com.nandra.myschool.R
 
 class ClassroomMaterialFragment : Fragment() {
