@@ -1,6 +1,7 @@
 package com.nandra.myschool.ui.classroom_detail
 
 import android.app.Application
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -12,9 +13,14 @@ import com.ale.infra.manager.channel.ChannelItem
 import com.ale.infra.proxy.channel.IChannelProxy
 import com.ale.rainbowsdk.RainbowSdk
 import com.google.firebase.database.*
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.UploadTask
+import com.nandra.myschool.model.Material
 import com.nandra.myschool.model.Subject
 import com.nandra.myschool.repository.MySchoolRepository
-import com.nandra.myschool.utils.Utility
+import com.nandra.myschool.utils.Utility.DataLoadState
+import com.nandra.myschool.utils.Utility.UploadFileState
+import com.nandra.myschool.utils.Utility.LOG_DEBUG_TAG
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -22,11 +28,18 @@ import kotlinx.coroutines.launch
 
 class ClassroomDetailViewModel(app: Application) : AndroidViewModel(app) {
 
+    val uploadFileState: LiveData<UploadFileState>
+        get() = _uploadFileState
+    private val _uploadFileState = MutableLiveData<UploadFileState>(UploadFileState.IDLE)
+    private var currentUploadTask: UploadTask? = null
+
+    private val storage = FirebaseStorage.getInstance()
+    private val database = FirebaseDatabase.getInstance()
     private var fetchDetailSubjectDatabaseReferenceJob: Job? = null
     private val repository = MySchoolRepository()
-    val detailSubjectDataLoadState: LiveData<Utility.DataLoadState>
+    val detailSubjectDataLoadState: LiveData<DataLoadState>
         get() = _detailSubjectDataLoadState
-    private val _detailSubjectDataLoadState = MutableLiveData<Utility.DataLoadState>(Utility.DataLoadState.UNLOADED)
+    private val _detailSubjectDataLoadState = MutableLiveData<DataLoadState>(DataLoadState.UNLOADED)
     private var detailSubjectQuery: Query? = null
     var detailSubject = Subject()
 
@@ -49,16 +62,16 @@ class ClassroomDetailViewModel(app: Application) : AndroidViewModel(app) {
 
     private val channelSubscriberListener = object : IChannelProxy.IChannelSubscribeListener {
         override fun onSubscribeSuccess(p0: Channel?) {
-            Log.d(Utility.LOG_DEBUG_TAG, "Subscribe Success")
+            Log.d(LOG_DEBUG_TAG, "Subscribe Success")
             RainbowSdk.instance().channels().fetchItems(currentChannel, 20, channelFetchItemListener)
             currentChannel!!.channelItems.registerChangeListener(::updateChannelListItem)
             isChannelItemListenerRegistered = true
-            _detailSubjectDataLoadState.postValue(Utility.DataLoadState.LOADED)
+            _detailSubjectDataLoadState.postValue(DataLoadState.LOADED)
         }
 
         override fun onSubscribeFailed(p0: RainbowServiceException?) {
-            Log.d(Utility.LOG_DEBUG_TAG, "Subscribe Failed")
-            _detailSubjectDataLoadState.postValue(Utility.DataLoadState.ERROR)
+            Log.d(LOG_DEBUG_TAG, "Subscribe Failed")
+            _detailSubjectDataLoadState.postValue(DataLoadState.ERROR)
             //Show Error Message
         }
     }
@@ -70,7 +83,7 @@ class ClassroomDetailViewModel(app: Application) : AndroidViewModel(app) {
         }
     }
 
-    fun changeSubjectDataLoadState(state: Utility.DataLoadState) {
+    fun changeSubjectDataLoadState(state: DataLoadState) {
         _detailSubjectDataLoadState.value = state
     }
 
@@ -78,12 +91,12 @@ class ClassroomDetailViewModel(app: Application) : AndroidViewModel(app) {
         fetchDetailSubjectDatabaseReferenceJob?.run {
             this.join()
         }
-        _detailSubjectDataLoadState.postValue(Utility.DataLoadState.LOADING)
+        _detailSubjectDataLoadState.postValue(DataLoadState.LOADING)
         detailSubjectQuery = repository.getThirdGradeSubjectById(subjectID)
         detailSubjectQuery?.addChildEventListener(object : ChildEventListener {
             override fun onCancelled(p0: DatabaseError) {
-                Log.d(Utility.LOG_DEBUG_TAG, "Firebase Database OnCanceled")
-                _detailSubjectDataLoadState.postValue(Utility.DataLoadState.ERROR)
+                Log.d(LOG_DEBUG_TAG, "Firebase Database OnCanceled")
+                _detailSubjectDataLoadState.postValue(DataLoadState.ERROR)
             }
 
             override fun onChildChanged(dataSnapshot: DataSnapshot, p1: String?) {}
@@ -99,8 +112,8 @@ class ClassroomDetailViewModel(app: Application) : AndroidViewModel(app) {
                     fetchChannelById(detailSubject.channel_id)
                 } else {
                     //show error and retry
-                    Log.d(Utility.LOG_DEBUG_TAG, "subject is null")
-                    _detailSubjectDataLoadState.postValue(Utility.DataLoadState.ERROR)
+                    Log.d(LOG_DEBUG_TAG, "subject is null")
+                    _detailSubjectDataLoadState.postValue(DataLoadState.ERROR)
                 }
             }
         })
@@ -123,17 +136,17 @@ class ClassroomDetailViewModel(app: Application) : AndroidViewModel(app) {
                     if (currentChannel != null) {
                         fetchChannelItem()
                     } else {
-                        Log.d(Utility.LOG_DEBUG_TAG, "currentChannel is null")
-                        _detailSubjectDataLoadState.postValue(Utility.DataLoadState.ERROR)
+                        Log.d(LOG_DEBUG_TAG, "currentChannel is null")
+                        _detailSubjectDataLoadState.postValue(DataLoadState.ERROR)
                     }
                 } else {
-                    Log.d(Utility.LOG_DEBUG_TAG, "null channel")
-                    _detailSubjectDataLoadState.postValue(Utility.DataLoadState.ERROR)
+                    Log.d(LOG_DEBUG_TAG, "null channel")
+                    _detailSubjectDataLoadState.postValue(DataLoadState.ERROR)
                 }
             }
         } else {
-            Log.d(Utility.LOG_DEBUG_TAG, "Internet Not Available")
-            _detailSubjectDataLoadState.postValue(Utility.DataLoadState.ERROR)
+            Log.d(LOG_DEBUG_TAG, "Internet Not Available")
+            _detailSubjectDataLoadState.postValue(DataLoadState.ERROR)
         }
     }
 
@@ -155,7 +168,7 @@ class ClassroomDetailViewModel(app: Application) : AndroidViewModel(app) {
             RainbowSdk.instance().channels().fetchItems(currentChannel, 20, channelFetchItemListener)
             currentChannel!!.channelItems.registerChangeListener(this::updateChannelListItem)
             isChannelItemListenerRegistered = true
-            _detailSubjectDataLoadState.postValue(Utility.DataLoadState.LOADED)
+            _detailSubjectDataLoadState.postValue(DataLoadState.LOADED)
         } else {
             RainbowSdk.instance().channels().subscribeToChannel(currentChannel, channelSubscriberListener)
         }
@@ -170,6 +183,52 @@ class ClassroomDetailViewModel(app: Application) : AndroidViewModel(app) {
 
     fun refreshChannelItemList() {
         updateChannelListItem()
+    }
+
+    fun uploadFileToFirebase(uri: Uri, fileExtension: String) {
+        val subjectCode = detailSubject.subject_code
+        val fileName: String = System.currentTimeMillis().toString() + "." + fileExtension
+        val subjectRef = storage.reference.child("material").child("third_grade").child(subjectCode)
+        val fullRef = subjectRef.child(fileName)
+
+        currentUploadTask = fullRef.putFile(uri)
+        _uploadFileState.value = UploadFileState.UPLOADING
+        currentUploadTask?.run {
+            this.addOnFailureListener {
+                _uploadFileState.value = UploadFileState.FAILED
+            }.addOnSuccessListener {
+                fullRef.downloadUrl.addOnSuccessListener {
+                    val databaseRef = database.reference.child("material").child("third_grade").child(subjectCode)
+                    val material = Material("lala", "la", "la", "la", it.toString())
+                    postMaterial(material, databaseRef)
+                }.addOnFailureListener {
+                    _uploadFileState.value = UploadFileState.FAILED
+                }
+            }
+        }
+    }
+
+    fun resetUploadFileState() {
+        _uploadFileState.value = UploadFileState.IDLE
+        currentUploadTask = null
+    }
+
+    fun attemptToCancelUpload() {
+        currentUploadTask?.run{
+            this.cancel()
+        }
+    }
+
+    fun isUploadInProgress() : Boolean {
+        return currentUploadTask?.isInProgress ?: false
+    }
+
+    private fun postMaterial(material: Material, reference: DatabaseReference) {
+        reference.push().setValue(material).addOnCompleteListener {
+            _uploadFileState.value = UploadFileState.UPLOADED
+        }.addOnFailureListener {
+            _uploadFileState.value = UploadFileState.FAILED
+        }
     }
 
 }

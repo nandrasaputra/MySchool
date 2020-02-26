@@ -9,6 +9,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.nandra.myschool.R
 import com.nandra.myschool.adapter.ClassroomListAdapter
+import com.nandra.myschool.ui.ClassScheduleDialogFragment
 import com.nandra.myschool.utils.Utility.DataLoadState
 import kotlinx.android.synthetic.main.chat_fragment.*
 import kotlinx.android.synthetic.main.classroom_fragment.*
@@ -51,6 +52,16 @@ class ClassroomFragment : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.classroom_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when(item.itemId) {
+            R.id.classroom_schedule -> {
+                ClassScheduleDialogFragment().show(childFragmentManager, "Schedule Dialog")
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     private fun handleDataLoadState(state: DataLoadState) {

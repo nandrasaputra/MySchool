@@ -29,6 +29,14 @@ object Utility {
         UNAVAILABLE
     }
 
+    enum class UploadFileState() {
+        IDLE,
+        UPLOADING,
+        UPLOADED,
+        FAILED,
+        CANCELED
+    }
+
     fun Date.convertToString() : String {
         val simpleDateFormat = SimpleDateFormat("hh:mm a")
         return simpleDateFormat.format(this)
@@ -50,6 +58,11 @@ object Utility {
 
     interface IAddNewChannelItem {
         fun onSendButtonClicked(message: String)
+        fun onCancelButtonClicked()
+    }
+
+    interface IUploadFile {
+        fun onUploadButtonClicked()
         fun onCancelButtonClicked()
     }
 }

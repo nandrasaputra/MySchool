@@ -3,9 +3,11 @@ package com.nandra.myschool.ui.classroom_detail
 import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.webkit.MimeTypeMap
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -19,6 +21,7 @@ import com.google.android.material.tabs.TabLayout
 import com.nandra.myschool.R
 import com.nandra.myschool.adapter.ClassroomDetailViewPagerAdapter
 import com.nandra.myschool.ui.AddNewChannelItemDialogFragment
+import com.nandra.myschool.ui.UploadFileConfirmationDialogFragment
 import com.nandra.myschool.utils.Utility.IAddNewChannelItem
 import com.nandra.myschool.utils.Utility.DataLoadState
 import com.nandra.myschool.utils.Utility.EXTRA_SUBJECT_ID
@@ -150,6 +153,7 @@ class ClassroomDetailActivity : AppCompatActivity(), IAddNewChannelItem {
         if (requestCode == filePickerRequest && resultCode == Activity.RESULT_OK){
             val uri = data?.data
             Log.d(LOG_DEBUG_TAG, uri.toString())
+            UploadFileConfirmationDialogFragment(uri!!).show(supportFragmentManager, "UploadFragment")
         }
     }
 
