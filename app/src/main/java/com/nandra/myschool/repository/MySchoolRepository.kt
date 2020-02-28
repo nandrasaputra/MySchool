@@ -20,4 +20,8 @@ class MySchoolRepository {
     fun getScheduleListByUserId(userID: String) : DatabaseReference {
         return FirebaseDatabase.getInstance().reference.child("users").child(userID).child("schedule")
     }
+
+    fun getSessionQueryBySubjectCode(subjectCode: String) : Query {
+        return FirebaseDatabase.getInstance().reference.child("session").child("third_grade").child(subjectCode).limitToLast(20)
+    }
 }

@@ -65,4 +65,9 @@ object Utility {
         fun onUploadButtonClicked()
         fun onCancelButtonClicked()
     }
+
+    interface IAddNewSession {
+        fun onAddSessionButtonClicked(topic: String, description: String)
+        fun onCancelSessionButtonClicked()
+    }
 }

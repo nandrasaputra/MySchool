@@ -68,6 +68,7 @@
         android:layout_height="0dp"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
+        android:layout_marginBottom="4dp"
         android:clipToPadding="false"
         app:layout_constraintTop_toBottomOf="@id/activity_detail_chat_toolbar"
         app:layout_constraintBottom_toTopOf="@id/activity_chat_message_layout" />
@@ -76,9 +77,12 @@
         android:id="@+id/activity_chat_message_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/chat_typer_background"
+        android:elevation="1dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="4dp">
 
         <EditText
             android:id="@+id/activity_chat_message_edit_text"
@@ -92,6 +96,8 @@
             android:layout_marginEnd="16dp"
             android:inputType="textMultiLine"
             android:isScrollContainer="true"
+            android:background="@android:color/transparent"
+            android:fontFamily="@font/airbnb_cereal_book"
             android:maxLines="4"
             android:scrollbars="vertical"
             android:hint="Enter Message"/>
@@ -106,7 +112,8 @@
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
-            android:src="@drawable/ic_send"/>
+            android:src="@drawable/ic_send"
+            android:tint="@color/themeColor"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

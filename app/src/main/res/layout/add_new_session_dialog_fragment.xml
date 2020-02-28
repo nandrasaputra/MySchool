@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="300dp"
+        android:layout_height="260dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+            android:id="@+id/add_new_session_title_background"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toTopOf="@id/add_new_session_title"
+            app:layout_constraintBottom_toBottomOf="@id/add_new_session_title"
+            android:src="@color/themeColor"
+            />
+
+        <TextView
+            android:id="@+id/add_new_session_title"
+            style="@style/MySchool.TextAppearance.GrandTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintTop_toTopOf="parent"
+            android:textColor="@color/colorPureWhite"
+            android:text="Add New Session"/>
+
+        <EditText
+            android:id="@+id/add_new_session_topic_text"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_margin="16dp"
+
+            app:layout_constraintTop_toBottomOf="@id/add_new_session_title"
+
+            android:hint="Enter Topic"
+            />
+
+        <EditText
+            android:id="@+id/add_new_session_description_text"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_margin="16dp"
+            app:layout_constraintTop_toBottomOf="@id/add_new_session_topic_text"
+            app:layout_constraintBottom_toTopOf="@id/add_new_session_cancel_button"
+            android:hint="Enter Description"
+            android:gravity=""
+            />
+
+        <Button
+            android:id="@+id/add_new_session_cancel_button"
+            android:layout_width="100dp"
+            android:layout_height="32dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/add_new_session_add_button"
+            android:layout_marginBottom="16dp"
+            android:textSize="12sp"
+            android:background="@drawable/add_new_channel_item_cancel_button_background"
+            android:textColor="@color/colorPureWhite"
+            android:fontFamily="@font/avenir_next_medium"
+            android:text="Cancel"/>
+
+        <Button
+            android:id="@+id/add_new_session_add_button"
+            android:layout_width="100dp"
+            android:layout_height="32dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/add_new_session_cancel_button"
+            android:layout_marginBottom="16dp"
+            android:textSize="12sp"
+            android:fontFamily="@font/avenir_next_medium"
+            android:background="@drawable/add_new_channel_item_send_button_background"
+            android:textColor="@color/colorPureWhite"
+            android:text="Add"/>
+
+        <ProgressBar
+            android:id="@+id/add_new_session_progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@id/add_new_session_cancel_button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/add_new_session_title"
+            android:visibility="gone"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout >

@@ -10,23 +10,36 @@ import androidx.lifecycle.viewModelScope
 import com.ale.infra.http.adapter.concurrent.RainbowServiceException
 import com.ale.infra.manager.channel.Channel
 import com.ale.infra.manager.channel.ChannelItem
+import com.ale.infra.manager.channel.ChannelItemBuilder
 import com.ale.infra.proxy.channel.IChannelProxy
 import com.ale.rainbowsdk.RainbowSdk
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.UploadTask
 import com.nandra.myschool.model.Material
+import com.nandra.myschool.model.Session
 import com.nandra.myschool.model.Subject
 import com.nandra.myschool.repository.MySchoolRepository
 import com.nandra.myschool.utils.Utility.DataLoadState
 import com.nandra.myschool.utils.Utility.UploadFileState
 import com.nandra.myschool.utils.Utility.LOG_DEBUG_TAG
+import com.nandra.myschool.utils.Utility.nameBuilder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.HashMap
 
 class ClassroomDetailViewModel(app: Application) : AndroidViewModel(app) {
+
+    private var fetchSessionDatabaseReferenceJob: Job? = null
+    val sessionDataLoadState: LiveData<DataLoadState>
+        get() = _sessionDataLoadState
+    private val _sessionDataLoadState = MutableLiveData<DataLoadState>(DataLoadState.UNLOADED)
+    private var sessionDatabaseQuery: Query? = null
+    var sessionList = listOf<Session>()
 
     val uploadFileState: LiveData<UploadFileState>
         get() = _uploadFileState
@@ -58,6 +71,37 @@ class ClassroomDetailViewModel(app: Application) : AndroidViewModel(app) {
         override fun onFetchItemsSuccess() {
             updateChannelListItem()
         }
+    }
+
+    fun getSessionList() {
+        //HandleInternetConnectionHere
+        viewModelScope.launch(Dispatchers.IO) {
+            fetchSessionList()
+        }
+    }
+
+    private suspend fun fetchSessionList() {
+        val subjectCode = detailSubject.subject_code
+        fetchSessionDatabaseReferenceJob?.run {
+            this.join()
+        }
+        _sessionDataLoadState.postValue(DataLoadState.LOADING)
+        sessionDatabaseQuery = repository.getSessionQueryBySubjectCode(subjectCode)
+        sessionDatabaseQuery?.addValueEventListener(object : ValueEventListener{
+            override fun onCancelled(p0: DatabaseError) {
+                _sessionDataLoadState.postValue(DataLoadState.ERROR)
+            }
+
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val dataSnapshotList = dataSnapshot.children
+                val newSessionList = mutableListOf<Session>()
+                for (item in dataSnapshotList) {
+                    newSessionList.add(item.getValue(Session::class.java)!!)
+                }
+                sessionList = newSessionList.reversed()
+                _sessionDataLoadState.postValue(DataLoadState.LOADED)
+            }
+        })
     }
 
     private val channelSubscriberListener = object : IChannelProxy.IChannelSubscribeListener {
@@ -229,6 +273,44 @@ class ClassroomDetailViewModel(app: Application) : AndroidViewModel(app) {
         }.addOnFailureListener {
             _uploadFileState.value = UploadFileState.FAILED
         }
+    }
+
+    fun addNewItemToChannel(message: String) {
+        Log.d(LOG_DEBUG_TAG, "Send Button Clicked, Message = $message")
+        val channelItem = ChannelItemBuilder().setMessage(message).build()
+        RainbowSdk.instance().channels().createItem(currentChannel, channelItem, object : IChannelProxy.IChannelCreateItemListener {
+            override fun onCreateMessageItemFailed(p0: RainbowServiceException?) {
+                Log.d(LOG_DEBUG_TAG, "Create Item Failed")
+            }
+
+            override fun onCreateMessageItemSuccess(p0: String?) {
+                refreshChannelItemList()
+                Log.d(LOG_DEBUG_TAG, "Create Item Success")
+            }
+        })
+    }
+
+    fun addNewSession(topic: String, description: String) {
+        val subjectCode = detailSubject.subject_code
+        val date = getCurrentStringDate()
+        val initiatorName = nameBuilder(RainbowSdk.instance().myProfile().connectedUser)
+        val key = database.reference.child("session").child("third_grade").child(subjectCode).push().key
+        val path = "/session/third_grade/$subjectCode/$key"
+        val session = Session(topic, description, initiatorName, date, "Open", key!!)
+
+        val childUpdate = HashMap<String, Any>()
+        childUpdate[path] = session
+        database.reference.updateChildren(childUpdate).addOnSuccessListener {
+            Log.d(LOG_DEBUG_TAG, "SESSION POST SUCCESS")
+        }.addOnFailureListener {
+            Log.d(LOG_DEBUG_TAG, "SESSION POST FAILED")
+        }
+    }
+
+    private fun getCurrentStringDate() : String {
+        val calendar = Calendar.getInstance()
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy")
+        return dateFormat.format(calendar.time)
     }
 
 }
