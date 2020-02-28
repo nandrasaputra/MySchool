@@ -32,7 +32,7 @@ class ClassroomSessionFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        classroomSessionListAdapter = ClassroomSessionListAdapter()
+        classroomSessionListAdapter = ClassroomSessionListAdapter(classroomDetailViewModel.userRole)
         fragment_classroom_session_recycler_view.apply {
             adapter = classroomSessionListAdapter
             layoutManager = LinearLayoutManager(activity)

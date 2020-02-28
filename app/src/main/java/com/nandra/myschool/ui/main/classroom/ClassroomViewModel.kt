@@ -10,18 +10,24 @@ import com.ale.rainbowsdk.RainbowSdk
 import com.google.firebase.database.*
 import com.nandra.myschool.model.Schedule
 import com.nandra.myschool.model.Subject
+import com.nandra.myschool.model.User
 import com.nandra.myschool.repository.MySchoolRepository
 import com.nandra.myschool.utils.Utility.DataLoadState
 import com.nandra.myschool.utils.Utility.LOG_DEBUG_TAG
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 class ClassroomViewModel(app: Application) : AndroidViewModel(app) {
 
+    var currentUser = User()
     private var fetchSubjectDatabaseReferenceJob: Job? = null
     private var fetchScheduleDatabaseReferenceJob: Job? = null
+    private var fetchUserDatabaseReferenceJob: Job? = null
     private val repository = MySchoolRepository()
+
+    val userLoadState: LiveData<DataLoadState>
+        get() = _userDataLoadState
+    private val _userDataLoadState = MutableLiveData<DataLoadState>(DataLoadState.UNLOADED)
 
     val subjectDataLoadState: LiveData<DataLoadState>
         get() = _subjectDataLoadState
@@ -39,27 +45,54 @@ class ClassroomViewModel(app: Application) : AndroidViewModel(app) {
 
     fun getSubjectList() {
         //HandleInternetConnectionHere
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             fetchSubjectList()
         }
     }
 
     fun getScheduleList() {
         //HandleInternetConnectionHere
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             fetchScheduleList()
         }
+    }
+
+    fun getUser() {
+        //HandleInternetConnectionHere
+        viewModelScope.launch {
+            fetchUser()
+        }
+    }
+
+    private suspend fun fetchUser() {
+        fetchUserDatabaseReferenceJob?.run {
+            this.join()
+        }
+        _userDataLoadState.value = DataLoadState.LOADING
+        val userDatabaseReference = repository.getUserDatabaseReference(RainbowSdk.instance().myProfile().connectedUser.id)
+        userDatabaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onCancelled(p0: DatabaseError) {
+                Log.d(LOG_DEBUG_TAG, "Fetch User Canceled")
+                _userDataLoadState.value = DataLoadState.ERROR
+            }
+
+            override fun onDataChange(dataSnapShot: DataSnapshot) {
+                currentUser = dataSnapShot.getValue(User::class.java)!!
+                _userDataLoadState.value = DataLoadState.LOADED
+            }
+
+        })
     }
 
     private suspend fun fetchScheduleList() {
         fetchScheduleDatabaseReferenceJob?.run {
             this.join()
         }
-        _scheduleDataLoadState.postValue(DataLoadState.LOADING)
-        scheduleDatabaseReference = repository.getScheduleListByUserId(RainbowSdk.instance().myProfile().connectedUser.id)
+        _scheduleDataLoadState.value = DataLoadState.LOADING
+        scheduleDatabaseReference = repository.getScheduleDatabaseReference(RainbowSdk.instance().myProfile().connectedUser.id)
         scheduleDatabaseReference?.addValueEventListener(object : ValueEventListener{
             override fun onCancelled(p0: DatabaseError) {
-                _scheduleDataLoadState.postValue(DataLoadState.ERROR)
+                _scheduleDataLoadState.value = DataLoadState.ERROR
             }
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -70,7 +103,7 @@ class ClassroomViewModel(app: Application) : AndroidViewModel(app) {
                 }
                 Log.d(LOG_DEBUG_TAG, newScheduleList.size.toString())
                 scheduleList = newScheduleList
-                _scheduleDataLoadState.postValue(DataLoadState.LOADED)
+                _scheduleDataLoadState.value = DataLoadState.LOADED
             }
         })
     }
@@ -79,11 +112,11 @@ class ClassroomViewModel(app: Application) : AndroidViewModel(app) {
         fetchSubjectDatabaseReferenceJob?.run {
             this.join()
         }
-        _subjectDataLoadState.postValue(DataLoadState.LOADING)
-        subjectDatabaseReference = repository.getSubjectByUserId(RainbowSdk.instance().myProfile().connectedUser.id)
+        _subjectDataLoadState.value = DataLoadState.LOADING
+        subjectDatabaseReference = repository.getSubjectDatabaseReference(RainbowSdk.instance().myProfile().connectedUser.id)
         subjectDatabaseReference?.addValueEventListener(object : ValueEventListener{
             override fun onCancelled(p0: DatabaseError) {
-                _subjectDataLoadState.postValue(DataLoadState.ERROR)
+                _subjectDataLoadState.value = DataLoadState.ERROR
             }
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -93,7 +126,7 @@ class ClassroomViewModel(app: Application) : AndroidViewModel(app) {
                     newSubjectList.add(item.getValue(Subject::class.java)!!)
                 }
                 subjectList = newSubjectList
-                _subjectDataLoadState.postValue(DataLoadState.LOADED)
+                _subjectDataLoadState.value = DataLoadState.LOADED
             }
         })
     }

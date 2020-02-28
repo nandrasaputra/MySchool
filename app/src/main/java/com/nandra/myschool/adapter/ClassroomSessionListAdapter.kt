@@ -1,17 +1,22 @@
 package com.nandra.myschool.adapter
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.ale.infra.manager.channel.ChannelItem
+import com.ale.util.Util
 import com.nandra.myschool.R
 import com.nandra.myschool.model.Session
+import com.nandra.myschool.ui.classroom_detail.ClassroomSessionDetail
+import com.nandra.myschool.utils.Utility
 import kotlinx.android.synthetic.main.classroom_session_item.view.*
 
-class ClassroomSessionListAdapter : ListAdapter<Session, ClassroomSessionListAdapter.ClassroomSessionViewHolder>(classroomSessionDiffCallback) {
+class ClassroomSessionListAdapter(
+    val userRole: String
+) : ListAdapter<Session, ClassroomSessionListAdapter.ClassroomSessionViewHolder>(classroomSessionDiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ClassroomSessionViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.classroom_session_item, parent, false)
@@ -33,6 +38,14 @@ class ClassroomSessionListAdapter : ListAdapter<Session, ClassroomSessionListAda
                 fragment_classroom_session_item_description.text = session.session_description
                 fragment_classroom_session_item_status.text = status
                 fragment_classroom_session_item_initiator.text = initiator
+            }
+            itemView.setOnClickListener {
+                val intent = Intent(itemView.context, ClassroomSessionDetail::class.java).apply {
+                    putExtra(Utility.EXTRA_SESSION_KEY, session.session_key)
+                    putExtra(Utility.EXTRA_SUBJECT_CODE, session.subject_code)
+                    putExtra(Utility.EXTRA_USER_ROLE, userRole)
+                }
+                itemView.context.startActivity(intent)
             }
         }
     }

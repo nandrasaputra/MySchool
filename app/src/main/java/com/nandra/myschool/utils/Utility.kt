@@ -6,7 +6,9 @@ import java.util.*
 
 object Utility {
     const val EXTRA_SUBJECT_NAME = "subject_name"
-    const val EXTRA_SUBJECT_ID = "subject_code"
+    const val EXTRA_SUBJECT_CODE = "subject_code"
+    const val EXTRA_SESSION_KEY = "session_id"
+    const val EXTRA_USER_ROLE = "user_role"
     const val EXTRA_JID = "jid"
     const val LOG_DEBUG_TAG = "MySchool"
 
@@ -54,6 +56,12 @@ object Utility {
         } else {
             "No Name"
         }
+    }
+
+    fun getCurrentStringDate() : String {
+        val calendar = Calendar.getInstance()
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy")
+        return dateFormat.format(calendar.time)
     }
 
     interface IAddNewChannelItem {

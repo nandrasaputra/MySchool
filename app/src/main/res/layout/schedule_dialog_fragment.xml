@@ -43,7 +43,6 @@
             app:layout_constraintBottom_toTopOf="@id/schedule_dialog_fragment_cancel_button"
             android:hint="Enter a message"
             android:scrollbars="vertical"
-            android:fadeScrollbars="false"
             />
 
         <Button

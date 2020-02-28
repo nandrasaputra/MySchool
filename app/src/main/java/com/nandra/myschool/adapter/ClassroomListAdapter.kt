@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide
 import com.google.firebase.storage.FirebaseStorage
 import com.nandra.myschool.R
 import com.nandra.myschool.model.Subject
+import com.nandra.myschool.model.User
 import com.nandra.myschool.ui.classroom_detail.ClassroomDetailActivity
 import com.nandra.myschool.utils.Utility
 import kotlinx.android.synthetic.main.classroom_fragment_item.view.*
@@ -18,6 +19,11 @@ import kotlinx.android.synthetic.main.classroom_fragment_item.view.*
 class ClassroomListAdapter : ListAdapter<Subject, ClassroomListAdapter.ClassroomViewHolder>(classroomDiffCallback) {
 
     val storage = FirebaseStorage.getInstance()
+    var currentUser = User()
+
+    fun submitUser(user: User) {
+        currentUser = user
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ClassroomViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.classroom_fragment_item, parent, false)
@@ -74,7 +80,8 @@ class ClassroomListAdapter : ListAdapter<Subject, ClassroomListAdapter.Classroom
             itemView.setOnClickListener {
                 val intent = Intent(itemView.context, ClassroomDetailActivity::class.java).apply {
                     putExtra(Utility.EXTRA_SUBJECT_NAME, subject.subject_name)
-                    putExtra(Utility.EXTRA_SUBJECT_ID, subject.subject_id)
+                    putExtra(Utility.EXTRA_SUBJECT_CODE, subject.subject_id)
+                    putExtra(Utility.EXTRA_USER_ROLE, currentUser.role)
                 }
                 itemView.context.startActivity(intent)
             }

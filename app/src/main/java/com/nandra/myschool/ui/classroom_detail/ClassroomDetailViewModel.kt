@@ -23,6 +23,7 @@ import com.nandra.myschool.repository.MySchoolRepository
 import com.nandra.myschool.utils.Utility.DataLoadState
 import com.nandra.myschool.utils.Utility.UploadFileState
 import com.nandra.myschool.utils.Utility.LOG_DEBUG_TAG
+import com.nandra.myschool.utils.Utility.getCurrentStringDate
 import com.nandra.myschool.utils.Utility.nameBuilder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -33,6 +34,8 @@ import java.util.*
 import kotlin.collections.HashMap
 
 class ClassroomDetailViewModel(app: Application) : AndroidViewModel(app) {
+
+    var userRole = ""
 
     private var fetchSessionDatabaseReferenceJob: Job? = null
     val sessionDataLoadState: LiveData<DataLoadState>
@@ -86,7 +89,7 @@ class ClassroomDetailViewModel(app: Application) : AndroidViewModel(app) {
             this.join()
         }
         _sessionDataLoadState.postValue(DataLoadState.LOADING)
-        sessionDatabaseQuery = repository.getSessionQueryBySubjectCode(subjectCode)
+        sessionDatabaseQuery = repository.getThirdGradeSessionQuery(subjectCode)
         sessionDatabaseQuery?.addValueEventListener(object : ValueEventListener{
             override fun onCancelled(p0: DatabaseError) {
                 _sessionDataLoadState.postValue(DataLoadState.ERROR)
@@ -136,7 +139,7 @@ class ClassroomDetailViewModel(app: Application) : AndroidViewModel(app) {
             this.join()
         }
         _detailSubjectDataLoadState.postValue(DataLoadState.LOADING)
-        detailSubjectQuery = repository.getThirdGradeSubjectById(subjectID)
+        detailSubjectQuery = repository.getThirdGradeSubjectQuery(subjectID)
         detailSubjectQuery?.addChildEventListener(object : ChildEventListener {
             override fun onCancelled(p0: DatabaseError) {
                 Log.d(LOG_DEBUG_TAG, "Firebase Database OnCanceled")
@@ -296,7 +299,7 @@ class ClassroomDetailViewModel(app: Application) : AndroidViewModel(app) {
         val initiatorName = nameBuilder(RainbowSdk.instance().myProfile().connectedUser)
         val key = database.reference.child("session").child("third_grade").child(subjectCode).push().key
         val path = "/session/third_grade/$subjectCode/$key"
-        val session = Session(topic, description, initiatorName, date, "Open", key!!)
+        val session = Session(topic, description, initiatorName, date, "Open", key!!, subjectCode)
 
         val childUpdate = HashMap<String, Any>()
         childUpdate[path] = session
@@ -305,12 +308,6 @@ class ClassroomDetailViewModel(app: Application) : AndroidViewModel(app) {
         }.addOnFailureListener {
             Log.d(LOG_DEBUG_TAG, "SESSION POST FAILED")
         }
-    }
-
-    private fun getCurrentStringDate() : String {
-        val calendar = Calendar.getInstance()
-        val dateFormat = SimpleDateFormat("dd/MM/yyyy")
-        return dateFormat.format(calendar.time)
     }
 
 }

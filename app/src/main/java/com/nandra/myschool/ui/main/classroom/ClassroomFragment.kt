@@ -1,6 +1,7 @@
 package com.nandra.myschool.ui.main.classroom
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -11,6 +12,7 @@ import com.nandra.myschool.R
 import com.nandra.myschool.adapter.ClassroomListAdapter
 import com.nandra.myschool.ui.ClassScheduleDialogFragment
 import com.nandra.myschool.utils.Utility.DataLoadState
+import com.nandra.myschool.utils.Utility.LOG_DEBUG_TAG
 import kotlinx.android.synthetic.main.chat_fragment.*
 import kotlinx.android.synthetic.main.classroom_fragment.*
 
@@ -32,6 +34,9 @@ class ClassroomFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         classroomViewModel.subjectDataLoadState.observe(viewLifecycleOwner, Observer {
             handleDataLoadState(it)
+        })
+        classroomViewModel.userLoadState.observe(viewLifecycleOwner, Observer {
+            handleUserLoadState(it)
         })
     }
 
@@ -72,6 +77,19 @@ class ClassroomFragment : Fragment() {
             DataLoadState.LOADING -> { }
             DataLoadState.LOADED -> {
                 classroomListAdapter.submitList(classroomViewModel.subjectList)
+            }
+            else -> {}
+        }
+    }
+
+    private fun handleUserLoadState(state: DataLoadState) {
+        when(state) {
+            DataLoadState.UNLOADED -> {
+                classroomViewModel.getUser()
+            }
+            DataLoadState.LOADING -> { }
+            DataLoadState.LOADED -> {
+                classroomListAdapter.submitUser(classroomViewModel.currentUser)
             }
             else -> {}
         }
