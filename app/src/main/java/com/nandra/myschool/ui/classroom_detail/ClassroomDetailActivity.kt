@@ -14,9 +14,11 @@ import com.nandra.myschool.adapter.ClassroomDetailViewPagerAdapter
 import com.nandra.myschool.ui.AddNewChannelItemDialogFragment
 import com.nandra.myschool.ui.AddNewSessionDialogFragment
 import com.nandra.myschool.ui.UploadFileConfirmationDialogFragment
+import com.nandra.myschool.utils.Utility
 import com.nandra.myschool.utils.Utility.IAddNewChannelItem
 import com.nandra.myschool.utils.Utility.DataLoadState
 import com.nandra.myschool.utils.Utility.EXTRA_SUBJECT_CODE
+import com.nandra.myschool.utils.Utility.EXTRA_SUBJECT_ID
 import com.nandra.myschool.utils.Utility.EXTRA_SUBJECT_NAME
 import com.nandra.myschool.utils.Utility.EXTRA_USER_ROLE
 import com.nandra.myschool.utils.Utility.LOG_DEBUG_TAG
@@ -27,6 +29,7 @@ class ClassroomDetailActivity : AppCompatActivity(), IAddNewChannelItem {
     private lateinit var classroomDetailViewPagerAdapter: ClassroomDetailViewPagerAdapter
     private var subjectID: Int = -1
     private var userRole = ""
+    private var subjectCode = ""
     private lateinit var subjectName: String
     private val classroomDetailViewModel: ClassroomDetailViewModel by viewModels()
     private val filePickerRequest = 101
@@ -35,11 +38,13 @@ class ClassroomDetailActivity : AppCompatActivity(), IAddNewChannelItem {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.classroom_detail_activity)
 
-        subjectID = intent.getIntExtra(EXTRA_SUBJECT_CODE, -1)
+        subjectID = intent.getIntExtra(EXTRA_SUBJECT_ID, -1)
         subjectName = intent.getStringExtra(EXTRA_SUBJECT_NAME) ?: "Classroom Detail"
         userRole = intent.getStringExtra(EXTRA_USER_ROLE) ?: ""
+        subjectCode = intent.getStringExtra(EXTRA_SUBJECT_CODE) ?: ""
 
         classroomDetailViewModel.userRole = userRole
+        classroomDetailViewModel.subjectCode = subjectCode
 
         Log.d(LOG_DEBUG_TAG, "User Role = $userRole")
 
@@ -154,8 +159,9 @@ class ClassroomDetailActivity : AppCompatActivity(), IAddNewChannelItem {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == filePickerRequest && resultCode == Activity.RESULT_OK){
             val uri = data?.data
+            val mime = Utility.getMimeTypeFromUri(application, uri!!)
             Log.d(LOG_DEBUG_TAG, uri.toString())
-            UploadFileConfirmationDialogFragment(uri!!).show(supportFragmentManager, "UploadFragment")
+            UploadFileConfirmationDialogFragment(uri, mime!!).show(supportFragmentManager, "UploadFragment")
         }
     }
 

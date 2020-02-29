@@ -30,4 +30,8 @@ class MySchoolRepository {
         return FirebaseDatabase.getInstance().reference.child("session").child("third_grade").child(subjectCode)
             .child(sessionKey).child("session_attendance")
     }
+
+    fun getMaterialDatabaseReference(subjectCode: String) : DatabaseReference {
+        return FirebaseDatabase.getInstance().reference.child("material").child("third_grade").child(subjectCode)
+    }
 }

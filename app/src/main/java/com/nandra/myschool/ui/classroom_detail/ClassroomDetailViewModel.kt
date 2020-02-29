@@ -20,6 +20,7 @@ import com.nandra.myschool.model.Material
 import com.nandra.myschool.model.Session
 import com.nandra.myschool.model.Subject
 import com.nandra.myschool.repository.MySchoolRepository
+import com.nandra.myschool.utils.Utility
 import com.nandra.myschool.utils.Utility.DataLoadState
 import com.nandra.myschool.utils.Utility.UploadFileState
 import com.nandra.myschool.utils.Utility.LOG_DEBUG_TAG
@@ -36,6 +37,16 @@ import kotlin.collections.HashMap
 class ClassroomDetailViewModel(app: Application) : AndroidViewModel(app) {
 
     var userRole = ""
+    var subjectCode = ""
+    private val storage = FirebaseStorage.getInstance()
+    private val database = FirebaseDatabase.getInstance()
+
+    private var fetchMaterialDatabaseReferenceJob: Job? = null
+    val materialDataLoadState: LiveData<DataLoadState>
+        get() = _materialDataLoadState
+    private val _materialDataLoadState = MutableLiveData<DataLoadState>(DataLoadState.UNLOADED)
+    private var materialDatabaseReference: DatabaseReference? = null
+    var materialList = listOf<Material>()
 
     private var fetchSessionDatabaseReferenceJob: Job? = null
     val sessionDataLoadState: LiveData<DataLoadState>
@@ -49,8 +60,7 @@ class ClassroomDetailViewModel(app: Application) : AndroidViewModel(app) {
     private val _uploadFileState = MutableLiveData<UploadFileState>(UploadFileState.IDLE)
     private var currentUploadTask: UploadTask? = null
 
-    private val storage = FirebaseStorage.getInstance()
-    private val database = FirebaseDatabase.getInstance()
+
     private var fetchDetailSubjectDatabaseReferenceJob: Job? = null
     private val repository = MySchoolRepository()
     val detailSubjectDataLoadState: LiveData<DataLoadState>
@@ -78,21 +88,20 @@ class ClassroomDetailViewModel(app: Application) : AndroidViewModel(app) {
 
     fun getSessionList() {
         //HandleInternetConnectionHere
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             fetchSessionList()
         }
     }
 
     private suspend fun fetchSessionList() {
-        val subjectCode = detailSubject.subject_code
         fetchSessionDatabaseReferenceJob?.run {
             this.join()
         }
-        _sessionDataLoadState.postValue(DataLoadState.LOADING)
+        _sessionDataLoadState.value = DataLoadState.LOADING
         sessionDatabaseQuery = repository.getThirdGradeSessionQuery(subjectCode)
         sessionDatabaseQuery?.addValueEventListener(object : ValueEventListener{
             override fun onCancelled(p0: DatabaseError) {
-                _sessionDataLoadState.postValue(DataLoadState.ERROR)
+                _sessionDataLoadState.value = DataLoadState.ERROR
             }
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -102,7 +111,37 @@ class ClassroomDetailViewModel(app: Application) : AndroidViewModel(app) {
                     newSessionList.add(item.getValue(Session::class.java)!!)
                 }
                 sessionList = newSessionList.reversed()
-                _sessionDataLoadState.postValue(DataLoadState.LOADED)
+                _sessionDataLoadState.value = DataLoadState.LOADED
+            }
+        })
+    }
+
+    fun getMaterialList() {
+        //HandleInternetConnectionHere
+        viewModelScope.launch {
+            fetchMaterialList()
+        }
+    }
+
+    private suspend fun fetchMaterialList() {
+        fetchMaterialDatabaseReferenceJob?.run {
+            this.join()
+        }
+        _materialDataLoadState.value = DataLoadState.LOADING
+        materialDatabaseReference = repository.getMaterialDatabaseReference(subjectCode)
+        materialDatabaseReference?.addValueEventListener(object : ValueEventListener{
+            override fun onCancelled(p0: DatabaseError) {
+                _materialDataLoadState.value = DataLoadState.ERROR
+            }
+
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val dataSnapshotList = dataSnapshot.children
+                val newMaterialList = mutableListOf<Material>()
+                for (item in dataSnapshotList) {
+                    newMaterialList.add(item.getValue(Material::class.java)!!)
+                }
+                materialList = newMaterialList.reversed()
+                _materialDataLoadState.value = DataLoadState.LOADED
             }
         })
     }
@@ -125,7 +164,7 @@ class ClassroomDetailViewModel(app: Application) : AndroidViewModel(app) {
 
     fun getDetailSubject(subjectID: Int) {
         //HandleInternetConnectionHere
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             fetchDetailSubject(subjectID)
         }
     }
@@ -232,8 +271,7 @@ class ClassroomDetailViewModel(app: Application) : AndroidViewModel(app) {
         updateChannelListItem()
     }
 
-    fun uploadFileToFirebase(uri: Uri, fileExtension: String) {
-        val subjectCode = detailSubject.subject_code
+    fun uploadFileToFirebase(uri: Uri, materialName: String, mimeType: String, fileExtension: String) {
         val fileName: String = System.currentTimeMillis().toString() + "." + fileExtension
         val subjectRef = storage.reference.child("material").child("third_grade").child(subjectCode)
         val fullRef = subjectRef.child(fileName)
@@ -246,7 +284,7 @@ class ClassroomDetailViewModel(app: Application) : AndroidViewModel(app) {
             }.addOnSuccessListener {
                 fullRef.downloadUrl.addOnSuccessListener {
                     val databaseRef = database.reference.child("material").child("third_grade").child(subjectCode)
-                    val material = Material("lala", "la", "la", "la", it.toString())
+                    val material = Material(materialName, mimeType, getCurrentStringDate(), it.toString())
                     postMaterial(material, databaseRef)
                 }.addOnFailureListener {
                     _uploadFileState.value = UploadFileState.FAILED
@@ -294,7 +332,6 @@ class ClassroomDetailViewModel(app: Application) : AndroidViewModel(app) {
     }
 
     fun addNewSession(topic: String, description: String) {
-        val subjectCode = detailSubject.subject_code
         val date = getCurrentStringDate()
         val initiatorName = nameBuilder(RainbowSdk.instance().myProfile().connectedUser)
         val key = database.reference.child("session").child("third_grade").child(subjectCode).push().key

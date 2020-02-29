@@ -19,7 +19,10 @@ import com.nandra.myschool.utils.Utility.UploadFileState
 import com.nandra.myschool.utils.Utility.UploadFileState.*
 import kotlinx.android.synthetic.main.upload_file_confirmation_dialog_fragment.*
 
-class UploadFileConfirmationDialogFragment(private val uri: Uri) : DialogFragment() {
+class UploadFileConfirmationDialogFragment(
+    private val uri: Uri,
+    private val mimeType: String
+) : DialogFragment() {
 
     private val classroomDetailViewModel: ClassroomDetailViewModel by activityViewModels()
 
@@ -30,7 +33,12 @@ class UploadFileConfirmationDialogFragment(private val uri: Uri) : DialogFragmen
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         upload_file_confirmation_upload_button.setOnClickListener {
-            classroomDetailViewModel.uploadFileToFirebase(uri, getFileExtension(uri))
+            val materialName = upload_file_confirmation_material_name_edit_text.text.toString()
+            if (materialName.isNotEmpty()) {
+                classroomDetailViewModel.uploadFileToFirebase(uri, materialName, mimeType, getFileExtension(uri))
+            } else {
+                Toast.makeText(activity, "Material Name Cannot Be Empty!", Toast.LENGTH_SHORT).show()
+            }
         }
         upload_file_confirmation_cancel_button.setOnClickListener {
             when {
@@ -60,7 +68,7 @@ class UploadFileConfirmationDialogFragment(private val uri: Uri) : DialogFragmen
             IDLE -> {}
             UPLOADING -> {
                 upload_file_confirmation_upload_button.visibility = View.GONE
-                upload_file_confirmation_edit_text.visibility = View.GONE
+                upload_file_confirmation_material_name_edit_text.visibility = View.GONE
                 upload_file_confirmation_progress_bar.visibility = View.VISIBLE
             }
             UPLOADED -> {

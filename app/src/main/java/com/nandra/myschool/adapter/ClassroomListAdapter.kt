@@ -80,7 +80,8 @@ class ClassroomListAdapter : ListAdapter<Subject, ClassroomListAdapter.Classroom
             itemView.setOnClickListener {
                 val intent = Intent(itemView.context, ClassroomDetailActivity::class.java).apply {
                     putExtra(Utility.EXTRA_SUBJECT_NAME, subject.subject_name)
-                    putExtra(Utility.EXTRA_SUBJECT_CODE, subject.subject_id)
+                    putExtra(Utility.EXTRA_SUBJECT_ID, subject.subject_id)
+                    putExtra(Utility.EXTRA_SUBJECT_CODE, subject.subject_code)
                     putExtra(Utility.EXTRA_USER_ROLE, currentUser.role)
                 }
                 itemView.context.startActivity(intent)

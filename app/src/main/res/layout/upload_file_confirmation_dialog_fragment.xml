@@ -34,14 +34,14 @@
             android:textColor="@color/colorPureWhite"
             android:text="Upload File"/>
 
-        <TextView
-            android:id="@+id/upload_file_confirmation_edit_text"
+        <EditText
+            android:id="@+id/upload_file_confirmation_material_name_edit_text"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_margin="16dp"
             app:layout_constraintTop_toBottomOf="@id/upload_file_confirmation_title"
             app:layout_constraintBottom_toTopOf="@id/upload_file_confirmation_cancel_button"
-            android:hint="Upload Selected File To Current Classroom?"
+            android:hint="Enter Material Name"
             />
 
         <Button

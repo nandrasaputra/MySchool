@@ -1,12 +1,18 @@
 package com.nandra.myschool.utils
 
+import android.app.Application
+import android.net.Uri
+import android.webkit.MimeTypeMap
 import com.ale.infra.contact.IRainbowContact
+import java.io.File
+import java.net.URI
 import java.text.SimpleDateFormat
 import java.util.*
 
 object Utility {
     const val EXTRA_SUBJECT_NAME = "subject_name"
     const val EXTRA_SUBJECT_CODE = "subject_code"
+    const val EXTRA_SUBJECT_ID = "subject_id"
     const val EXTRA_SESSION_KEY = "session_id"
     const val EXTRA_USER_ROLE = "user_role"
     const val EXTRA_JID = "jid"
@@ -62,6 +68,12 @@ object Utility {
         val calendar = Calendar.getInstance()
         val dateFormat = SimpleDateFormat("dd/MM/yyyy")
         return dateFormat.format(calendar.time)
+    }
+
+    fun getMimeTypeFromUri(app: Application, uri: Uri) : String? {
+        val contentResolver = app.contentResolver
+        val mime = MimeTypeMap.getSingleton()
+        return contentResolver.getType(uri)
     }
 
     interface IAddNewChannelItem {
