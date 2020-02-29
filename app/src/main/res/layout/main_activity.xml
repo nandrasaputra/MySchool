@@ -23,13 +23,4 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/bottom_nav_menu"/>
 
-    <ProgressBar
-        android:id="@+id/main_activity_progress_bar"
-        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@id/main_activity_bottom_navigation_bar"
-        android:indeterminate="true"
-        android:visibility="gone"/>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

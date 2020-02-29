@@ -15,7 +15,8 @@ import com.ale.infra.manager.channel.ChannelItem
 import com.nandra.myschool.R
 import com.nandra.myschool.adapter.ChannelItemListAdapter
 import com.nandra.myschool.ui.classroom_detail.ClassroomDetailViewModel
-import com.nandra.myschool.utils.Utility
+import com.nandra.myschool.utils.Utility.DataLoadState
+import com.nandra.myschool.utils.Utility.LOG_DEBUG_TAG
 import kotlinx.android.synthetic.main.classroom_feed_fragment.*
 
 class ClassroomFeedFragment : Fragment() {
@@ -32,12 +33,6 @@ class ClassroomFeedFragment : Fragment() {
         classroomDetailViewModel.detailSubjectDataLoadState.observe(viewLifecycleOwner, Observer {
             handleDetailLoadState(it)
         })
-        classroomDetailViewModel.channelFeedItemList.observe(viewLifecycleOwner, Observer {
-            if (classroomDetailViewModel.detailSubjectDataLoadState.value == Utility.DataLoadState.LOADED) {
-                channelItemListAdapter.submitList(it)
-                channelItemListAdapter.notifyDataSetChanged()
-            }
-        })
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -48,7 +43,7 @@ class ClassroomFeedFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         classroomDetailViewModel.unregisterAnyChannelFetchItemListener()
-        classroomDetailViewModel.changeSubjectDataLoadState(Utility.DataLoadState.UNLOADED)
+        classroomDetailViewModel.changeSubjectDataLoadState(DataLoadState.UNLOADED)
     }
 
     private fun setupView() {
@@ -60,25 +55,26 @@ class ClassroomFeedFragment : Fragment() {
         }
     }
 
-    private fun handleDetailLoadState(state: Utility.DataLoadState) {
+    private fun handleDetailLoadState(state: DataLoadState) {
         when (state) {
-            Utility.DataLoadState.UNLOADED -> {
-                Log.d(Utility.LOG_DEBUG_TAG, "UnLoaded")
+            DataLoadState.UNLOADED -> { }
+            DataLoadState.LOADING -> {
+                fragment_classroom_feed_shimmer_veil.visibility = View.VISIBLE
+                fragment_classroom_feed_shimmer_layout.visibility = View.VISIBLE
+                fragment_classroom_feed_shimmer_layout.startShimmer()
             }
-            Utility.DataLoadState.LOADING -> {
-                Log.d(Utility.LOG_DEBUG_TAG, "Loading")
+            DataLoadState.LOADED -> {
+                channelItemListAdapter.submitList(classroomDetailViewModel.channelFeedItemList)
+                channelItemListAdapter.notifyDataSetChanged()
+                fragment_classroom_feed_shimmer_veil.visibility = View.GONE
+                fragment_classroom_feed_shimmer_layout.visibility = View.GONE
+                fragment_classroom_feed_shimmer_layout.stopShimmer()
             }
-            Utility.DataLoadState.LOADED -> {
-                Log.d(Utility.LOG_DEBUG_TAG, "Loaded")
-            }
-            else -> {
-                Log.d(Utility.LOG_DEBUG_TAG, "Error")
-            }
+            else -> { }
         }
     }
 
     private fun onFeedItemFailureCallback() {
-        Log.d(Utility.LOG_DEBUG_TAG, "Retry Load")
         classroomDetailViewModel.refreshChannelItemList()
     }
 }

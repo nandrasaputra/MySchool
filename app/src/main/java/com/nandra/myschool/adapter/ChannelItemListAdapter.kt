@@ -13,14 +13,14 @@ import com.bumptech.glide.Glide
 import com.nandra.myschool.R
 import com.nandra.myschool.utils.Utility
 import com.nandra.myschool.utils.Utility.convertToString
-import kotlinx.android.synthetic.main.channel_detail_item.view.*
+import kotlinx.android.synthetic.main.classroom_detail_feed_item.view.*
 
 class ChannelItemListAdapter(
 private val onFailureCallback: () -> Unit
 ) : ListAdapter<ChannelItem, ChannelItemListAdapter.ChannelItemViewHolder>(homeDiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChannelItemViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.channel_detail_item, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.classroom_detail_feed_item, parent, false)
         return ChannelItemViewHolder(view)
     }
 
@@ -33,34 +33,34 @@ private val onFailureCallback: () -> Unit
             if (channelItem.contact != null) {
                 val contactName = Utility.nameBuilder(RainbowSdk.instance().contacts().getContactFromId(channelItem.contact.id))
                 val channel = RainbowSdk.instance().channels().getChannel(channelItem.channelId)
-                itemView.channel_detail_item_publisher_name.text = contactName
+                itemView.classroom_detail_feed_item_publisher_name.text = contactName
                 if (!channelItem.title.isNullOrEmpty()) {
-                    itemView.channel_detail_item_content_title.visibility = View.VISIBLE
-                    itemView.channel_detail_item_content_title.text = channelItem.title
+                    itemView.classroom_detail_feed_item_content_title.visibility = View.VISIBLE
+                    itemView.classroom_detail_feed_item_content_title.text = channelItem.title
                 } else {
-                    itemView.channel_detail_item_content_title.visibility = View.GONE
+                    itemView.classroom_detail_feed_item_content_title.visibility = View.GONE
                 }
                 if (!channelItem.message.isNullOrEmpty()) {
-                    itemView.channel_detail_item_content_body.visibility = View.VISIBLE
-                    itemView.channel_detail_item_content_body.text = Html.fromHtml(channelItem.message).toString()
+                    itemView.classroom_detail_feed_item_content_body.visibility = View.VISIBLE
+                    itemView.classroom_detail_feed_item_content_body.text = Html.fromHtml(channelItem.message).toString()
                 } else {
-                    itemView.channel_detail_item_content_body.visibility = View.GONE
+                    itemView.classroom_detail_feed_item_content_body.visibility = View.GONE
                 }
-                itemView.channel_detail_item_publish_date.text = channelItem.creationDate.convertToString()
+                itemView.classroom_detail_feed_item_publish_date.text = channelItem.creationDate.convertToString()
 
                 if(channelItem.imageList.size > 0) {
-                    itemView.channel_detail_item_content_photo.visibility = View.VISIBLE
+                    itemView.classroom_detail_feed_item_content_photo.visibility = View.VISIBLE
                     //TODO: FIX THIS
                     Glide.with(itemView.context)
                         .load(channelItem.imageList[0].image)
-                        .into(itemView.channel_detail_item_content_photo)
+                        .into(itemView.classroom_detail_feed_item_content_photo)
                 } else {
-                    itemView.channel_detail_item_content_photo.visibility = View.GONE
+                    itemView.classroom_detail_feed_item_content_photo.visibility = View.GONE
                 }
                 if (channelItem.contact.photo != null) {
                     Glide.with(itemView.context)
                         .load(channelItem.contact.photo)
-                        .into(itemView.channel_detail_item_photo)
+                        .into(itemView.classroom_detail_feed_item_photo)
                 }
             } else {
                 //RetryLoad

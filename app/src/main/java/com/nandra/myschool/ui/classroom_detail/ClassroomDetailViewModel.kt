@@ -71,15 +71,11 @@ class ClassroomDetailViewModel(app: Application) : AndroidViewModel(app) {
 
     var isChannelItemListenerRegistered: Boolean = false
 
-    val channelFeedItemList: LiveData<List<ChannelItem>>
-        get() = _channelFeedItemList
-    private val _channelFeedItemList = MutableLiveData<List<ChannelItem>>(listOf())
+    var channelFeedItemList = listOf<ChannelItem>()
 
     var currentChannel: Channel? = null
     private val channelFetchItemListener = object : IChannelProxy.IChannelFetchItemsListener {
-        override fun onFetchItemsFailed(p0: RainbowServiceException?) {
-            throw Exception("LOLZ")
-        }
+        override fun onFetchItemsFailed(p0: RainbowServiceException?) { }
 
         override fun onFetchItemsSuccess() {
             updateChannelListItem()
@@ -148,15 +144,12 @@ class ClassroomDetailViewModel(app: Application) : AndroidViewModel(app) {
 
     private val channelSubscriberListener = object : IChannelProxy.IChannelSubscribeListener {
         override fun onSubscribeSuccess(p0: Channel?) {
-            Log.d(LOG_DEBUG_TAG, "Subscribe Success")
             RainbowSdk.instance().channels().fetchItems(currentChannel, 20, channelFetchItemListener)
             currentChannel!!.channelItems.registerChangeListener(::updateChannelListItem)
             isChannelItemListenerRegistered = true
-            _detailSubjectDataLoadState.postValue(DataLoadState.LOADED)
         }
 
         override fun onSubscribeFailed(p0: RainbowServiceException?) {
-            Log.d(LOG_DEBUG_TAG, "Subscribe Failed")
             _detailSubjectDataLoadState.postValue(DataLoadState.ERROR)
             //Show Error Message
         }
@@ -181,7 +174,6 @@ class ClassroomDetailViewModel(app: Application) : AndroidViewModel(app) {
         detailSubjectQuery = repository.getThirdGradeSubjectQuery(subjectID)
         detailSubjectQuery?.addChildEventListener(object : ChildEventListener {
             override fun onCancelled(p0: DatabaseError) {
-                Log.d(LOG_DEBUG_TAG, "Firebase Database OnCanceled")
                 _detailSubjectDataLoadState.postValue(DataLoadState.ERROR)
             }
 
@@ -198,7 +190,6 @@ class ClassroomDetailViewModel(app: Application) : AndroidViewModel(app) {
                     fetchChannelById(detailSubject.channel_id)
                 } else {
                     //show error and retry
-                    Log.d(LOG_DEBUG_TAG, "subject is null")
                     _detailSubjectDataLoadState.postValue(DataLoadState.ERROR)
                 }
             }
@@ -210,7 +201,8 @@ class ClassroomDetailViewModel(app: Application) : AndroidViewModel(app) {
         newChannelItemList.sortByDescending {
             it.date
         }
-        _channelFeedItemList.postValue(newChannelItemList)
+        channelFeedItemList = newChannelItemList
+        _detailSubjectDataLoadState.postValue(DataLoadState.LOADED)
     }
 
     private fun retryFetchChannel(id: String) {
@@ -222,16 +214,13 @@ class ClassroomDetailViewModel(app: Application) : AndroidViewModel(app) {
                     if (currentChannel != null) {
                         fetchChannelItem()
                     } else {
-                        Log.d(LOG_DEBUG_TAG, "currentChannel is null")
                         _detailSubjectDataLoadState.postValue(DataLoadState.ERROR)
                     }
                 } else {
-                    Log.d(LOG_DEBUG_TAG, "null channel")
                     _detailSubjectDataLoadState.postValue(DataLoadState.ERROR)
                 }
             }
         } else {
-            Log.d(LOG_DEBUG_TAG, "Internet Not Available")
             _detailSubjectDataLoadState.postValue(DataLoadState.ERROR)
         }
     }
@@ -254,7 +243,6 @@ class ClassroomDetailViewModel(app: Application) : AndroidViewModel(app) {
             RainbowSdk.instance().channels().fetchItems(currentChannel, 20, channelFetchItemListener)
             currentChannel!!.channelItems.registerChangeListener(this::updateChannelListItem)
             isChannelItemListenerRegistered = true
-            _detailSubjectDataLoadState.postValue(DataLoadState.LOADED)
         } else {
             RainbowSdk.instance().channels().subscribeToChannel(currentChannel, channelSubscriberListener)
         }
@@ -317,16 +305,12 @@ class ClassroomDetailViewModel(app: Application) : AndroidViewModel(app) {
     }
 
     fun addNewItemToChannel(message: String) {
-        Log.d(LOG_DEBUG_TAG, "Send Button Clicked, Message = $message")
         val channelItem = ChannelItemBuilder().setMessage(message).build()
         RainbowSdk.instance().channels().createItem(currentChannel, channelItem, object : IChannelProxy.IChannelCreateItemListener {
-            override fun onCreateMessageItemFailed(p0: RainbowServiceException?) {
-                Log.d(LOG_DEBUG_TAG, "Create Item Failed")
-            }
+            override fun onCreateMessageItemFailed(p0: RainbowServiceException?) { }
 
             override fun onCreateMessageItemSuccess(p0: String?) {
                 refreshChannelItemList()
-                Log.d(LOG_DEBUG_TAG, "Create Item Success")
             }
         })
     }
@@ -340,11 +324,7 @@ class ClassroomDetailViewModel(app: Application) : AndroidViewModel(app) {
 
         val childUpdate = HashMap<String, Any>()
         childUpdate[path] = session
-        database.reference.updateChildren(childUpdate).addOnSuccessListener {
-            Log.d(LOG_DEBUG_TAG, "SESSION POST SUCCESS")
-        }.addOnFailureListener {
-            Log.d(LOG_DEBUG_TAG, "SESSION POST FAILED")
-        }
+        database.reference.updateChildren(childUpdate)
     }
 
 }

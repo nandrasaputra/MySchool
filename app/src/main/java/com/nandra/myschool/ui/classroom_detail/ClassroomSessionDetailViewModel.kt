@@ -78,26 +78,9 @@ class ClassroomSessionDetailViewModel(app: Application) : AndroidViewModel(app) 
 
                 val childUpdate = HashMap<String, Any>()
                 childUpdate[path] = sessionAttendance
-                FirebaseDatabase.getInstance().reference.updateChildren(childUpdate).addOnSuccessListener {
-                    Log.d(LOG_DEBUG_TAG, "Submit Attendance Success")
-                }.addOnFailureListener {
-                    Log.d(LOG_DEBUG_TAG, "Submit Attendance Failed")
-                }
+                FirebaseDatabase.getInstance().reference.updateChildren(childUpdate)
             }
         })
-
-        /*val initiatorName = Utility.nameBuilder(RainbowSdk.instance().myProfile().connectedUser)
-        val key = database.reference.child("session").child("third_grade").child(subjectCode).push().key
-        val path = "/session/third_grade/$subjectCode/$key"
-        val session = Session(topic, description, initiatorName, date, "Open", key!!, subjectCode)
-
-        val childUpdate = HashMap<String, Any>()
-        childUpdate[path] = session
-        database.reference.updateChildren(childUpdate).addOnSuccessListener {
-            Log.d(Utility.LOG_DEBUG_TAG, "SESSION POST SUCCESS")
-        }.addOnFailureListener {
-            Log.d(Utility.LOG_DEBUG_TAG, "SESSION POST FAILED")
-        }*/
     }
 
 }

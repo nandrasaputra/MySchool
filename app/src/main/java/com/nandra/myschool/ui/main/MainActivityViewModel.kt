@@ -13,6 +13,14 @@ import com.nandra.myschool.utils.Utility.ConnectServerState
 
 class MainActivityViewModel(app: Application) : AndroidViewModel(app) {
 
+    fun checkServerLoadingState() {
+        if (RainbowSdk.instance().connection().isInProgress) {
+            _loadingState.value = ConnectServerState.LOADING
+        } else if (RainbowSdk.instance().connection().isConnected) {
+            _loadingState.value = ConnectServerState.SUCCESS
+        }
+    }
+
     val connectServerState: LiveData<ConnectServerState>
         get() = _loadingState
     private val _loadingState = MutableLiveData<ConnectServerState>(ConnectServerState.LOADING)

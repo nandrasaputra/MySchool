@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.nandra.myschool.R
 import com.nandra.myschool.adapter.ClassroomListAdapter
 import com.nandra.myschool.ui.ClassScheduleDialogFragment
+import com.nandra.myschool.ui.main.MainActivityViewModel
+import com.nandra.myschool.utils.Utility.ConnectServerState
 import com.nandra.myschool.utils.Utility.DataLoadState
 import com.nandra.myschool.utils.Utility.LOG_DEBUG_TAG
 import kotlinx.android.synthetic.main.chat_fragment.*
@@ -19,6 +21,7 @@ import kotlinx.android.synthetic.main.classroom_fragment.*
 class ClassroomFragment : Fragment() {
 
     private val classroomViewModel: ClassroomViewModel by activityViewModels()
+    private val mainActivityViewModel: MainActivityViewModel by activityViewModels()
     private lateinit var classroomListAdapter: ClassroomListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,6 +40,9 @@ class ClassroomFragment : Fragment() {
         })
         classroomViewModel.userLoadState.observe(viewLifecycleOwner, Observer {
             handleUserLoadState(it)
+        })
+        mainActivityViewModel.connectServerState.observe(viewLifecycleOwner, Observer {
+            handleConnectState(it)
         })
     }
 
@@ -92,6 +98,25 @@ class ClassroomFragment : Fragment() {
                 classroomListAdapter.submitUser(classroomViewModel.currentUser)
             }
             else -> {}
+        }
+    }
+
+    private fun handleConnectState(state: ConnectServerState) {
+        when(state) {
+            ConnectServerState.UNKNOWN -> {
+                mainActivityViewModel.checkServerLoadingState()
+            }
+            ConnectServerState.LOADING -> {
+                fragment_classroom_shimmer_veil.visibility = View.VISIBLE
+                fragment_classroom_shimmer_layout.visibility = View.VISIBLE
+                fragment_classroom_shimmer_layout.startShimmer()
+            }
+            ConnectServerState.SUCCESS -> {
+                fragment_classroom_shimmer_veil.visibility = View.GONE
+                fragment_classroom_shimmer_layout.visibility = View.GONE
+                fragment_classroom_shimmer_layout.stopShimmer()
+            }
+            ConnectServerState.CONNECTION_ERROR -> { }
         }
     }
 }

@@ -55,7 +55,6 @@ class UploadFileConfirmationDialogFragment(
         }
         classroomDetailViewModel.uploadFileState.observe(viewLifecycleOwner, Observer {
             handleUploadFileState(it)
-            Log.d(LOG_DEBUG_TAG, it.toString())
         })
     }
 

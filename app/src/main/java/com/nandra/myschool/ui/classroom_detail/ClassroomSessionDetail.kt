@@ -51,9 +51,7 @@ class ClassroomSessionDetail : AppCompatActivity() {
         setupToolbar()
     }
 
-    private fun observeViewModel() {
-
-    }
+    private fun observeViewModel() {}
 
     private fun setupToolbar() {
         setSupportActionBar(activity_classroom_session_detail_toolbar)

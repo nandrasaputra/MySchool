@@ -72,7 +72,6 @@ class ClassroomViewModel(app: Application) : AndroidViewModel(app) {
         val userDatabaseReference = repository.getUserDatabaseReference(RainbowSdk.instance().myProfile().connectedUser.id)
         userDatabaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
-                Log.d(LOG_DEBUG_TAG, "Fetch User Canceled")
                 _userDataLoadState.value = DataLoadState.ERROR
             }
 
@@ -101,7 +100,6 @@ class ClassroomViewModel(app: Application) : AndroidViewModel(app) {
                 for (item in dataSnapshotList) {
                     newScheduleList.add(item.getValue(Schedule::class.java)!!)
                 }
-                Log.d(LOG_DEBUG_TAG, newScheduleList.size.toString())
                 scheduleList = newScheduleList
                 _scheduleDataLoadState.value = DataLoadState.LOADED
             }

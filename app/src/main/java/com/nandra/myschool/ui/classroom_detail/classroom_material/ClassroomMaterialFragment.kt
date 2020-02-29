@@ -43,7 +43,6 @@ class ClassroomMaterialFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         classroomDetailViewModel.materialDataLoadState.observe(viewLifecycleOwner, Observer {
             handleMaterialLoadState(it)
-            Log.d(LOG_DEBUG_TAG, "Material State : ${it.toString()}")
         })
     }
 
@@ -59,15 +58,10 @@ class ClassroomMaterialFragment : Fragment() {
     private fun handleMaterialLoadState(state: DataLoadState) {
         when(state) {
             DataLoadState.UNLOADED -> {
-                Log.d(LOG_DEBUG_TAG, "Material State UNLOADED")
                 classroomDetailViewModel.getMaterialList()
             }
-            DataLoadState.LOADING -> {
-                Log.d(LOG_DEBUG_TAG, "Material State LOADING")
-            }
+            DataLoadState.LOADING -> { }
             DataLoadState.LOADED -> {
-                Log.d(LOG_DEBUG_TAG, "Material State LOADED")
-                Log.d(LOG_DEBUG_TAG, "MAterial Size = ${classroomDetailViewModel.materialList.size}")
                 classroomMaterialListAdapter.submitList(classroomDetailViewModel.materialList)
                 classroomMaterialListAdapter.notifyDataSetChanged()
             }
@@ -78,8 +72,8 @@ class ClassroomMaterialFragment : Fragment() {
     private fun downloadClickCallback(material: Material) {
         currentMaterial = material
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (activity?.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
-                    PackageManager.PERMISSION_DENIED) {
+            if (activity?.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
+                    PackageManager.PERMISSION_GRANTED) {
                 activity?.requestPermissions(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), STORAGE_PERMISSION_CODE)
             } else {
                 downloadFileFromUrl(currentMaterial.material_download_url)

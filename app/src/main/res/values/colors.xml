@@ -20,4 +20,7 @@
     <color name="colorGrey">#707070</color>
     <color name="iconColor">@color/colorPureBlack</color>
     <color name="iconColorSecondary">@color/colorPureWhite</color>
+
+    <color name="shimmerColorOne">#C9C9C9</color>
+    <color name="shimmerColorTwo">#ACACAC</color>
 </resources>

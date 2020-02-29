@@ -17,6 +17,7 @@ import com.nandra.myschool.adapter.ContactListAdapter
 import com.nandra.myschool.ui.main.MainActivityViewModel
 import com.nandra.myschool.utils.Utility.ConnectServerState
 import kotlinx.android.synthetic.main.chat_contact_fragment.*
+import kotlinx.android.synthetic.main.chat_conversation_fragment.*
 
 class ChatContactFragment : Fragment(), IRainbowContact.IContactListener {
 
@@ -55,8 +56,17 @@ class ChatContactFragment : Fragment(), IRainbowContact.IContactListener {
 
     private fun handleConnectServerState(state: ConnectServerState) {
         when(state) {
-            ConnectServerState.LOADING -> { }
-            ConnectServerState.SUCCESS -> { getContactList() }
+            ConnectServerState.LOADING -> {
+                fragment_chat_contact_shimmer_layout.visibility = View.VISIBLE
+                fragment_chat_contact_shimmer_veil.visibility = View.VISIBLE
+                fragment_chat_contact_shimmer_layout.startShimmer()
+            }
+            ConnectServerState.SUCCESS -> {
+                fragment_chat_contact_shimmer_layout.visibility = View.GONE
+                fragment_chat_contact_shimmer_veil.visibility = View.GONE
+                fragment_chat_contact_shimmer_layout.stopShimmer()
+                getContactList()
+            }
             else -> { }
         }
     }
@@ -73,32 +83,21 @@ class ChatContactFragment : Fragment(), IRainbowContact.IContactListener {
         }
     }
 
-    // Unregister IRainbowContact.IContactListener to all contacts
     private fun unregisterListeners() {
         for (contact in contactList) {
             contact.unregisterChangeListener(this)
         }
     }
 
-    // Register IRainbowContact.IContactListener for all contacts
     private fun registerListeners() {
         for (contact in contactList) {
             contact.registerChangeListener(this)
         }
     }
 
-    override fun onCompanyChanged(p0: String?) {
-
-    }
-
-    override fun onPresenceChanged(p0: IRainbowContact?, p1: RainbowPresence?) {
-
-    }
-
-    override fun onActionInProgress(p0: Boolean) {
-
-    }
-
+    override fun onCompanyChanged(p0: String?) {}
+    override fun onPresenceChanged(p0: IRainbowContact?, p1: RainbowPresence?) {}
+    override fun onActionInProgress(p0: Boolean) {}
     override fun contactUpdated(p0: IRainbowContact?) {
         getContactList()
     }

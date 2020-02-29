@@ -89,4 +89,6 @@ dependencies {
     implementation 'com.google.firebase:firebase-database:19.2.1'
     implementation 'com.google.firebase:firebase-storage-ktx:19.1.1'
     implementation 'com.firebaseui:firebase-ui-storage:6.2.0'
+    //Shimmer
+    implementation 'com.facebook.shimmer:shimmer:0.5.0'
 }

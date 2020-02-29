@@ -49,20 +49,13 @@ class ClassScheduleDialogFragment() : DialogFragment() {
     private fun handleLoadState(state: DataLoadState) {
         when(state) {
             DataLoadState.LOADED -> {
-                Log.d(Utility.LOG_DEBUG_TAG, "Schedule Loaded")
-                Log.d(Utility.LOG_DEBUG_TAG, classroomViewModel.scheduleList.size.toString())
                 scheduleListAdapter.submitList(classroomViewModel.scheduleList)
             }
             DataLoadState.UNLOADED -> {
-                Log.d(Utility.LOG_DEBUG_TAG, "Schedule UnLoaded")
                 classroomViewModel.getScheduleList()
             }
-            DataLoadState.LOADING -> {
-                Log.d(Utility.LOG_DEBUG_TAG, "Schedule Loading")
-            }
-            DataLoadState.ERROR -> {
-                Log.d(Utility.LOG_DEBUG_TAG, "Schedule Error")
-            }
+            DataLoadState.LOADING -> { }
+            DataLoadState.ERROR -> { }
         }
     }
 }

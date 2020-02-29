@@ -46,15 +46,11 @@ class ClassroomDetailActivity : AppCompatActivity(), IAddNewChannelItem {
         classroomDetailViewModel.userRole = userRole
         classroomDetailViewModel.subjectCode = subjectCode
 
-        Log.d(LOG_DEBUG_TAG, "User Role = $userRole")
-
         setupView()
         observeViewModel()
     }
 
-    override fun onCancelButtonClicked() {
-        Log.d(LOG_DEBUG_TAG, "Cancel Button Clicked")
-    }
+    override fun onCancelButtonClicked() {}
 
     override fun onSendButtonClicked(message: String) {
         classroomDetailViewModel.addNewItemToChannel(message)
@@ -132,9 +128,7 @@ class ClassroomDetailActivity : AppCompatActivity(), IAddNewChannelItem {
                 classroomDetailViewModel.getDetailSubject(subjectID)
             }
             DataLoadState.LOADING -> { }
-            DataLoadState.LOADED -> {
-                //DO SOMETHING
-            }
+            DataLoadState.LOADED -> { }
             else -> {}
         }
     }

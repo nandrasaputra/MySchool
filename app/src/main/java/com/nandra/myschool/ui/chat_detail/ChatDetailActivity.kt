@@ -35,10 +35,6 @@ class ChatDetailActivity : AppCompatActivity() {
 
         conversation.messages.registerChangeListener(changeListener)
         retrieveMessage()
-
-        /*btn_dummy_chat.setOnClickListener {
-            dummy()
-        }*/
     }
 
     override fun onDestroy() {
@@ -92,12 +88,7 @@ class ChatDetailActivity : AppCompatActivity() {
         RainbowSdk.instance().im().getMessagesFromConversation(conversation, 50)
     }
 
-    /*private fun retrieveMoreMessage() {
-        RainbowSdk.instance().im().getMoreMessagesFromConversation(conversation, 50)
-    }*/
-
     private fun updateMessageList() {
-        //reloadFileStorage()
 
         val newMessages = conversation.messages.copyOfDataList
         messageList = newMessages
@@ -110,12 +101,6 @@ class ChatDetailActivity : AppCompatActivity() {
         }
     }
 
-    /*private fun reloadFileStorage() {
-        mainViewModel.updateFileStorage()
-        sentFileStorage = mainViewModel.sentFileStorage
-        receivedFileStorage = mainViewModel.receivedFileStorage
-    }*/
-
     private fun sendMessage() {
         if (activity_chat_message_edit_text.text.toString().isNotEmpty())
         RainbowSdk.instance().im().sendMessageToConversation(conversation, activity_chat_message_edit_text.text.toString())
@@ -126,7 +111,4 @@ class ChatDetailActivity : AppCompatActivity() {
         activity_chat_detail_recycler_view.scrollToPosition(chatDetailListAdapter.itemCount - 1)
     }
 
-    /*private fun dummy() {
-        Log.d(LOG_DEBUG_TAG, "HAHA")
-    }*/
 }

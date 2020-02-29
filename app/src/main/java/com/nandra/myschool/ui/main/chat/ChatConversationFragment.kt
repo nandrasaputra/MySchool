@@ -1,6 +1,7 @@
 package com.nandra.myschool.ui.main.chat
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +19,7 @@ import com.nandra.myschool.adapter.ConversationListAdapter
 import com.nandra.myschool.ui.main.MainActivityViewModel
 import com.nandra.myschool.utils.Utility
 import kotlinx.android.synthetic.main.chat_conversation_fragment.*
+import kotlinx.android.synthetic.main.classroom_fragment.*
 
 class ChatConversationFragment : Fragment(), IRainbowContact.IContactListener {
 
@@ -61,13 +63,24 @@ class ChatConversationFragment : Fragment(), IRainbowContact.IContactListener {
 
     private fun handleConnectServerState(state: Utility.ConnectServerState) {
         when(state) {
-            Utility.ConnectServerState.LOADING -> { }
-            Utility.ConnectServerState.SUCCESS -> { getConversationList() }
+            Utility.ConnectServerState.LOADING -> {
+                fragment_chat_conversation_shimmer_layout.visibility = View.VISIBLE
+                fragment_chat_conversation_shimmer_veil.visibility = View.VISIBLE
+                fragment_chat_conversation_shimmer_layout.startShimmer()
+            }
+            Utility.ConnectServerState.SUCCESS -> {
+                getConversationList()
+                fragment_chat_conversation_shimmer_layout.visibility = View.GONE
+                fragment_chat_conversation_shimmer_veil.visibility = View.GONE
+                fragment_chat_conversation_shimmer_layout.stopShimmer()
+            }
             else -> { }
         }
     }
 
     private fun getConversationList() {
+
+
 
         unregisterListeners()
         chatViewModel.updateConversationList()
@@ -81,14 +94,12 @@ class ChatConversationFragment : Fragment(), IRainbowContact.IContactListener {
         }
     }
 
-    // Unregister IRainbowContact.IContactListener to all contacts
     private fun unregisterListeners() {
         for (contact in contactList) {
             contact.unregisterChangeListener(this)
         }
     }
 
-    // Register IRainbowContact.IContactListener for all contacts
     private fun registerListeners() {
         for (contact in contactList) {
             contact.registerChangeListener(this)

@@ -19,6 +19,7 @@ object Utility {
     const val LOG_DEBUG_TAG = "MySchool"
 
     enum class ConnectServerState {
+        UNKNOWN,
         LOADING,
         SUCCESS,
         CONNECTION_ERROR

@@ -26,8 +26,41 @@
         android:id="@+id/fragment_classroom_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:clipToPadding="false"
         app:layout_constraintTop_toBottomOf="@id/fragment_classroom_toolbar"
         app:layout_constraintBottom_toBottomOf="parent" />
+
+    <ImageView
+        android:id="@+id/fragment_classroom_shimmer_veil"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:src="@color/colorPureWhite"
+        app:layout_constraintTop_toBottomOf="@id/fragment_classroom_toolbar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="gone"/>
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/fragment_classroom_shimmer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:clickable="true"
+        android:focusable="true"
+        app:shimmer_auto_start="false"
+        app:layout_constraintTop_toBottomOf="@id/fragment_classroom_toolbar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <include layout="@layout/classroom_fragment_item_shimmer"/>
+            <include layout="@layout/classroom_fragment_item_shimmer"/>
+            <include layout="@layout/classroom_fragment_item_shimmer"/>
+            <include layout="@layout/classroom_fragment_item_shimmer"/>
+
+        </LinearLayout>
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
