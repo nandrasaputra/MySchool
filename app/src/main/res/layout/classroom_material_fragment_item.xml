@@ -35,8 +35,8 @@
 
             <ImageView
                 android:id="@+id/fragment_classroom_material_item_download"
-                android:layout_width="16dp"
-                android:layout_height="16dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:tint="@color/iconColorSecondary"

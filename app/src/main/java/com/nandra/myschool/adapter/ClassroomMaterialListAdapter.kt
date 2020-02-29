@@ -10,7 +10,9 @@ import com.nandra.myschool.R
 import com.nandra.myschool.model.Material
 import kotlinx.android.synthetic.main.classroom_material_fragment_item.view.*
 
-class ClassroomMaterialListAdapter : ListAdapter<Material, ClassroomMaterialListAdapter.ClassroomMaterialViewHolder>(classroomMaterialDiffCallback) {
+class ClassroomMaterialListAdapter(
+    val clickDownloadCallback : (Material) -> Unit
+) : ListAdapter<Material, ClassroomMaterialListAdapter.ClassroomMaterialViewHolder>(classroomMaterialDiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ClassroomMaterialViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.classroom_material_fragment_item, parent, false)
@@ -26,6 +28,9 @@ class ClassroomMaterialListAdapter : ListAdapter<Material, ClassroomMaterialList
             itemView.apply {
                 fragment_classroom_material_item_date.text = material.material_upload_date
                 fragment_classroom_material_item_file_name.text = material.material_name
+            }
+            itemView.fragment_classroom_material_item_download.setOnClickListener {
+                clickDownloadCallback(material)
             }
         }
     }
