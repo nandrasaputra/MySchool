@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
+import com.ale.infra.contact.RainbowPresence
 import com.ale.listener.IConnectionChanged
 import com.ale.rainbowsdk.RainbowSdk
 import com.nandra.myschool.R

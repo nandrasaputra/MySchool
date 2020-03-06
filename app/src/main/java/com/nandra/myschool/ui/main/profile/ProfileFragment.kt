@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.ale.listener.SignoutResponseListener
 import com.ale.rainbowsdk.RainbowSdk
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
@@ -23,6 +24,9 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         fragment_profile_my_logout_button.setOnClickListener {
             FirebaseAuth.getInstance().signOut()
+            RainbowSdk.instance().connection().signout(object : SignoutResponseListener() {
+                override fun onSignoutSucceeded() {}
+            })
             val intent = Intent(activity, LoginActivity::class.java).apply {
                 addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
             }

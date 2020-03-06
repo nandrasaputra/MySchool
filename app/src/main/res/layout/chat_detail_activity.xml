@@ -42,6 +42,7 @@
                     style="@style/MySchool.TextAppearance.Title1"
                     android:text="Nandra Saputra"
                     android:textColor="@color/toolbarFontColor"
+                    android:textSize="14sp"
                     android:lines="1"
                     android:ellipsize="end"/>
 
@@ -51,6 +52,7 @@
                     android:layout_height="wrap_content"
                     style="@style/MySchool.TextAppearance.SubTitle2"
                     android:text="Online"
+                    android:textSize="12sp"
                     android:visibility="gone"
                     android:textColor="@color/toolbarFontColor"
                     android:lines="1"
@@ -78,7 +80,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/chat_typer_background"
-        android:elevation="1dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -116,5 +117,41 @@
             android:tint="@color/themeColor"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageView
+        android:id="@+id/activity_chat_detail_shimmer_veil"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/activity_detail_chat_toolbar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:src="@color/colorPureWhite"
+        android:visibility="gone"/>
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/activity_chat_detail_shimmer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/activity_detail_chat_toolbar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:shimmer_auto_start="false"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <include layout="@layout/chat_detail_received_item_shimmer" />
+            <include layout="@layout/chat_detail_sent_item_shimmer" />
+            <include layout="@layout/chat_detail_sent_item_shimmer" />
+            <include layout="@layout/chat_detail_received_item_shimmer" />
+            <include layout="@layout/chat_detail_received_item_shimmer" />
+        </LinearLayout>
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

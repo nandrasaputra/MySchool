@@ -46,9 +46,13 @@ object Utility {
         CANCELED
     }
 
-    fun Date.convertToString() : String {
-        val simpleDateFormat = SimpleDateFormat("hh:mm a")
-        return simpleDateFormat.format(this)
+    fun Date?.convertToString() : String {
+        return if (this != null) {
+            val simpleDateFormat = SimpleDateFormat("hh:mm a")
+            simpleDateFormat.format(this)
+        } else {
+            ""
+        }
     }
 
     fun nameBuilder(contact: IRainbowContact) : String {
