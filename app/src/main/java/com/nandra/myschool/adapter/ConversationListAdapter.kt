@@ -4,6 +4,8 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Filter
+import android.widget.Filterable
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -19,7 +21,8 @@ import kotlinx.android.synthetic.main.chat_conversation_fragment_item.view.*
 
 class ConversationListAdapter(
     val clickCallback: (IRainbowConversation) -> Unit
-) : ListAdapter<IRainbowConversation, ConversationListAdapter.ConversationViewHolder>(chatConversationDiffCallback) {
+) : ListAdapter<IRainbowConversation, ConversationListAdapter.ConversationViewHolder>(chatConversationDiffCallback),
+    Filterable {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ConversationViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.chat_conversation_fragment_item, parent, false)
@@ -70,6 +73,26 @@ class ConversationListAdapter(
                 itemView.channel_detail_item_publish_date.text = conversation.lastMessage.messageDate.convertToString()
             } else {
                 itemView.channel_detail_item_publish_date.visibility = View.GONE
+            }
+        }
+    }
+
+    override fun getFilter(): Filter {
+        return object : Filter() {
+            override fun performFiltering(constraint: CharSequence?): FilterResults {
+                val filteredList = currentList.filter {
+                    it.lastMessage == constraint
+                }
+
+                return FilterResults().apply {
+                    values = filteredList
+                }
+            }
+
+            override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
+                results.run {
+                    submitList(this?.values as MutableList<IRainbowConversation>)
+                }
             }
         }
     }

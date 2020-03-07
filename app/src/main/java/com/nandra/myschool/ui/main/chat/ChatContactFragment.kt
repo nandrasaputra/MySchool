@@ -1,9 +1,8 @@
 package com.nandra.myschool.ui.main.chat
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.util.Log
+import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -15,6 +14,7 @@ import com.ale.rainbowsdk.RainbowSdk
 import com.nandra.myschool.R
 import com.nandra.myschool.adapter.ContactListAdapter
 import com.nandra.myschool.ui.main.MainActivityViewModel
+import com.nandra.myschool.utils.Utility
 import com.nandra.myschool.utils.Utility.ConnectServerState
 import kotlinx.android.synthetic.main.chat_contact_fragment.*
 import kotlinx.android.synthetic.main.chat_conversation_fragment.*
@@ -100,5 +100,10 @@ class ChatContactFragment : Fragment(), IRainbowContact.IContactListener {
     override fun onActionInProgress(p0: Boolean) {}
     override fun contactUpdated(p0: IRainbowContact?) {
         getContactList()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        Log.d(Utility.LOG_DEBUG_TAG ,"Called From Contact Fragment")
+        super.onCreateOptionsMenu(menu, inflater)
     }
 }

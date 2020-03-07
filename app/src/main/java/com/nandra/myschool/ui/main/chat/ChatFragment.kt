@@ -1,18 +1,28 @@
 package com.nandra.myschool.ui.main.chat
 
+import android.app.SearchManager
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.*
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
+import androidx.core.view.MenuItemCompat
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
+import com.google.firebase.database.core.utilities.Utilities
 import com.nandra.myschool.R
 import com.nandra.myschool.adapter.ChatViewPagerAdapter
+import com.nandra.myschool.utils.Utility
 import kotlinx.android.synthetic.main.chat_fragment.*
+import kotlinx.android.synthetic.main.main_activity.*
 
 class ChatFragment : Fragment() {
 
     private lateinit var chatViewPagerAdapter: ChatViewPagerAdapter
+    private var searchView: SearchView? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.chat_fragment, container, false)
@@ -35,6 +45,40 @@ class ChatFragment : Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.chat_menu, menu)
+
+        val searchItem = menu.findItem(R.id.chat_search)
+        searchView = searchItem?.actionView as SearchView
+
+        searchView?.run {
+            this.isSubmitButtonEnabled = true
+
+            this.setOnSearchClickListener {
+                fragment_chat_tab_layout.visibility = View.GONE
+                fragment_chat_toolbar_title.visibility = View.GONE
+
+                when(fragment_chat_tab_layout.selectedTabPosition) {
+                    0 -> {this.queryHint = "Search Conversation"}
+                    1 -> {this.queryHint = "Search Contact"}
+                }
+            }
+
+            this.setOnCloseListener {
+                fragment_chat_tab_layout.visibility = View.VISIBLE
+                fragment_chat_toolbar_title.visibility = View.VISIBLE
+                false
+            }
+
+            /*this.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    TODO("Not yet implemented")
+                }
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    TODO("Not yet implemented")
+                }
+            })*/
+        }
+
         super.onCreateOptionsMenu(menu, inflater)
     }
 

@@ -17,6 +17,7 @@ import com.nandra.myschool.utils.Utility.DataLoadState
 import com.nandra.myschool.utils.Utility.LOG_DEBUG_TAG
 import kotlinx.android.synthetic.main.chat_fragment.*
 import kotlinx.android.synthetic.main.classroom_fragment.*
+import kotlinx.android.synthetic.main.main_activity.*
 
 class ClassroomFragment : Fragment() {
 
