@@ -1,5 +1,6 @@
 package com.nandra.myschool.ui.main.chat
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
@@ -8,6 +9,7 @@ import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import com.nandra.myschool.R
 import com.nandra.myschool.adapter.ChatViewPagerAdapter
+import com.nandra.myschool.ui.create_new_chat.CreateNewChatActivity
 import kotlinx.android.synthetic.main.chat_fragment.*
 
 class ChatFragment : Fragment() {
@@ -16,6 +18,23 @@ class ChatFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.chat_fragment, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        fragment_chat_fab.setOnClickListener {
+            when(fragment_chat_tab_layout.selectedTabPosition) {
+                0 -> {
+                    val intent = Intent(view.context, CreateNewChatActivity::class.java).apply {
+                        addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+                    }
+                    view.context.startActivity(intent)
+                }
+                1 -> {
+
+                }
+            }
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
