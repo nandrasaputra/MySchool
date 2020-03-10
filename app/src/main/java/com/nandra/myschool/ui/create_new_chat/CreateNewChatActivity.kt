@@ -1,13 +1,11 @@
 package com.nandra.myschool.ui.create_new_chat
 
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ale.infra.contact.IRainbowContact
 import com.ale.infra.contact.RainbowPresence
@@ -15,11 +13,6 @@ import com.ale.infra.list.IItemListChangeListener
 import com.ale.rainbowsdk.RainbowSdk
 import com.nandra.myschool.R
 import com.nandra.myschool.adapter.CreateNewChatListAdapter
-import com.nandra.myschool.ui.main.MainActivityViewModel
-import com.nandra.myschool.ui.main.chat.ChatViewModel
-import com.nandra.myschool.utils.Utility.ConnectServerState
-import com.nandra.myschool.utils.Utility.LOG_DEBUG_TAG
-import kotlinx.android.synthetic.main.chat_fragment.*
 import kotlinx.android.synthetic.main.create_new_chat_activity.*
 
 class CreateNewChatActivity : AppCompatActivity(), IRainbowContact.IContactListener {
@@ -124,8 +117,12 @@ class CreateNewChatActivity : AppCompatActivity(), IRainbowContact.IContactListe
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.create_new_chat_menu, menu)
+        setupSearchView(menu)
+        return true
+    }
 
-        val searchItem = menu?.findItem(R.id.create_new_chat_search)
+    private fun setupSearchView(menu: Menu?) {
+        val searchItem = menu?.findItem(R.id.create_new_chat_search_menu_item)
         searchView = searchItem?.actionView as SearchView
 
         searchView?.run {
@@ -154,8 +151,6 @@ class CreateNewChatActivity : AppCompatActivity(), IRainbowContact.IContactListe
                 }
             })
         }
-
-        return true
     }
 
 }

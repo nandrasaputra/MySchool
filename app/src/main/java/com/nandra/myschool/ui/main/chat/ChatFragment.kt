@@ -9,6 +9,7 @@ import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import com.nandra.myschool.R
 import com.nandra.myschool.adapter.ChatViewPagerAdapter
+import com.nandra.myschool.ui.add_new_contact.AddNewContactActivity
 import com.nandra.myschool.ui.create_new_chat.CreateNewChatActivity
 import kotlinx.android.synthetic.main.chat_fragment.*
 
@@ -31,7 +32,10 @@ class ChatFragment : Fragment() {
                     view.context.startActivity(intent)
                 }
                 1 -> {
-
+                    val intent = Intent(view.context, AddNewContactActivity::class.java).apply {
+                        addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+                    }
+                    view.context.startActivity(intent)
                 }
             }
         }

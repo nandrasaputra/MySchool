@@ -55,6 +55,10 @@
 
         </activity>
 
+        <activity android:name=".ui.add_new_contact.AddNewContactActivity">
+
+        </activity>
+
     </application>
 
 </manifest>

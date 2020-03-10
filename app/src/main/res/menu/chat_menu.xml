@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/chat_search"
+        android:id="@+id/chat_search_menu_item"
         android:icon="@drawable/ic_search_toolbar"
         android:title="Search"
         app:showAsAction="always"/>

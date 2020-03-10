@@ -1,7 +1,6 @@
 package com.nandra.myschool.ui.main.classroom
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -14,8 +13,6 @@ import com.nandra.myschool.ui.ClassScheduleDialogFragment
 import com.nandra.myschool.ui.main.MainActivityViewModel
 import com.nandra.myschool.utils.Utility.ConnectServerState
 import com.nandra.myschool.utils.Utility.DataLoadState
-import com.nandra.myschool.utils.Utility.LOG_DEBUG_TAG
-import kotlinx.android.synthetic.main.chat_fragment.*
 import kotlinx.android.synthetic.main.classroom_fragment.*
 
 class ClassroomFragment : Fragment() {
@@ -67,7 +64,7 @@ class ClassroomFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId) {
-            R.id.classroom_schedule -> {
+            R.id.classroom_schedule_menu_item -> {
                 ClassScheduleDialogFragment().show(childFragmentManager, "Schedule Dialog")
                 true
             }

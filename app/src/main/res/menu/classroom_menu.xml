@@ -2,12 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/classroom_schedule"
+        android:id="@+id/classroom_schedule_menu_item"
         android:icon="@drawable/ic_schedule"
         android:title="Schedule"
         app:showAsAction="always"/>
     <item
-        android:id="@+id/classroom_search"
+        android:id="@+id/classroom_search_menu_item"
         android:icon="@drawable/ic_search_toolbar"
         android:title="Search"
         app:showAsAction="always"/>
