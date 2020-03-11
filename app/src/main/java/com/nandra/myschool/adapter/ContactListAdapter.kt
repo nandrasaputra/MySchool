@@ -34,6 +34,7 @@ class ContactListAdapter : ListAdapter<IRainbowContact, ContactListAdapter.Conta
 
             Glide.with(itemView.context)
                 .load(contact.photo)
+                .placeholder(R.drawable.ic_profile)
                 .into(itemView.fragment_chat_contact_item_profile_picture)
 
             view.setOnClickListener {

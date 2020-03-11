@@ -75,6 +75,8 @@ class AddNewContactActivity : AppCompatActivity() {
 
             this.setOnCloseListener {
                 activity_add_new_contact_toolbar_title.visibility = View.VISIBLE
+                addNewContactAdapter.wipeData()
+                addNewContactViewModel.resetLoadState()
                 false
             }
 
@@ -92,6 +94,7 @@ class AddNewContactActivity : AppCompatActivity() {
                                 if (this.isActive) {
                                     this.cancel()
                                 }
+                                addNewContactAdapter.wipeData()
                             }
                         }
                     } else {
@@ -123,13 +126,14 @@ class AddNewContactActivity : AppCompatActivity() {
     private fun handleLoadState(state: DataLoadState) {
         when(state) {
             DataLoadState.UNLOADED -> {
-                Log.d(LOG_DEBUG_TAG, "State UNLOADED")
+                activity_add_new_contact_state_layout.visibility = View.VISIBLE
             }
             DataLoadState.LOADING -> {
                 Log.d(LOG_DEBUG_TAG, "State LOADING")
             }
             DataLoadState.LOADED -> {
                 Log.d(LOG_DEBUG_TAG, "State LOADED")
+                activity_add_new_contact_state_layout.visibility = View.GONE
                 addNewContactAdapter.submitList(addNewContactViewModel.contactList)
                 addNewContactAdapter.notifyDataSetChanged()
             }

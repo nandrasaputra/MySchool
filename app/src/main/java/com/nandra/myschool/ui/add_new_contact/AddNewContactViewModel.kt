@@ -38,4 +38,8 @@ class AddNewContactViewModel(app: Application) : AndroidViewModel(app) {
             }
         })
     }
+
+    fun resetLoadState() {
+        _addNewContactLoadState.value = DataLoadState.UNLOADED
+    }
 }

@@ -52,6 +52,7 @@ Filterable {
 
             Glide.with(itemView.context)
                 .load(contact.photo)
+                .placeholder(R.drawable.ic_profile)
                 .into(itemView.activity_create_new_chat_item_photo)
 
             itemView.setOnClickListener {

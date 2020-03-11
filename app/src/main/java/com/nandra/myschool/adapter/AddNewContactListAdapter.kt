@@ -25,6 +25,11 @@ class AddNewContactListAdapter : ListAdapter<IRainbowContact, AddNewContactListA
         holder.bind(getItem(position))
     }
 
+    fun wipeData() {
+        submitList(listOf())
+        notifyDataSetChanged()
+    }
+
     inner class AddNewContactViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         fun bind(contact: IRainbowContact) {
             itemView.activity_create_new_chat_item_user_name.text = Utility.nameBuilder(contact)
@@ -32,6 +37,7 @@ class AddNewContactListAdapter : ListAdapter<IRainbowContact, AddNewContactListA
             val contactAvatarUrl = RainbowSdk.instance().contacts().getAvatarUrl(contact.id)
             Glide.with(itemView.context)
                 .load(contactAvatarUrl)
+                .placeholder(R.drawable.ic_profile)
                 .into(itemView.activity_create_new_chat_item_photo)
         }
     }
