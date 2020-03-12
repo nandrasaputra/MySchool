@@ -33,6 +33,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
+    <TextView
+        android:id="@+id/activity_add_new_contact_state_no_result"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/activity_add_new_contact_toolbar"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/airbnb_cereal_medium"
+        android:textSize="14sp"
+        android:text="No Result"
+        android:visibility="gone"/>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/activity_add_new_contact_state_layout"
         android:layout_width="match_parent"

@@ -32,9 +32,7 @@ class ChatFragment : Fragment() {
                     view.context.startActivity(intent)
                 }
                 1 -> {
-                    val intent = Intent(view.context, AddNewContactActivity::class.java).apply {
-                        addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
-                    }
+                    val intent = Intent(view.context, AddNewContactActivity::class.java)
                     view.context.startActivity(intent)
                 }
             }

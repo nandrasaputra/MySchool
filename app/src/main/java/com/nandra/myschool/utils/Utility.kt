@@ -95,4 +95,11 @@ object Utility {
         fun onAddSessionButtonClicked(topic: String, description: String)
         fun onCancelSessionButtonClicked()
     }
+
+    sealed class AddContactToRoasterState {
+        object Loading : AddContactToRoasterState()
+        object Finished : AddContactToRoasterState()
+        class Failed(val errorMessage: String) : AddContactToRoasterState()
+        object Idle : AddContactToRoasterState()
+    }
 }

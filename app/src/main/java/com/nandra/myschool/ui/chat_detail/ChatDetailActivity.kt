@@ -211,9 +211,7 @@ class ChatDetailActivity : AppCompatActivity(), IRainbowContact.IContactListener
 
     override fun onImReceived(p0: String?, newMessage: IMMessage?) {}
 
-    override fun onMessagesListUpdated(p0: Int, p1: String?, newMessageList: MutableList<IMMessage>?) {
-        Log.d(LOG_DEBUG_TAG, "Message List Updated!")
-    }
+    override fun onMessagesListUpdated(p0: Int, p1: String?, newMessageList: MutableList<IMMessage>?) {}
 
     override fun isTypingState(p0: IRainbowContact?, state: Boolean, p2: String?) {
         if (state) {
@@ -226,7 +224,5 @@ class ChatDetailActivity : AppCompatActivity(), IRainbowContact.IContactListener
         }
     }
 
-    override fun onMoreMessagesListUpdated(p0: Int, p1: String?, p2: MutableList<IMMessage>?) {
-        Log.d(LOG_DEBUG_TAG, "More Messages")
-    }
+    override fun onMoreMessagesListUpdated(p0: Int, p1: String?, p2: MutableList<IMMessage>?) {}
 }

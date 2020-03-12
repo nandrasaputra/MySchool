@@ -12,12 +12,15 @@ import com.bumptech.glide.Glide
 import com.nandra.myschool.R
 import com.nandra.myschool.utils.Utility
 import kotlinx.android.synthetic.main.add_new_contact_item.view.*
-import kotlinx.android.synthetic.main.create_new_chat_item.view.*
 
-class AddNewContactListAdapter : ListAdapter<IRainbowContact, AddNewContactListAdapter.AddNewContactViewHolder>(addNewContactDiffUtil) {
+class AddNewContactListAdapter(
+    private val addContactCallback: (IRainbowContact) -> Unit
+) : ListAdapter<IRainbowContact, AddNewContactListAdapter.AddNewContactViewHolder>(addNewContactDiffUtil) {
+
+    private val addContactLoadingStateMap = mapOf<String, Boolean>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AddNewContactViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.create_new_chat_item, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.add_new_contact_item, parent, false)
         return AddNewContactViewHolder(view)
     }
 
@@ -32,13 +35,35 @@ class AddNewContactListAdapter : ListAdapter<IRainbowContact, AddNewContactListA
 
     inner class AddNewContactViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         fun bind(contact: IRainbowContact) {
-            itemView.activity_create_new_chat_item_user_name.text = Utility.nameBuilder(contact)
-            itemView.activity_create_new_chat_item_user_company.text = contact.companyName
+
+            val state = addContactLoadingStateMap[contact.id]
+
+            if (state != null && state == true) {
+                isOnAddContactLoadingState(true)
+            } else {
+                isOnAddContactLoadingState(false)
+            }
+
+            itemView.activity_add_new_contact_item_name_tv.text = Utility.nameBuilder(contact)
+            itemView.activity_add_new_contact_item_company_tv.text = contact.companyName
             val contactAvatarUrl = RainbowSdk.instance().contacts().getAvatarUrl(contact.id)
             Glide.with(itemView.context)
                 .load(contactAvatarUrl)
                 .placeholder(R.drawable.ic_profile)
-                .into(itemView.activity_create_new_chat_item_photo)
+                .into(itemView.activity_add_new_contact_item_profile_picture)
+            itemView.activity_add_new_contact_item_add_contact_button.setOnClickListener {
+                addContactCallback(contact)
+            }
+        }
+
+        private fun isOnAddContactLoadingState(boolean: Boolean) {
+            if (boolean) {
+                itemView.activity_add_new_contact_item_add_contact_progress_bar.visibility = View.VISIBLE
+                itemView.activity_add_new_contact_item_add_contact_button.visibility = View.GONE
+            } else {
+                itemView.activity_add_new_contact_item_add_contact_progress_bar.visibility = View.GONE
+                itemView.activity_add_new_contact_item_add_contact_button.visibility = View.VISIBLE
+            }
         }
     }
 

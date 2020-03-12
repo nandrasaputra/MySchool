@@ -1,19 +1,20 @@
 package com.nandra.myschool.ui.add_new_contact
 
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.ale.infra.contact.IRainbowContact
 import com.nandra.myschool.R
 import com.nandra.myschool.adapter.AddNewContactListAdapter
 import com.nandra.myschool.utils.Utility.DataLoadState
-import com.nandra.myschool.utils.Utility.LOG_DEBUG_TAG
+import com.nandra.myschool.utils.Utility.AddContactToRoasterState
 import kotlinx.android.synthetic.main.add_new_contact_activity.*
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -22,6 +23,7 @@ import kotlinx.coroutines.launch
 class AddNewContactActivity : AppCompatActivity() {
 
     private lateinit var addNewContactAdapter: AddNewContactListAdapter
+    private lateinit var addNewContactLayoutManager: LinearLayoutManager
     private var searchView: SearchView? = null
     private val addNewContactViewModel: AddNewContactViewModel by viewModels()
     private var searchJob: Job? = null
@@ -36,10 +38,11 @@ class AddNewContactActivity : AppCompatActivity() {
     }
 
     private fun setupView() {
-        addNewContactAdapter = AddNewContactListAdapter()
+        addNewContactAdapter = AddNewContactListAdapter(::addContactCallback)
+        addNewContactLayoutManager = LinearLayoutManager(this)
         activity_add_new_contact_recycler_view.apply {
             adapter = addNewContactAdapter
-            layoutManager = LinearLayoutManager(this@AddNewContactActivity)
+            layoutManager = addNewContactLayoutManager
         }
     }
 
@@ -86,9 +89,7 @@ class AddNewContactActivity : AppCompatActivity() {
                 }
 
                 override fun onQueryTextChange(newText: String?): Boolean {
-                    Log.d(LOG_DEBUG_TAG, "Query Change, text = $newText")
                     if (newText.isNullOrEmpty()) {
-                        Log.d(LOG_DEBUG_TAG, "Is Null Or Empty")
                         lifecycleScope.launch {
                             searchJob?.run {
                                 if (this.isActive) {
@@ -98,7 +99,6 @@ class AddNewContactActivity : AppCompatActivity() {
                             }
                         }
                     } else {
-                        Log.d(LOG_DEBUG_TAG, "Is NOTT Null Or Empty")
                         lifecycleScope.launch {
                             searchJob?.run {
                                 if (this.isActive) {
@@ -118,28 +118,49 @@ class AddNewContactActivity : AppCompatActivity() {
     }
 
     private fun observeViewModel() {
-        addNewContactViewModel.addNewContactLoadState.observe(this, Observer {
+        addNewContactViewModel.addNewContactContentLoadState.observe(this, Observer {
             handleLoadState(it)
+        })
+        addNewContactViewModel.addContactToRoasterState.observe(this, Observer {
+            handleAddContactToRoasterState(it)
         })
     }
 
     private fun handleLoadState(state: DataLoadState) {
+        activity_add_new_contact_state_no_result.visibility = View.GONE
         when(state) {
             DataLoadState.UNLOADED -> {
                 activity_add_new_contact_state_layout.visibility = View.VISIBLE
             }
-            DataLoadState.LOADING -> {
-                Log.d(LOG_DEBUG_TAG, "State LOADING")
-            }
+            DataLoadState.LOADING -> { }
             DataLoadState.LOADED -> {
-                Log.d(LOG_DEBUG_TAG, "State LOADED")
                 activity_add_new_contact_state_layout.visibility = View.GONE
                 addNewContactAdapter.submitList(addNewContactViewModel.contactList)
                 addNewContactAdapter.notifyDataSetChanged()
+                if (addNewContactViewModel.contactList.isEmpty()) {
+                    activity_add_new_contact_state_no_result.visibility = View.VISIBLE
+                }
             }
-            else -> {
-                Log.d(LOG_DEBUG_TAG, "State ELSE")
-            }
+            else -> { }
         }
+    }
+
+    private fun handleAddContactToRoasterState(state: AddContactToRoasterState) {
+        when(state) {
+            is AddContactToRoasterState.Loading -> { }
+            is AddContactToRoasterState.Finished -> {
+                Toast.makeText(this, "Added To Contact", Toast.LENGTH_SHORT).show()
+                addNewContactViewModel.resetAddContactToRoasterState()
+            }
+            is AddContactToRoasterState.Failed -> {
+                Toast.makeText(this, state.errorMessage, Toast.LENGTH_SHORT).show()
+                addNewContactViewModel.resetAddContactToRoasterState()
+            }
+            AddContactToRoasterState.Idle -> { }
+        }
+    }
+
+    private fun addContactCallback(contact: IRainbowContact) {
+        addNewContactViewModel.addContactToRoaster(contact)
     }
 }
