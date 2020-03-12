@@ -12,6 +12,7 @@ import com.ale.infra.http.adapter.concurrent.RainbowServiceException
 import com.ale.listener.IRainbowContactsSearchListener
 import com.ale.listener.IRainbowSentInvitationListener
 import com.ale.rainbowsdk.RainbowSdk
+import com.nandra.myschool.utils.Utility
 import com.nandra.myschool.utils.Utility.DataLoadState
 import com.nandra.myschool.utils.Utility.AddContactToRoasterState
 import com.nandra.myschool.utils.Utility.LOG_DEBUG_TAG
@@ -56,19 +57,18 @@ class AddNewContactViewModel(app: Application) : AndroidViewModel(app) {
         _addNewContactContentLoadState.value = DataLoadState.UNLOADED
     }
 
-    fun addContactToRoaster(contact: IRainbowContact) {
+    fun addContactToRoaster(contact: IRainbowContact, adapterPosition: Int) {
         if (addContactToRoasterJob != null) {
             if (addContactToRoasterJob!!.isActive) {
                 return
             }
         }
         addContactToRoasterJob = viewModelScope.launch {
-            _addContactToRoasterState.postValue(AddContactToRoasterState.Loading)
-            delay(3000L)
+            _addContactToRoasterState.postValue(AddContactToRoasterState.Loading(adapterPosition))
             RainbowSdk.instance().contacts().addRainbowContactToRoster(contact, object : IRainbowSentInvitationListener {
                 override fun onInvitationError() {
                     Log.d(LOG_DEBUG_TAG, "onInvitationError")
-                    _addContactToRoasterState.postValue(AddContactToRoasterState.Failed( "Unknown Error"))
+                    _addContactToRoasterState.postValue(AddContactToRoasterState.Failed( "Unknown Error", adapterPosition))
                 }
 
                 override fun onInvitationSentError(execption: RainbowServiceException?) {
@@ -85,12 +85,12 @@ class AddNewContactViewModel(app: Application) : AndroidViewModel(app) {
                             else -> {}
                         }
                     }
-                    _addContactToRoasterState.postValue(AddContactToRoasterState.Failed(errorMessage))
+                    _addContactToRoasterState.postValue(AddContactToRoasterState.Failed(errorMessage, adapterPosition))
                 }
 
                 override fun onInvitationSentSuccess() {
                     Log.d(LOG_DEBUG_TAG, "onInvitationSentSuccess")
-                    _addContactToRoasterState.postValue(AddContactToRoasterState.Finished)
+                    _addContactToRoasterState.postValue(AddContactToRoasterState.Finished(adapterPosition, Utility.nameBuilder(contact)))
                 }
             })
         }

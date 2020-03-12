@@ -136,7 +136,7 @@ class AddNewContactActivity : AppCompatActivity() {
             DataLoadState.LOADED -> {
                 activity_add_new_contact_state_layout.visibility = View.GONE
                 addNewContactAdapter.submitList(addNewContactViewModel.contactList)
-                addNewContactAdapter.notifyDataSetChanged()
+                //addNewContactAdapter.notifyDataSetChanged()
                 if (addNewContactViewModel.contactList.isEmpty()) {
                     activity_add_new_contact_state_no_result.visibility = View.VISIBLE
                 }
@@ -147,20 +147,24 @@ class AddNewContactActivity : AppCompatActivity() {
 
     private fun handleAddContactToRoasterState(state: AddContactToRoasterState) {
         when(state) {
-            is AddContactToRoasterState.Loading -> { }
+            is AddContactToRoasterState.Loading -> {
+                addNewContactAdapter.changeAddContactLoadingState(state.adapterPosition, true)
+            }
             is AddContactToRoasterState.Finished -> {
-                Toast.makeText(this, "Added To Contact", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Invitation To ${state.name} Have Been Sent", Toast.LENGTH_SHORT).show()
+                addNewContactAdapter.changeAddContactLoadingState(state.adapterPosition, false)
                 addNewContactViewModel.resetAddContactToRoasterState()
             }
             is AddContactToRoasterState.Failed -> {
                 Toast.makeText(this, state.errorMessage, Toast.LENGTH_SHORT).show()
+                addNewContactAdapter.changeAddContactLoadingState(state.adapterPosition, false)
                 addNewContactViewModel.resetAddContactToRoasterState()
             }
             AddContactToRoasterState.Idle -> { }
         }
     }
 
-    private fun addContactCallback(contact: IRainbowContact) {
-        addNewContactViewModel.addContactToRoaster(contact)
+    private fun addContactCallback(contact: IRainbowContact, adapterPosition: Int) {
+        addNewContactViewModel.addContactToRoaster(contact, adapterPosition)
     }
 }

@@ -97,9 +97,9 @@ object Utility {
     }
 
     sealed class AddContactToRoasterState {
-        object Loading : AddContactToRoasterState()
-        object Finished : AddContactToRoasterState()
-        class Failed(val errorMessage: String) : AddContactToRoasterState()
+        class Loading(val adapterPosition: Int) : AddContactToRoasterState()
+        class Finished(val adapterPosition: Int, val name: String) : AddContactToRoasterState()
+        class Failed(val errorMessage: String, val adapterPosition: Int) : AddContactToRoasterState()
         object Idle : AddContactToRoasterState()
     }
 }

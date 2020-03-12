@@ -14,10 +14,10 @@ import com.nandra.myschool.utils.Utility
 import kotlinx.android.synthetic.main.add_new_contact_item.view.*
 
 class AddNewContactListAdapter(
-    private val addContactCallback: (IRainbowContact) -> Unit
+    private val addContactCallback: (IRainbowContact, Int) -> Unit
 ) : ListAdapter<IRainbowContact, AddNewContactListAdapter.AddNewContactViewHolder>(addNewContactDiffUtil) {
 
-    private val addContactLoadingStateMap = mapOf<String, Boolean>()
+    private var addContactLoadingStateMap = mutableMapOf<String, Boolean>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AddNewContactViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.add_new_contact_item, parent, false)
@@ -28,9 +28,27 @@ class AddNewContactListAdapter(
         holder.bind(getItem(position))
     }
 
+    override fun submitList(list: List<IRainbowContact>?) {
+        addContactLoadingStateMap = mutableMapOf()
+        super.submitList(list)
+        notifyDataSetChanged()
+    }
+
     fun wipeData() {
         submitList(listOf())
+        addContactLoadingStateMap = mutableMapOf()
         notifyDataSetChanged()
+    }
+
+    fun changeAddContactLoadingState(adapterPosition: Int, isLoading: Boolean) {
+        try {
+            val contact = getItem(adapterPosition)
+            val contactId = contact.id
+            addContactLoadingStateMap[contactId] = isLoading
+            notifyDataSetChanged()
+        } catch (exception: IndexOutOfBoundsException) {
+
+        }
     }
 
     inner class AddNewContactViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -52,7 +70,7 @@ class AddNewContactListAdapter(
                 .placeholder(R.drawable.ic_profile)
                 .into(itemView.activity_add_new_contact_item_profile_picture)
             itemView.activity_add_new_contact_item_add_contact_button.setOnClickListener {
-                addContactCallback(contact)
+                addContactCallback(contact, adapterPosition)
             }
         }
 
