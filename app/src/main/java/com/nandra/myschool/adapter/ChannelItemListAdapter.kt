@@ -60,6 +60,7 @@ private val onFailureCallback: () -> Unit
                 if (channelItem.contact.photo != null) {
                     Glide.with(itemView.context)
                         .load(channelItem.contact.photo)
+                        .placeholder(R.drawable.ic_profile)
                         .into(itemView.classroom_detail_feed_item_photo)
                 }
             } else {

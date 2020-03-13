@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/profile"
+    android:id="@+id/profile_menu_item"
     app:startDestination="@id/profileFragment"
     tools:ignore="UnusedNavigation">
 

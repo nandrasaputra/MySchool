@@ -1,14 +1,11 @@
 package com.nandra.myschool.adapter.viewholder
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ale.infra.manager.IMMessage
-import com.ale.rainbowsdk.RainbowSdk
 import com.nandra.myschool.R
-import com.nandra.myschool.utils.Utility.LOG_DEBUG_TAG
 import com.nandra.myschool.utils.Utility.convertToString
 import kotlinx.android.synthetic.main.chat_detail_sent_item.view.*
 

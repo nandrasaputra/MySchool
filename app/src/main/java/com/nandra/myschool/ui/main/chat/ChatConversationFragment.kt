@@ -1,7 +1,6 @@
 package com.nandra.myschool.ui.main.chat
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,7 +18,6 @@ import com.nandra.myschool.adapter.ConversationListAdapter
 import com.nandra.myschool.ui.main.MainActivityViewModel
 import com.nandra.myschool.utils.Utility
 import kotlinx.android.synthetic.main.chat_conversation_fragment.*
-import kotlinx.android.synthetic.main.classroom_fragment.*
 
 class ChatConversationFragment : Fragment(), IRainbowContact.IContactListener {
 

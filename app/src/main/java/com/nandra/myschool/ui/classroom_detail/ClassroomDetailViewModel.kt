@@ -2,7 +2,6 @@ package com.nandra.myschool.ui.classroom_detail
 
 import android.app.Application
 import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -20,19 +19,13 @@ import com.nandra.myschool.model.Material
 import com.nandra.myschool.model.Session
 import com.nandra.myschool.model.Subject
 import com.nandra.myschool.repository.MySchoolRepository
-import com.nandra.myschool.utils.Utility
 import com.nandra.myschool.utils.Utility.DataLoadState
 import com.nandra.myschool.utils.Utility.UploadFileState
-import com.nandra.myschool.utils.Utility.LOG_DEBUG_TAG
 import com.nandra.myschool.utils.Utility.getCurrentStringDate
 import com.nandra.myschool.utils.Utility.nameBuilder
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.*
-import kotlin.collections.HashMap
 
 class ClassroomDetailViewModel(app: Application) : AndroidViewModel(app) {
 
@@ -44,20 +37,20 @@ class ClassroomDetailViewModel(app: Application) : AndroidViewModel(app) {
     private var fetchMaterialDatabaseReferenceJob: Job? = null
     val materialDataLoadState: LiveData<DataLoadState>
         get() = _materialDataLoadState
-    private val _materialDataLoadState = MutableLiveData<DataLoadState>(DataLoadState.UNLOADED)
+    private val _materialDataLoadState = MutableLiveData(DataLoadState.UNLOADED)
     private var materialDatabaseReference: DatabaseReference? = null
     var materialList = listOf<Material>()
 
     private var fetchSessionDatabaseReferenceJob: Job? = null
     val sessionDataLoadState: LiveData<DataLoadState>
         get() = _sessionDataLoadState
-    private val _sessionDataLoadState = MutableLiveData<DataLoadState>(DataLoadState.UNLOADED)
+    private val _sessionDataLoadState = MutableLiveData(DataLoadState.UNLOADED)
     private var sessionDatabaseQuery: Query? = null
     var sessionList = listOf<Session>()
 
     val uploadFileState: LiveData<UploadFileState>
         get() = _uploadFileState
-    private val _uploadFileState = MutableLiveData<UploadFileState>(UploadFileState.IDLE)
+    private val _uploadFileState = MutableLiveData(UploadFileState.IDLE)
     private var currentUploadTask: UploadTask? = null
 
 
@@ -65,7 +58,7 @@ class ClassroomDetailViewModel(app: Application) : AndroidViewModel(app) {
     private val repository = MySchoolRepository()
     val detailSubjectDataLoadState: LiveData<DataLoadState>
         get() = _detailSubjectDataLoadState
-    private val _detailSubjectDataLoadState = MutableLiveData<DataLoadState>(DataLoadState.UNLOADED)
+    private val _detailSubjectDataLoadState = MutableLiveData(DataLoadState.UNLOADED)
     private var detailSubjectQuery: Query? = null
     var detailSubject = Subject()
 

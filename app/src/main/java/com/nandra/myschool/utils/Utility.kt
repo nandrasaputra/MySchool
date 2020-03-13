@@ -4,8 +4,6 @@ import android.app.Application
 import android.net.Uri
 import android.webkit.MimeTypeMap
 import com.ale.infra.contact.IRainbowContact
-import java.io.File
-import java.net.URI
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -38,7 +36,7 @@ object Utility {
         UNAVAILABLE
     }
 
-    enum class UploadFileState() {
+    enum class UploadFileState {
         IDLE,
         UPLOADING,
         UPLOADED,
@@ -94,5 +92,12 @@ object Utility {
     interface IAddNewSession {
         fun onAddSessionButtonClicked(topic: String, description: String)
         fun onCancelSessionButtonClicked()
+    }
+
+    sealed class AddContactToRoasterState {
+        class Loading(val adapterPosition: Int) : AddContactToRoasterState()
+        class Finished(val adapterPosition: Int, val name: String) : AddContactToRoasterState()
+        class Failed(val errorMessage: String, val adapterPosition: Int) : AddContactToRoasterState()
+        object Idle : AddContactToRoasterState()
     }
 }

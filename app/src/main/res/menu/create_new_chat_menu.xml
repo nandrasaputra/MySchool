@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <item
-        android:id="@+id/chat_search_menu_item"
-        android:icon="@drawable/ic_search_toolbar"
+        android:id="@+id/create_new_chat_search_menu_item"
         android:title="Search"
         app:showAsAction="always"
-        app:actionViewClass="androidx.appcompat.widget.SearchView" />
+        android:icon="@drawable/ic_search_toolbar"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"/>
+
 </menu>

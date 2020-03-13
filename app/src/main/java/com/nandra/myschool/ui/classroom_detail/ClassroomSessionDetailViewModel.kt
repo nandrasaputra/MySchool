@@ -27,7 +27,7 @@ class ClassroomSessionDetailViewModel(app: Application) : AndroidViewModel(app) 
 
     val attendanceLoadState: LiveData<DataLoadState>
         get() = _attendanceLoadState
-    private val _attendanceLoadState = MutableLiveData<DataLoadState>(DataLoadState.UNLOADED)
+    private val _attendanceLoadState = MutableLiveData(DataLoadState.UNLOADED)
 
     fun getAttendanceList(subjectCode: String, sessionKey: String) {
         //handle internet connection here

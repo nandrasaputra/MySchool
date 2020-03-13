@@ -3,7 +3,6 @@ package com.nandra.myschool.ui
 import android.content.DialogInterface
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +13,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import com.nandra.myschool.R
 import com.nandra.myschool.ui.classroom_detail.ClassroomDetailViewModel
-import com.nandra.myschool.utils.Utility.LOG_DEBUG_TAG
 import com.nandra.myschool.utils.Utility.UploadFileState
 import com.nandra.myschool.utils.Utility.UploadFileState.*
 import kotlinx.android.synthetic.main.upload_file_confirmation_dialog_fragment.*

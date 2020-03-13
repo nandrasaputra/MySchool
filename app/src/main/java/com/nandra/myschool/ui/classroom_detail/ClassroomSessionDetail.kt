@@ -18,7 +18,7 @@ import kotlinx.android.synthetic.main.classroom_session_detail.*
 class ClassroomSessionDetail : AppCompatActivity() {
 
     private val classroomSessionDetailViewModel: ClassroomSessionDetailViewModel by viewModels()
-    lateinit var classroomSessionDetailListAdapter: ClassroomSessionDetailListAdapter
+    private lateinit var classroomSessionDetailListAdapter: ClassroomSessionDetailListAdapter
     private var userRole = ""
     private var sessionKey = ""
     private var subjectCode = ""
@@ -76,13 +76,13 @@ class ClassroomSessionDetail : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId) {
-            R.id.classroom_session_detail_close_session -> {
+            R.id.classroom_session_detail_close_session_menu_item -> {
                 true
             }
-            R.id.classroom_session_detail_delete_seesion -> {
+            R.id.classroom_session_detail_delete_seesion_menu_item -> {
                 true
             }
-            R.id.classroom_session_detail_submit_attendance -> {
+            R.id.classroom_session_detail_submit_attendance_menu_item -> {
                 classroomSessionDetailViewModel.submitAttendance(subjectCode, sessionKey)
                 true
             }

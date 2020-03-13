@@ -1,7 +1,6 @@
 package com.nandra.myschool.ui.classroom_detail.classroom_feed
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,13 +9,10 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.ale.infra.manager.channel.Channel
-import com.ale.infra.manager.channel.ChannelItem
 import com.nandra.myschool.R
 import com.nandra.myschool.adapter.ChannelItemListAdapter
 import com.nandra.myschool.ui.classroom_detail.ClassroomDetailViewModel
 import com.nandra.myschool.utils.Utility.DataLoadState
-import com.nandra.myschool.utils.Utility.LOG_DEBUG_TAG
 import kotlinx.android.synthetic.main.classroom_feed_fragment.*
 
 class ClassroomFeedFragment : Fragment() {

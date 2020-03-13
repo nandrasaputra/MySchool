@@ -30,6 +30,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_marginStart="8dp"
+                android:gravity="center_vertical"
                 app:layout_constraintStart_toEndOf="@id/activity_chat_detail_photo"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/activity_chat_detail_photo"
@@ -42,7 +43,7 @@
                     style="@style/MySchool.TextAppearance.Title1"
                     android:text="Nandra Saputra"
                     android:textColor="@color/toolbarFontColor"
-                    android:textSize="14sp"
+                    android:textSize="16sp"
                     android:lines="1"
                     android:ellipsize="end"/>
 

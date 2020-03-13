@@ -41,6 +41,7 @@ class ConversationListAdapter(
 
                 Glide.with(itemView.context)
                     .load(conversation.contact.photo)
+                    .placeholder(R.drawable.ic_profile)
                     .into(itemView.channel_detail_item_photo)
             } else {
                 val roomName = conversation.room.name
@@ -48,6 +49,7 @@ class ConversationListAdapter(
 
                 Glide.with(itemView.context)
                     .load(conversation.room.photo)
+                    .placeholder(R.drawable.ic_profile)
                     .into(itemView.channel_detail_item_photo)
             }
             itemView.channel_detail_item_publisher_name.text = conversation.lastMessage.messageContent
