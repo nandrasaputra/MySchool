@@ -13,8 +13,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.ale.infra.contact.IRainbowContact
 import com.nandra.myschool.R
 import com.nandra.myschool.adapter.AddNewContactListAdapter
-import com.nandra.myschool.utils.Utility.DataLoadState
 import com.nandra.myschool.utils.Utility.AddContactToRoasterState
+import com.nandra.myschool.utils.Utility.DataLoadState
 import kotlinx.android.synthetic.main.add_new_contact_activity.*
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -136,7 +136,6 @@ class AddNewContactActivity : AppCompatActivity() {
             DataLoadState.LOADED -> {
                 activity_add_new_contact_state_layout.visibility = View.GONE
                 addNewContactAdapter.submitList(addNewContactViewModel.contactList)
-                //addNewContactAdapter.notifyDataSetChanged()
                 if (addNewContactViewModel.contactList.isEmpty()) {
                     activity_add_new_contact_state_no_result.visibility = View.VISIBLE
                 }

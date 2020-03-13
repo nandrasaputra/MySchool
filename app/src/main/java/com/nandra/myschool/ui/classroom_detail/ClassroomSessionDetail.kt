@@ -18,7 +18,7 @@ import kotlinx.android.synthetic.main.classroom_session_detail.*
 class ClassroomSessionDetail : AppCompatActivity() {
 
     private val classroomSessionDetailViewModel: ClassroomSessionDetailViewModel by viewModels()
-    lateinit var classroomSessionDetailListAdapter: ClassroomSessionDetailListAdapter
+    private lateinit var classroomSessionDetailListAdapter: ClassroomSessionDetailListAdapter
     private var userRole = ""
     private var sessionKey = ""
     private var subjectCode = ""

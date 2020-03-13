@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.ale.util.Util
 import com.nandra.myschool.R
 import com.nandra.myschool.model.Session
 import com.nandra.myschool.ui.classroom_detail.ClassroomSessionDetail

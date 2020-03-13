@@ -1,7 +1,6 @@
 package com.nandra.myschool.model
 
 import com.google.firebase.database.IgnoreExtraProperties
-import java.util.*
 
 @IgnoreExtraProperties
 data class Material(

@@ -1,19 +1,20 @@
 package com.nandra.myschool.ui.main.classroom
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.ale.rainbowsdk.RainbowSdk
-import com.google.firebase.database.*
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ValueEventListener
 import com.nandra.myschool.model.Schedule
 import com.nandra.myschool.model.Subject
 import com.nandra.myschool.model.User
 import com.nandra.myschool.repository.MySchoolRepository
 import com.nandra.myschool.utils.Utility.DataLoadState
-import com.nandra.myschool.utils.Utility.LOG_DEBUG_TAG
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
@@ -27,15 +28,15 @@ class ClassroomViewModel(app: Application) : AndroidViewModel(app) {
 
     val userLoadState: LiveData<DataLoadState>
         get() = _userDataLoadState
-    private val _userDataLoadState = MutableLiveData<DataLoadState>(DataLoadState.UNLOADED)
+    private val _userDataLoadState = MutableLiveData(DataLoadState.UNLOADED)
 
     val subjectDataLoadState: LiveData<DataLoadState>
         get() = _subjectDataLoadState
-    private val _subjectDataLoadState = MutableLiveData<DataLoadState>(DataLoadState.UNLOADED)
+    private val _subjectDataLoadState = MutableLiveData(DataLoadState.UNLOADED)
 
     val scheduleDataLoadState: LiveData<DataLoadState>
         get() = _scheduleDataLoadState
-    private val _scheduleDataLoadState = MutableLiveData<DataLoadState>(DataLoadState.UNLOADED)
+    private val _scheduleDataLoadState = MutableLiveData(DataLoadState.UNLOADED)
 
     private var subjectDatabaseReference: DatabaseReference? = null
     var subjectList = listOf<Subject>()

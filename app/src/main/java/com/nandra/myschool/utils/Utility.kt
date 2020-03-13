@@ -4,8 +4,6 @@ import android.app.Application
 import android.net.Uri
 import android.webkit.MimeTypeMap
 import com.ale.infra.contact.IRainbowContact
-import java.io.File
-import java.net.URI
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -38,7 +36,7 @@ object Utility {
         UNAVAILABLE
     }
 
-    enum class UploadFileState() {
+    enum class UploadFileState {
         IDLE,
         UPLOADING,
         UPLOADED,

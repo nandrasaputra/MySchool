@@ -1,7 +1,6 @@
 package com.nandra.myschool.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,11 +12,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.nandra.myschool.R
 import com.nandra.myschool.adapter.ScheduleListAdapter
 import com.nandra.myschool.ui.main.classroom.ClassroomViewModel
-import com.nandra.myschool.utils.Utility
 import com.nandra.myschool.utils.Utility.DataLoadState
 import kotlinx.android.synthetic.main.schedule_dialog_fragment.*
 
-class ClassScheduleDialogFragment() : DialogFragment() {
+class ClassScheduleDialogFragment : DialogFragment() {
 
     private lateinit var scheduleListAdapter: ScheduleListAdapter
     private val classroomViewModel: ClassroomViewModel by activityViewModels()

@@ -17,7 +17,6 @@ import com.nandra.myschool.adapter.ContactListAdapter
 import com.nandra.myschool.ui.main.MainActivityViewModel
 import com.nandra.myschool.utils.Utility.ConnectServerState
 import kotlinx.android.synthetic.main.chat_contact_fragment.*
-import kotlinx.android.synthetic.main.chat_conversation_fragment.*
 
 class ChatContactFragment : Fragment(), IRainbowContact.IContactListener {
 

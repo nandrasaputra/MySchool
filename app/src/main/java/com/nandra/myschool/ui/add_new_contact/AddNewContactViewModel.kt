@@ -1,7 +1,6 @@
 package com.nandra.myschool.ui.add_new_contact
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -13,11 +12,9 @@ import com.ale.listener.IRainbowContactsSearchListener
 import com.ale.listener.IRainbowSentInvitationListener
 import com.ale.rainbowsdk.RainbowSdk
 import com.nandra.myschool.utils.Utility
-import com.nandra.myschool.utils.Utility.DataLoadState
 import com.nandra.myschool.utils.Utility.AddContactToRoasterState
-import com.nandra.myschool.utils.Utility.LOG_DEBUG_TAG
+import com.nandra.myschool.utils.Utility.DataLoadState
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class AddNewContactViewModel(app: Application) : AndroidViewModel(app) {
@@ -67,12 +64,10 @@ class AddNewContactViewModel(app: Application) : AndroidViewModel(app) {
             _addContactToRoasterState.postValue(AddContactToRoasterState.Loading(adapterPosition))
             RainbowSdk.instance().contacts().addRainbowContactToRoster(contact, object : IRainbowSentInvitationListener {
                 override fun onInvitationError() {
-                    Log.d(LOG_DEBUG_TAG, "onInvitationError")
                     _addContactToRoasterState.postValue(AddContactToRoasterState.Failed( "Unknown Error", adapterPosition))
                 }
 
                 override fun onInvitationSentError(execption: RainbowServiceException?) {
-                    Log.d(LOG_DEBUG_TAG, "onInvitationSentError : Detail Code = ${execption?.detailsCode}, message = ${execption?.detailsMessage}")
                     var errorMessage = "Failed To Add Contact"
                     execption?.run {
                         when(this.detailsCode) {
@@ -89,7 +84,6 @@ class AddNewContactViewModel(app: Application) : AndroidViewModel(app) {
                 }
 
                 override fun onInvitationSentSuccess() {
-                    Log.d(LOG_DEBUG_TAG, "onInvitationSentSuccess")
                     _addContactToRoasterState.postValue(AddContactToRoasterState.Finished(adapterPosition, Utility.nameBuilder(contact)))
                 }
             })

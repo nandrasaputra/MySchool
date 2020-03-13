@@ -5,12 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import com.nandra.myschool.R
 import com.nandra.myschool.ui.classroom_detail.ClassroomDetailViewModel
-import com.nandra.myschool.utils.Utility
 import kotlinx.android.synthetic.main.add_new_session_dialog_fragment.*
 
 class AddNewSessionDialogFragment : DialogFragment() {
