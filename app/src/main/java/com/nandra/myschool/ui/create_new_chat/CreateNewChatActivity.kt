@@ -85,7 +85,6 @@ class CreateNewChatActivity : AppCompatActivity(), IRainbowContact.IContactListe
                 //SearchView Closed
                 runOnUiThread {
                     createNewChatListAdapter.submitAndUpdateList(contactList)
-                    createNewChatListAdapter.notifyDataSetChanged()
                     activity_create_new_chat_contact_count.text = "${contactList.size} Contact"
                 }
             } else {
@@ -97,7 +96,6 @@ class CreateNewChatActivity : AppCompatActivity(), IRainbowContact.IContactListe
         } else {
             runOnUiThread {
                 createNewChatListAdapter.submitAndUpdateList(contactList)
-                createNewChatListAdapter.notifyDataSetChanged()
                 activity_create_new_chat_contact_count.text = "${contactList.size} Contact"
             }
         }

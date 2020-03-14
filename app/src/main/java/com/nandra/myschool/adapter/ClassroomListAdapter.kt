@@ -4,6 +4,8 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Filter
+import android.widget.Filterable
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -16,10 +18,21 @@ import com.nandra.myschool.ui.classroom_detail.ClassroomDetailActivity
 import com.nandra.myschool.utils.Utility
 import kotlinx.android.synthetic.main.classroom_fragment_item.view.*
 
-class ClassroomListAdapter : ListAdapter<Subject, ClassroomListAdapter.ClassroomViewHolder>(classroomDiffCallback) {
+class ClassroomListAdapter : ListAdapter<Subject, ClassroomListAdapter.ClassroomViewHolder>(classroomDiffCallback), Filterable {
 
+    private var cachedList = listOf<Subject>()
     val storage = FirebaseStorage.getInstance()
     var currentUser = User()
+
+    fun submitAndUpdateList(list: List<Subject>) {
+        cachedList = list
+        submitList(list)
+        notifyDataSetChanged()
+    }
+
+    fun restoreList() {
+        submitList(cachedList)
+    }
 
     fun submitUser(user: User) {
         currentUser = user
@@ -88,6 +101,33 @@ class ClassroomListAdapter : ListAdapter<Subject, ClassroomListAdapter.Classroom
             }
         }
     }
+
+    override fun getFilter(): Filter {
+        return object : Filter() {
+            override fun performFiltering(constraint: CharSequence?): FilterResults {
+                val filterResult = FilterResults()
+
+                if (!constraint.isNullOrEmpty()) {
+                    val filteredList = cachedList.filter {
+                        it.subject_name.toLowerCase().contains(constraint)
+                    }
+                    filterResult.values = filteredList
+                } else {
+                    filterResult.values = cachedList
+                }
+
+                return filterResult
+            }
+
+            override fun publishResults(constraint: CharSequence?, results: FilterResults) {
+                results.values?.run {
+                    val value = this as List<Subject>
+                    submitList(value)
+                }
+            }
+        }
+    }
+
     companion object {
         private val classroomDiffCallback = object : DiffUtil.ItemCallback<Subject>() {
             override fun areItemsTheSame(oldItem: Subject, newItem: Subject): Boolean {

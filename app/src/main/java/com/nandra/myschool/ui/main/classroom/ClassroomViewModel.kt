@@ -25,6 +25,7 @@ class ClassroomViewModel(app: Application) : AndroidViewModel(app) {
     private var fetchScheduleDatabaseReferenceJob: Job? = null
     private var fetchUserDatabaseReferenceJob: Job? = null
     private val repository = MySchoolRepository()
+    var isSearchViewOnCloseHandled = true
 
     val userLoadState: LiveData<DataLoadState>
         get() = _userDataLoadState

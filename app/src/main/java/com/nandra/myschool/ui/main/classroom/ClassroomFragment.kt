@@ -1,8 +1,10 @@
 package com.nandra.myschool.ui.main.classroom
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -13,14 +15,15 @@ import com.nandra.myschool.ui.ClassScheduleDialogFragment
 import com.nandra.myschool.ui.main.MainActivityViewModel
 import com.nandra.myschool.utils.Utility.ConnectServerState
 import com.nandra.myschool.utils.Utility.DataLoadState
+import com.nandra.myschool.utils.Utility.LOG_DEBUG_TAG
 import kotlinx.android.synthetic.main.classroom_fragment.*
-import kotlinx.android.synthetic.main.main_activity.*
 
 class ClassroomFragment : Fragment() {
 
     private val classroomViewModel: ClassroomViewModel by activityViewModels()
     private val mainActivityViewModel: MainActivityViewModel by activityViewModels()
     private lateinit var classroomListAdapter: ClassroomListAdapter
+    private var searchView: SearchView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,6 +63,7 @@ class ClassroomFragment : Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.classroom_menu, menu)
+        setupSearchView(menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 
@@ -80,7 +84,7 @@ class ClassroomFragment : Fragment() {
             }
             DataLoadState.LOADING -> { }
             DataLoadState.LOADED -> {
-                classroomListAdapter.submitList(classroomViewModel.subjectList)
+                classroomListAdapter.submitAndUpdateList(classroomViewModel.subjectList)
             }
             else -> {}
         }
@@ -115,6 +119,43 @@ class ClassroomFragment : Fragment() {
                 fragment_classroom_shimmer_layout.stopShimmer()
             }
             ConnectServerState.CONNECTION_ERROR -> { }
+        }
+    }
+
+    private fun setupSearchView(menu: Menu) {
+        val searchItem = menu.findItem(R.id.classroom_search_menu_item)
+        searchView = searchItem?.actionView as SearchView
+
+        searchView?.run {
+            this.setOnSearchClickListener {
+                fragment_classroom_toolbar_title.visibility = View.GONE
+                menu.findItem(R.id.classroom_schedule_menu_item).isVisible = false
+                this.queryHint = "Search Subject"
+                classroomViewModel.isSearchViewOnCloseHandled = false
+                Log.d(LOG_DEBUG_TAG, "isSearchViewOnCloseHandled = false")
+            }
+
+            this.setOnCloseListener {
+                fragment_classroom_toolbar_title.visibility = View.VISIBLE
+                menu.findItem(R.id.classroom_schedule_menu_item).isVisible = true
+                classroomListAdapter.restoreList()
+                classroomViewModel.isSearchViewOnCloseHandled = true
+                Log.d(LOG_DEBUG_TAG, "isSearchViewOnCloseHandled = true")
+                false
+            }
+
+            this.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    return true
+                }
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    newText?.run {
+                        classroomListAdapter.filter.filter(this.toLowerCase())
+                    }
+                    return true
+                }
+            })
         }
     }
 }

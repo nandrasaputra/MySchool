@@ -10,6 +10,7 @@
         android:id="@+id/classroom_search_menu_item"
         android:icon="@drawable/ic_search_toolbar"
         android:title="Search"
-        app:showAsAction="always"/>
+        app:showAsAction="always"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"/>
 
 </menu>
