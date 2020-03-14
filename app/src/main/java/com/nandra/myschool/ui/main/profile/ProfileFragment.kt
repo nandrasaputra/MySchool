@@ -64,6 +64,7 @@ class ProfileFragment : Fragment() {
         fragment_profile_person_email.text = email
         Glide.with(this)
             .load(contact.photo)
+            .placeholder(R.drawable.ic_profile)
             .into(fragment_profile_my_photo)
     }
 }

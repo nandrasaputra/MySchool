@@ -78,6 +78,7 @@ class ChatDetailActivity : AppCompatActivity(), IRainbowContact.IContactListener
 
                 Glide.with(this@ChatDetailActivity)
                     .load(contact.photo)
+                    .placeholder(R.drawable.ic_profile)
                     .into(activity_chat_detail_photo)
             }
         } else {
