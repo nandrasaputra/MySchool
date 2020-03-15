@@ -2,24 +2,25 @@ package com.nandra.myschool.ui.main.chat
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import com.nandra.myschool.R
 import com.nandra.myschool.adapter.ChatViewPagerAdapter
 import com.nandra.myschool.ui.add_new_contact.AddNewContactActivity
 import com.nandra.myschool.ui.create_new_chat.CreateNewChatActivity
-import com.nandra.myschool.utils.Utility
+import com.nandra.myschool.utils.Utility.ChatFilterState
 import kotlinx.android.synthetic.main.chat_fragment.*
 
 class ChatFragment : Fragment() {
 
     private lateinit var chatViewPagerAdapter: ChatViewPagerAdapter
     private var searchView: SearchView? = null
+    private val chatViewModel: ChatViewModel by activityViewModels()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.chat_fragment, container, false)
@@ -105,20 +106,54 @@ class ChatFragment : Fragment() {
     }
 
     private fun setupSearchView(menu: Menu) {
+
+        chatViewModel.isSearchViewOpened = false
+        chatViewModel.changeChatFilterState(ChatFilterState.NoFilter)
+
         val searchItem = menu.findItem(R.id.chat_search_menu_item)
         searchView = searchItem?.actionView as SearchView
 
         searchView?.run {
             this.setOnSearchClickListener {
+                chatViewModel.isSearchViewOpened = true
                 fragment_chat_toolbar_title.visibility = View.GONE
-                this.queryHint = "Search In Chat"
+                when (fragment_chat_tab_layout.selectedTabPosition) {
+                    0 -> {
+                        this.queryHint = "Search In Conversation"
+                    }
+                    1 -> {
+                        this.queryHint = "Search In Contact"
+                    }
+                }
             }
 
             this.setOnCloseListener {
-                Log.d(Utility.LOG_DEBUG_TAG, "OnCloseSearchView Chat")
                 fragment_chat_toolbar_title.visibility = View.VISIBLE
+                chatViewModel.changeChatFilterState(ChatFilterState.NoFilter)
+                chatViewModel.isSearchViewOpened = false
                 false
             }
+
+            this.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    return true
+                }
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    newText?.run {
+                        //createNewChatListAdapter.filter.filter(this.toLowerCase())
+                        when (fragment_chat_tab_layout.selectedTabPosition) {
+                            0 -> {
+                                chatViewModel.changeChatFilterState(ChatFilterState.FilterConversation(newText))
+                            }
+                            1 -> {
+                                chatViewModel.changeChatFilterState(ChatFilterState.FilterContact(newText))
+                            }
+                        }
+                    }
+                    return true
+                }
+            })
         }
     }
 

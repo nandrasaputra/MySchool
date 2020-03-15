@@ -100,4 +100,15 @@ object Utility {
         class Failed(val errorMessage: String, val adapterPosition: Int) : AddContactToRoasterState()
         object Idle : AddContactToRoasterState()
     }
+
+    sealed class ChatFilterState {
+        class FilterConversation(val constraint: String) : ChatFilterState()
+        class FilterContact(val constraint: String) : ChatFilterState()
+        object NoFilter : ChatFilterState()
+    }
+
+    sealed class SearchViewState {
+        object Opened : SearchViewState()
+        object Closed : SearchViewState()
+    }
 }

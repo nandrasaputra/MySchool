@@ -4,6 +4,8 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Filter
+import android.widget.Filterable
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -16,7 +18,11 @@ import com.nandra.myschool.utils.Utility
 import com.nandra.myschool.utils.Utility.EXTRA_JID
 import kotlinx.android.synthetic.main.chat_contact_fragment_item.view.*
 
-class ContactListAdapter : ListAdapter<IRainbowContact, ContactListAdapter.ContactViewHolder>(chatContactDiffCallback) {
+class ContactListAdapter : ListAdapter<IRainbowContact, ContactListAdapter.ContactViewHolder>(chatContactDiffCallback),
+Filterable {
+
+    private var cachedList = listOf<IRainbowContact>()
+    var filterState: Utility.ChatFilterState = Utility.ChatFilterState.NoFilter
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContactViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.chat_contact_fragment_item, parent, false)
@@ -25,6 +31,21 @@ class ContactListAdapter : ListAdapter<IRainbowContact, ContactListAdapter.Conta
 
     override fun onBindViewHolder(holder: ContactViewHolder, position: Int) {
         holder.bind(getItem(position))
+    }
+
+    fun updateList(newList: List<IRainbowContact>) {
+        cachedList = newList
+    }
+
+    fun submitAndUpdateList(list: List<IRainbowContact>) {
+        cachedList = list
+        submitList(list)
+        notifyDataSetChanged()
+    }
+
+    fun restoreList() {
+        submitList(cachedList)
+        notifyDataSetChanged()
     }
 
     inner class ContactViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
@@ -43,6 +64,34 @@ class ContactListAdapter : ListAdapter<IRainbowContact, ContactListAdapter.Conta
                     putExtra(EXTRA_JID, jid)
                 }
                 view.context.startActivity(intent)
+            }
+        }
+    }
+
+    override fun getFilter(): Filter {
+        return object : Filter() {
+            override fun performFiltering(constraint: CharSequence): FilterResults {
+                val filterResult = FilterResults()
+
+                if (constraint.isNotEmpty() and (filterState != Utility.ChatFilterState.NoFilter)) {
+                    val filteredList = cachedList.filter {
+                        val name = Utility.nameBuilder(it)
+                        name.toLowerCase().contains(constraint)
+                    }
+                    filterResult.values = filteredList
+                } else {
+                    filterResult.values = cachedList
+                }
+                return filterResult
+            }
+
+            override fun publishResults(constraint: CharSequence?, results: FilterResults) {
+                results.values?.run {
+                    if (filterState != Utility.ChatFilterState.NoFilter) {
+                        val value = this as List<IRainbowContact>
+                        submitList(value)
+                    }
+                }
             }
         }
     }

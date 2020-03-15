@@ -1,8 +1,9 @@
 package com.nandra.myschool.ui.main.chat
 
 import android.os.Bundle
-import android.util.Log
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -14,7 +15,7 @@ import com.ale.rainbowsdk.RainbowSdk
 import com.nandra.myschool.R
 import com.nandra.myschool.adapter.ContactListAdapter
 import com.nandra.myschool.ui.main.MainActivityViewModel
-import com.nandra.myschool.utils.Utility
+import com.nandra.myschool.utils.Utility.ChatFilterState
 import com.nandra.myschool.utils.Utility.ConnectServerState
 import kotlinx.android.synthetic.main.chat_contact_fragment.*
 
@@ -33,9 +34,7 @@ class ChatContactFragment : Fragment(), IRainbowContact.IContactListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mainViewModel.connectServerState.observe(viewLifecycleOwner, Observer {
-            handleConnectServerState(it)
-        })
+        observeViewModel()
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -51,6 +50,51 @@ class ChatContactFragment : Fragment(), IRainbowContact.IContactListener {
         super.onDestroyView()
         unregisterListeners()
         RainbowSdk.instance().contacts().rainbowContacts.unregisterChangeListener(changeListener)
+    }
+
+    override fun onCompanyChanged(p0: String?) {}
+    override fun onPresenceChanged(p0: IRainbowContact?, p1: RainbowPresence?) {}
+    override fun onActionInProgress(p0: Boolean) {}
+    override fun contactUpdated(p0: IRainbowContact?) {
+        getContactList()
+    }
+
+    private fun getContactList() {
+        unregisterListeners()
+        chatViewModel.updateContactList()
+        contactList = chatViewModel.getContactList()
+        registerListeners()
+
+        if (!chatViewModel.isSearchViewOpened) {
+            activity?.runOnUiThread {
+                contactListAdapter.submitAndUpdateList(contactList)
+            }
+        } else {
+            activity?.runOnUiThread {
+                contactListAdapter.updateList(contactList)
+            }
+        }
+    }
+
+    private fun unregisterListeners() {
+        for (contact in contactList) {
+            contact.unregisterChangeListener(this)
+        }
+    }
+
+    private fun registerListeners() {
+        for (contact in contactList) {
+            contact.registerChangeListener(this)
+        }
+    }
+
+    private fun observeViewModel() {
+        mainViewModel.connectServerState.observe(viewLifecycleOwner, Observer {
+            handleConnectServerState(it)
+        })
+        chatViewModel.chatFilterState.observe(viewLifecycleOwner, Observer {
+            handleChatFilterState(it)
+        })
     }
 
     private fun handleConnectServerState(state: ConnectServerState) {
@@ -70,39 +114,17 @@ class ChatContactFragment : Fragment(), IRainbowContact.IContactListener {
         }
     }
 
-    private fun getContactList() {
-        unregisterListeners()
-        chatViewModel.updateContactList()
-        contactList = chatViewModel.getContactList()
-        registerListeners()
-
-        activity?.runOnUiThread {
-            contactListAdapter.submitList(contactList)
-            contactListAdapter.notifyDataSetChanged()
+    private fun handleChatFilterState(state: ChatFilterState) {
+        when(state) {
+            is ChatFilterState.FilterContact -> {
+                contactListAdapter.filterState = ChatFilterState.FilterConversation(state.constraint)
+                contactListAdapter.filter.filter(state.constraint)
+            }
+            is ChatFilterState.NoFilter -> {
+                contactListAdapter.restoreList()
+                contactListAdapter.filterState = ChatFilterState.NoFilter
+            }
+            else -> {}
         }
-    }
-
-    private fun unregisterListeners() {
-        for (contact in contactList) {
-            contact.unregisterChangeListener(this)
-        }
-    }
-
-    private fun registerListeners() {
-        for (contact in contactList) {
-            contact.registerChangeListener(this)
-        }
-    }
-
-    override fun onCompanyChanged(p0: String?) {}
-    override fun onPresenceChanged(p0: IRainbowContact?, p1: RainbowPresence?) {}
-    override fun onActionInProgress(p0: Boolean) {}
-    override fun contactUpdated(p0: IRainbowContact?) {
-        getContactList()
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        Log.d(Utility.LOG_DEBUG_TAG ,"Called From Contact Fragment")
-        super.onCreateOptionsMenu(menu, inflater)
     }
 }

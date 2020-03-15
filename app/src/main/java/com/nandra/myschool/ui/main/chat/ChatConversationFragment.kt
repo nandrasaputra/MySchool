@@ -16,7 +16,8 @@ import com.ale.rainbowsdk.RainbowSdk
 import com.nandra.myschool.R
 import com.nandra.myschool.adapter.ConversationListAdapter
 import com.nandra.myschool.ui.main.MainActivityViewModel
-import com.nandra.myschool.utils.Utility
+import com.nandra.myschool.utils.Utility.ChatFilterState
+import com.nandra.myschool.utils.Utility.ConnectServerState
 import kotlinx.android.synthetic.main.chat_conversation_fragment.*
 
 class ChatConversationFragment : Fragment(), IRainbowContact.IContactListener {
@@ -35,14 +36,12 @@ class ChatConversationFragment : Fragment(), IRainbowContact.IContactListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mainViewModel.connectServerState.observe(viewLifecycleOwner, Observer {
-            handleConnectServerState(it)
-        })
+        observeViewModel()
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        conversationListAdapter = ConversationListAdapter(::clickCallback)
+        conversationListAdapter = ConversationListAdapter()
         fragment_chat_conversation_recycler_view.apply {
             layoutManager = LinearLayoutManager(activity)
             adapter = conversationListAdapter
@@ -55,40 +54,31 @@ class ChatConversationFragment : Fragment(), IRainbowContact.IContactListener {
         RainbowSdk.instance().contacts().rainbowContacts.unregisterChangeListener(changeListener)
     }
 
-    private fun clickCallback(conversation: IRainbowConversation) {
-        //TODO: Implement This
-    }
+    override fun onCompanyChanged(p0: String?) {}
 
-    private fun handleConnectServerState(state: Utility.ConnectServerState) {
-        when(state) {
-            Utility.ConnectServerState.LOADING -> {
-                fragment_chat_conversation_shimmer_layout.visibility = View.VISIBLE
-                fragment_chat_conversation_shimmer_veil.visibility = View.VISIBLE
-                fragment_chat_conversation_shimmer_layout.startShimmer()
-            }
-            Utility.ConnectServerState.SUCCESS -> {
-                getConversationList()
-                fragment_chat_conversation_shimmer_layout.visibility = View.GONE
-                fragment_chat_conversation_shimmer_veil.visibility = View.GONE
-                fragment_chat_conversation_shimmer_layout.stopShimmer()
-            }
-            else -> { }
-        }
+    override fun onPresenceChanged(p0: IRainbowContact?, p1: RainbowPresence?) {}
+
+    override fun onActionInProgress(p0: Boolean) {}
+
+    override fun contactUpdated(p0: IRainbowContact?) {
+        getConversationList()
     }
 
     private fun getConversationList() {
-
-
-
         unregisterListeners()
         chatViewModel.updateConversationList()
         conversationList = chatViewModel.getConversationList()
         getContactFromConversation(conversationList)
         registerListeners()
 
-        activity?.runOnUiThread {
-            conversationListAdapter.submitList(conversationList)
-            conversationListAdapter.notifyDataSetChanged()
+        if (!chatViewModel.isSearchViewOpened) {
+            activity?.runOnUiThread {
+                conversationListAdapter.submitAndUpdateList(conversationList)
+            }
+        } else {
+            activity?.runOnUiThread {
+                conversationListAdapter.updateList(conversationList)
+            }
         }
     }
 
@@ -108,7 +98,6 @@ class ChatConversationFragment : Fragment(), IRainbowContact.IContactListener {
 
         val newContact = mutableListOf<IRainbowContact>()
 
-        //TODO: ADD ROOM TOO
         for (conversation in conversations) {
             if (!conversation.isRoomType) {
                 newContact.add(conversation.contact)
@@ -118,13 +107,43 @@ class ChatConversationFragment : Fragment(), IRainbowContact.IContactListener {
         contactList = newContact
     }
 
-    override fun onCompanyChanged(p0: String?) {}
+    private fun observeViewModel() {
+        mainViewModel.connectServerState.observe(viewLifecycleOwner, Observer {
+            handleConnectServerState(it)
+        })
+        chatViewModel.chatFilterState.observe(viewLifecycleOwner, Observer {
+            handleChatFilterState(it)
+        })
+    }
 
-    override fun onPresenceChanged(p0: IRainbowContact?, p1: RainbowPresence?) {}
+    private fun handleConnectServerState(state: ConnectServerState) {
+        when(state) {
+            ConnectServerState.LOADING -> {
+                fragment_chat_conversation_shimmer_layout.visibility = View.VISIBLE
+                fragment_chat_conversation_shimmer_veil.visibility = View.VISIBLE
+                fragment_chat_conversation_shimmer_layout.startShimmer()
+            }
+            ConnectServerState.SUCCESS -> {
+                getConversationList()
+                fragment_chat_conversation_shimmer_layout.visibility = View.GONE
+                fragment_chat_conversation_shimmer_veil.visibility = View.GONE
+                fragment_chat_conversation_shimmer_layout.stopShimmer()
+            }
+            else -> { }
+        }
+    }
 
-    override fun onActionInProgress(p0: Boolean) {}
-
-    override fun contactUpdated(p0: IRainbowContact?) {
-        getConversationList()
+    private fun handleChatFilterState(state: ChatFilterState) {
+        when(state) {
+            is ChatFilterState.FilterConversation -> {
+                conversationListAdapter.filterState = ChatFilterState.FilterConversation(state.constraint)
+                conversationListAdapter.filter.filter(state.constraint)
+            }
+            is ChatFilterState.NoFilter -> {
+                conversationListAdapter.restoreList()
+                conversationListAdapter.filterState = ChatFilterState.NoFilter
+            }
+            else -> {}
+        }
     }
 }
