@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.ale.rainbowsdk.RainbowSdk
 import com.google.firebase.database.*
+import com.google.firebase.database.ktx.getValue
 import com.nandra.myschool.model.SessionAttendance
 import com.nandra.myschool.model.User
 import com.nandra.myschool.repository.MySchoolRepository
@@ -88,7 +89,21 @@ class ClassroomSessionDetailViewModel(app: Application) : AndroidViewModel(app) 
 
     fun deleteAttendance(sessionAttendance: SessionAttendance) {
         val reference = FirebaseDatabase.getInstance().reference.child("session").child(sessionAttendance.grade).child(sessionAttendance.subjectCode)
-            .child(sessionAttendance.session_key).child("session_attendance").child(sessionAttendance.attendance_key).removeValue()
+            .child(sessionAttendance.session_key).child("session_attendance").child(sessionAttendance.attendance_key)
+        reference.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onCancelled(error: DatabaseError) {
+                Log.d(LOG_DEBUG_TAG, "ClassroomSessionDetailViewModel Canceled : ${error.message}")
+            }
+
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val children = dataSnapshot.getValue<SessionAttendance>()
+                if (children != null) {
+                    reference.removeValue()
+                } else {
+                    Log.d(LOG_DEBUG_TAG, "Session Attendance Not Found")
+                }
+            }
+        })
     }
 
 }
