@@ -13,7 +13,8 @@ import com.nandra.myschool.model.SessionAttendance
 import kotlinx.android.synthetic.main.classroom_session_detail_item.view.*
 
 class ClassroomSessionDetailListAdapter(
-    private val userRole: String
+    private val userRole: String,
+    private val deleteClickCallback: (SessionAttendance) -> Unit
 ) : ListAdapter<SessionAttendance, ClassroomSessionDetailListAdapter.SessionDetailViewHolder>(sessionDetailDiffCallback) {
 
     private val storage = FirebaseStorage.getInstance()
@@ -55,6 +56,4 @@ class ClassroomSessionDetailListAdapter(
             }
         }
     }
-
-
 }

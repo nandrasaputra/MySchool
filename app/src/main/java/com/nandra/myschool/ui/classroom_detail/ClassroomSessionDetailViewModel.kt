@@ -8,7 +8,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.ale.rainbowsdk.RainbowSdk
 import com.google.firebase.database.*
-import com.nandra.myschool.model.*
+import com.nandra.myschool.model.SessionAttendance
+import com.nandra.myschool.model.User
 import com.nandra.myschool.repository.MySchoolRepository
 import com.nandra.myschool.utils.Utility
 import com.nandra.myschool.utils.Utility.DataLoadState
@@ -70,15 +71,16 @@ class ClassroomSessionDetailViewModel(app: Application) : AndroidViewModel(app) 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val name = Utility.nameBuilder(RainbowSdk.instance().myProfile().connectedUser)
                 val date = getCurrentStringDate()
-                val sessionAttendance = SessionAttendance(name, dataSnapshot.getValue(User::class.java)!!.profile_picture_storage_path, date)
-
                 val key = FirebaseDatabase.getInstance().reference.child("session").child("third_grade").child(subjectCode)
                     .child(sessionKey).child("session_attendance").push().key
                 val path = "/session/third_grade/$subjectCode/$sessionKey/session_attendance/$key"
 
-                val childUpdate = HashMap<String, Any>()
-                childUpdate[path] = sessionAttendance
-                FirebaseDatabase.getInstance().reference.updateChildren(childUpdate)
+                key?.run {
+                    val sessionAttendance = SessionAttendance(name, dataSnapshot.getValue(User::class.java)!!.profile_picture_storage_path, date, this)
+                    val childUpdate = HashMap<String, Any>()
+                    childUpdate[path] = sessionAttendance
+                    FirebaseDatabase.getInstance().reference.updateChildren(childUpdate)
+                }
             }
         })
     }

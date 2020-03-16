@@ -9,6 +9,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.nandra.myschool.R
 import com.nandra.myschool.adapter.ClassroomSessionDetailListAdapter
+import com.nandra.myschool.model.SessionAttendance
 import com.nandra.myschool.utils.Utility.DataLoadState
 import com.nandra.myschool.utils.Utility.EXTRA_SESSION_KEY
 import com.nandra.myschool.utils.Utility.EXTRA_SUBJECT_CODE
@@ -33,7 +34,7 @@ class ClassroomSessionDetail : AppCompatActivity() {
 
         setSupportActionBar(activity_classroom_session_detail_toolbar)
 
-        classroomSessionDetailListAdapter = ClassroomSessionDetailListAdapter(userRole)
+        classroomSessionDetailListAdapter = ClassroomSessionDetailListAdapter(userRole, ::onDeleteAttendance)
         activity_classroom_session_detail_recycler_view.apply {
             layoutManager = LinearLayoutManager(this@ClassroomSessionDetail)
             adapter = classroomSessionDetailListAdapter
@@ -103,5 +104,9 @@ class ClassroomSessionDetail : AppCompatActivity() {
             }
             else -> {}
         }
+    }
+
+    private fun onDeleteAttendance(sessionAttendance: SessionAttendance) {
+
     }
 }

@@ -6,5 +6,6 @@ import com.google.firebase.database.IgnoreExtraProperties
 data class SessionAttendance(
     val name: String = "",
     val profile_path: String = "",
-    val date: String = ""
+    val date: String = "",
+    val attendance_key: String = ""
 )
