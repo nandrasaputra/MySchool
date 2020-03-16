@@ -47,7 +47,7 @@
 
         </activity>
 
-        <activity android:name=".ui.classroom_detail.ClassroomSessionDetail">
+        <activity android:name=".ui.classroom_detail.ClassroomSessionDetailActivity">
 
         </activity>
 

@@ -60,7 +60,7 @@ class ClassroomSessionDetailViewModel(app: Application) : AndroidViewModel(app) 
         })
     }
 
-    fun submitAttendance(subjectCode: String, sessionKey: String) {
+    fun submitAttendance(subjectCode: String, sessionKey: String, grade: String) {
 
         val userId = RainbowSdk.instance().myProfile().connectedUser.id ?: ""
         repository.getUserDatabaseReference(userId).addListenerForSingleValueEvent(object : ValueEventListener{
@@ -76,13 +76,19 @@ class ClassroomSessionDetailViewModel(app: Application) : AndroidViewModel(app) 
                 val path = "/session/third_grade/$subjectCode/$sessionKey/session_attendance/$key"
 
                 key?.run {
-                    val sessionAttendance = SessionAttendance(name, dataSnapshot.getValue(User::class.java)!!.profile_picture_storage_path, date, this)
+                    val sessionAttendance = SessionAttendance(name, dataSnapshot.getValue(User::class.java)!!.profile_picture_storage_path, date, sessionKey
+                        ,this, grade, subjectCode)
                     val childUpdate = HashMap<String, Any>()
                     childUpdate[path] = sessionAttendance
                     FirebaseDatabase.getInstance().reference.updateChildren(childUpdate)
                 }
             }
         })
+    }
+
+    fun deleteAttendance(sessionAttendance: SessionAttendance) {
+        val reference = FirebaseDatabase.getInstance().reference.child("session").child(sessionAttendance.grade).child(sessionAttendance.subjectCode)
+            .child(sessionAttendance.session_key).child("session_attendance").child(sessionAttendance.attendance_key).removeValue()
     }
 
 }

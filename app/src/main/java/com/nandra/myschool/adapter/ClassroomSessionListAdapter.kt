@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.nandra.myschool.R
 import com.nandra.myschool.model.Session
-import com.nandra.myschool.ui.classroom_detail.ClassroomSessionDetail
+import com.nandra.myschool.ui.classroom_detail.ClassroomSessionDetailActivity
 import com.nandra.myschool.utils.Utility
 import kotlinx.android.synthetic.main.classroom_session_item.view.*
 
@@ -39,10 +39,11 @@ class ClassroomSessionListAdapter(
                 fragment_classroom_session_item_initiator.text = initiator
             }
             itemView.setOnClickListener {
-                val intent = Intent(itemView.context, ClassroomSessionDetail::class.java).apply {
+                val intent = Intent(itemView.context, ClassroomSessionDetailActivity::class.java).apply {
                     putExtra(Utility.EXTRA_SESSION_KEY, session.session_key)
                     putExtra(Utility.EXTRA_SUBJECT_CODE, session.subject_code)
                     putExtra(Utility.EXTRA_USER_ROLE, userRole)
+                    putExtra(Utility.EXTRA_GRADE, session.grade)
                 }
                 itemView.context.startActivity(intent)
             }

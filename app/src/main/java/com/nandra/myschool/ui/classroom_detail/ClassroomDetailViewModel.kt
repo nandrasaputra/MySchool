@@ -313,7 +313,7 @@ class ClassroomDetailViewModel(app: Application) : AndroidViewModel(app) {
         val initiatorName = nameBuilder(RainbowSdk.instance().myProfile().connectedUser)
         val key = database.reference.child("session").child("third_grade").child(subjectCode).push().key
         val path = "/session/third_grade/$subjectCode/$key"
-        val session = Session(topic, description, initiatorName, date, "Open", key!!, subjectCode)
+        val session = Session(topic, description, initiatorName, date, "Open", key!!, subjectCode, grade = "third_grade")
 
         val childUpdate = HashMap<String, Any>()
         childUpdate[path] = session

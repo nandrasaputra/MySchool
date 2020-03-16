@@ -13,6 +13,7 @@ object Utility {
     const val EXTRA_SUBJECT_ID = "subject_id"
     const val EXTRA_SESSION_KEY = "session_id"
     const val EXTRA_USER_ROLE = "user_role"
+    const val EXTRA_GRADE = "user_grade"
     const val EXTRA_JID = "jid"
     const val LOG_DEBUG_TAG = "MySchool"
 

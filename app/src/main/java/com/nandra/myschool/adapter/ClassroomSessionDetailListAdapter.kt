@@ -35,6 +35,9 @@ class ClassroomSessionDetailListAdapter(
                 activity_classroom_session_detail_date.text = sessionAttendance.date
                 if (userRole == "user_teacher") {
                     activity_classroom_session_detail_remove_button.visibility = View.VISIBLE
+                    activity_classroom_session_detail_remove_button.setOnClickListener {
+                        deleteClickCallback.invoke(sessionAttendance)
+                    }
                 } else {
                     activity_classroom_session_detail_remove_button.visibility = View.GONE
                 }
