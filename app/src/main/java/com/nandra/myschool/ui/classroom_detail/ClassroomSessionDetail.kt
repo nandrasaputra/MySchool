@@ -33,7 +33,7 @@ class ClassroomSessionDetail : AppCompatActivity() {
 
         setSupportActionBar(activity_classroom_session_detail_toolbar)
 
-        classroomSessionDetailListAdapter = ClassroomSessionDetailListAdapter()
+        classroomSessionDetailListAdapter = ClassroomSessionDetailListAdapter(userRole)
         activity_classroom_session_detail_recycler_view.apply {
             layoutManager = LinearLayoutManager(this@ClassroomSessionDetail)
             adapter = classroomSessionDetailListAdapter

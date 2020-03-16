@@ -18,28 +18,47 @@
 
     <TextView
         android:id="@+id/activity_classroom_session_detail_name"
-        android:textAppearance="@style/MySchool.TextAppearance.SubTitle1"
+        android:textAppearance="@style/MySchool.TextAppearance.Title1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:textSize="14sp"
         android:maxLines="1"
         android:ellipsize="end"
+        android:layout_marginEnd="16dp"
         app:layout_constraintStart_toEndOf="@id/activity_classroom_session_detail_image"
         app:layout_constraintTop_toTopOf="@id/activity_classroom_session_detail_image"
-        app:layout_constraintBottom_toBottomOf="@id/activity_classroom_session_detail_image"
-        app:layout_constraintEnd_toStartOf="@id/activity_classroom_session_detail_date"
+        app:layout_constraintBottom_toTopOf="@id/activity_classroom_session_detail_date"
+        app:layout_constraintEnd_toStartOf="@id/activity_classroom_session_detail_remove_button"
+        app:layout_constraintVertical_chainStyle="packed"
         android:text="Makoto Niijima"/>
 
     <TextView
         android:id="@+id/activity_classroom_session_detail_date"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="16dp"
         android:textAppearance="@style/MySchool.TextAppearance.SubTitle2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/activity_classroom_session_detail_image"
+        app:layout_constraintStart_toEndOf="@id/activity_classroom_session_detail_image"
         app:layout_constraintBottom_toBottomOf="@id/activity_classroom_session_detail_image"
+        app:layout_constraintTop_toBottomOf="@id/activity_classroom_session_detail_name"
+        app:layout_constraintEnd_toStartOf="@id/activity_classroom_session_detail_remove_button"
+        app:layout_constraintVertical_chainStyle="packed"
         android:text="27/02/2000"
-        />
+        android:textSize="12sp" />
+
+    <ImageView
+        android:id="@+id/activity_classroom_session_detail_remove_button"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/ic_remove"
+        android:tint="@color/classroom_session_item_remove_icon_background"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="gone"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

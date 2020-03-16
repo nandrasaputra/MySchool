@@ -12,7 +12,9 @@ import com.nandra.myschool.R
 import com.nandra.myschool.model.SessionAttendance
 import kotlinx.android.synthetic.main.classroom_session_detail_item.view.*
 
-class ClassroomSessionDetailListAdapter : ListAdapter<SessionAttendance, ClassroomSessionDetailListAdapter.SessionDetailViewHolder>(sessionDetailDiffCallback) {
+class ClassroomSessionDetailListAdapter(
+    private val userRole: String
+) : ListAdapter<SessionAttendance, ClassroomSessionDetailListAdapter.SessionDetailViewHolder>(sessionDetailDiffCallback) {
 
     private val storage = FirebaseStorage.getInstance()
 
@@ -30,6 +32,11 @@ class ClassroomSessionDetailListAdapter : ListAdapter<SessionAttendance, Classro
             itemView.apply {
                 activity_classroom_session_detail_name.text = sessionAttendance.name
                 activity_classroom_session_detail_date.text = sessionAttendance.date
+                if (userRole == "user_teacher") {
+                    activity_classroom_session_detail_remove_button.visibility = View.VISIBLE
+                } else {
+                    activity_classroom_session_detail_remove_button.visibility = View.GONE
+                }
             }
             Glide.with(itemView.context)
                 .load(storage.getReferenceFromUrl(sessionAttendance.profile_path))
