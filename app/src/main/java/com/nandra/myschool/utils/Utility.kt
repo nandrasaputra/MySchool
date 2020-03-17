@@ -112,4 +112,12 @@ object Utility {
         object Opened : SearchViewState()
         object Closed : SearchViewState()
     }
+
+    sealed class ClassroomSessionEvent {
+        object SessionAttendanceDeleteSuccess : ClassroomSessionEvent()
+        class SessionAttendanceDeleteFailed(val errorMessage: String) : ClassroomSessionEvent()
+        object SessionDeleteSuccess : ClassroomSessionEvent()
+        class SessionDeleteFailed(val errorMessage: String) : ClassroomSessionEvent()
+        object Idle : ClassroomSessionEvent()
+    }
 }

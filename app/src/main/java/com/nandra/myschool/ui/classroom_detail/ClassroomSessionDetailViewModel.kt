@@ -9,13 +9,15 @@ import androidx.lifecycle.viewModelScope
 import com.ale.rainbowsdk.RainbowSdk
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.getValue
+import com.nandra.myschool.model.Session
 import com.nandra.myschool.model.SessionAttendance
 import com.nandra.myschool.model.User
 import com.nandra.myschool.repository.MySchoolRepository
-import com.nandra.myschool.utils.Utility
+import com.nandra.myschool.utils.Utility.ClassroomSessionEvent
 import com.nandra.myschool.utils.Utility.DataLoadState
 import com.nandra.myschool.utils.Utility.LOG_DEBUG_TAG
 import com.nandra.myschool.utils.Utility.getCurrentStringDate
+import com.nandra.myschool.utils.Utility.nameBuilder
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
@@ -30,6 +32,10 @@ class ClassroomSessionDetailViewModel(app: Application) : AndroidViewModel(app) 
     val attendanceLoadState: LiveData<DataLoadState>
         get() = _attendanceLoadState
     private val _attendanceLoadState = MutableLiveData(DataLoadState.UNLOADED)
+
+    val classroomSessionEvent: LiveData<ClassroomSessionEvent>
+        get() = _classroomSessionEvent
+    private val _classroomSessionEvent = MutableLiveData<ClassroomSessionEvent>(ClassroomSessionEvent.Idle)
 
     fun getAttendanceList(subjectCode: String, sessionKey: String) {
         //handle internet connection here
@@ -70,7 +76,7 @@ class ClassroomSessionDetailViewModel(app: Application) : AndroidViewModel(app) 
             }
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val name = Utility.nameBuilder(RainbowSdk.instance().myProfile().connectedUser)
+                val name = nameBuilder(RainbowSdk.instance().myProfile().connectedUser)
                 val date = getCurrentStringDate()
                 val key = FirebaseDatabase.getInstance().reference.child("session").child("third_grade").child(subjectCode)
                     .child(sessionKey).child("session_attendance").push().key
@@ -101,6 +107,32 @@ class ClassroomSessionDetailViewModel(app: Application) : AndroidViewModel(app) 
                     reference.removeValue()
                 } else {
                     Log.d(LOG_DEBUG_TAG, "Session Attendance Not Found")
+                }
+            }
+        })
+    }
+
+    fun resetClassroomEvent() {
+        _classroomSessionEvent.value = ClassroomSessionEvent.Idle
+    }
+
+    fun deleteSession(grade: String, subjectCode: String, sessionKey: String) {
+        val reference = FirebaseDatabase.getInstance().reference.child("session").child(grade).child(subjectCode).child(sessionKey)
+        reference.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onCancelled(error: DatabaseError) {
+                Log.d(LOG_DEBUG_TAG, "ClassroomSessionDetailViewModel Canceled : ${error.message}")
+            }
+
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val children = dataSnapshot.getValue<Session>()
+                if (children != null) {
+                    reference.removeValue().addOnSuccessListener {
+                        _classroomSessionEvent.value = ClassroomSessionEvent.SessionDeleteSuccess
+                    }.addOnFailureListener {
+                        _classroomSessionEvent.value = ClassroomSessionEvent.SessionDeleteFailed("Session Deletion Failed")
+                    }
+                } else {
+                    Log.d(LOG_DEBUG_TAG, "Session Not Found")
                 }
             }
         })

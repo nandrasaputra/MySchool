@@ -3,6 +3,7 @@ package com.nandra.myschool.ui.classroom_detail
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.nandra.myschool.R
 import com.nandra.myschool.adapter.ClassroomSessionDetailListAdapter
 import com.nandra.myschool.model.SessionAttendance
+import com.nandra.myschool.utils.Utility.ClassroomSessionEvent
 import com.nandra.myschool.utils.Utility.DataLoadState
 import com.nandra.myschool.utils.Utility.EXTRA_GRADE
 import com.nandra.myschool.utils.Utility.EXTRA_SESSION_KEY
@@ -55,7 +57,11 @@ class ClassroomSessionDetailActivity : AppCompatActivity() {
         setupToolbar()
     }
 
-    private fun observeViewModel() {}
+    private fun observeViewModel() {
+        classroomSessionDetailViewModel.classroomSessionEvent.observe(this, Observer {
+            handleClassroomSessionDetailEvent(it)
+        })
+    }
 
     private fun setupToolbar() {
         setSupportActionBar(activity_classroom_session_detail_toolbar)
@@ -84,6 +90,7 @@ class ClassroomSessionDetailActivity : AppCompatActivity() {
                 true
             }
             R.id.classroom_session_detail_delete_seesion_menu_item -> {
+                classroomSessionDetailViewModel.deleteSession(grade, subjectCode, sessionKey)
                 true
             }
             R.id.classroom_session_detail_submit_attendance_menu_item -> {
@@ -111,5 +118,22 @@ class ClassroomSessionDetailActivity : AppCompatActivity() {
 
     private fun onDeleteAttendance(sessionAttendance: SessionAttendance) {
         classroomSessionDetailViewModel.deleteAttendance(sessionAttendance)
+    }
+
+    private fun handleClassroomSessionDetailEvent(event: ClassroomSessionEvent) {
+        when(event) {
+            ClassroomSessionEvent.SessionAttendanceDeleteSuccess -> { }
+            is ClassroomSessionEvent.SessionAttendanceDeleteFailed -> {}
+            ClassroomSessionEvent.SessionDeleteSuccess -> {
+                Toast.makeText(this, "Session Deletion Success", Toast.LENGTH_SHORT).show()
+                classroomSessionDetailViewModel.resetClassroomEvent()
+                this.finish()
+            }
+            is ClassroomSessionEvent.SessionDeleteFailed -> {
+                Toast.makeText(this, event.errorMessage, Toast.LENGTH_SHORT).show()
+                classroomSessionDetailViewModel.resetClassroomEvent()
+            }
+            ClassroomSessionEvent.Idle -> {}
+        }
     }
 }
