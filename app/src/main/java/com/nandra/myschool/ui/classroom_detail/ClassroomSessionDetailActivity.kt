@@ -87,6 +87,7 @@ class ClassroomSessionDetailActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId) {
             R.id.classroom_session_detail_close_session_menu_item -> {
+                classroomSessionDetailViewModel.closeSession(grade, subjectCode, sessionKey)
                 true
             }
             R.id.classroom_session_detail_delete_seesion_menu_item -> {
@@ -130,6 +131,14 @@ class ClassroomSessionDetailActivity : AppCompatActivity() {
                 this.finish()
             }
             is ClassroomSessionEvent.SessionDeleteFailed -> {
+                Toast.makeText(this, event.errorMessage, Toast.LENGTH_SHORT).show()
+                classroomSessionDetailViewModel.resetClassroomEvent()
+            }
+            ClassroomSessionEvent.CloseSessionSuccess -> {
+                Toast.makeText(this, "Session Closed", Toast.LENGTH_SHORT).show()
+                classroomSessionDetailViewModel.resetClassroomEvent()
+            }
+            is ClassroomSessionEvent.CloseSessionFailed -> {
                 Toast.makeText(this, event.errorMessage, Toast.LENGTH_SHORT).show()
                 classroomSessionDetailViewModel.resetClassroomEvent()
             }

@@ -102,8 +102,8 @@ class ClassroomSessionDetailViewModel(app: Application) : AndroidViewModel(app) 
             }
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val children = dataSnapshot.getValue<SessionAttendance>()
-                if (children != null) {
+                val value = dataSnapshot.getValue<SessionAttendance>()
+                if (value != null) {
                     reference.removeValue()
                 } else {
                     Log.d(LOG_DEBUG_TAG, "Session Attendance Not Found")
@@ -124,8 +124,8 @@ class ClassroomSessionDetailViewModel(app: Application) : AndroidViewModel(app) 
             }
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val children = dataSnapshot.getValue<Session>()
-                if (children != null) {
+                val value = dataSnapshot.getValue<Session>()
+                if (value != null) {
                     reference.removeValue().addOnSuccessListener {
                         _classroomSessionEvent.value = ClassroomSessionEvent.SessionDeleteSuccess
                     }.addOnFailureListener {
@@ -133,6 +133,33 @@ class ClassroomSessionDetailViewModel(app: Application) : AndroidViewModel(app) 
                     }
                 } else {
                     Log.d(LOG_DEBUG_TAG, "Session Not Found")
+                }
+            }
+        })
+    }
+
+    fun closeSession(grade: String, subjectCode: String, sessionKey: String) {
+        val reference = FirebaseDatabase.getInstance().reference.child("session").child(grade).child(subjectCode).child(sessionKey)
+            .child("session_status")
+        reference.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onCancelled(error: DatabaseError) {
+                Log.d(LOG_DEBUG_TAG, "ClassroomSessionDetailViewModel Canceled, closeSession : ${error.message}")
+            }
+
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val value = dataSnapshot.value as String?
+                if (value != null) {
+                    if (value == "Open") {
+                        reference.setValue("Closed").addOnSuccessListener {
+                            _classroomSessionEvent.value = ClassroomSessionEvent.CloseSessionSuccess
+                        }.addOnFailureListener {
+                            _classroomSessionEvent.value = ClassroomSessionEvent.CloseSessionFailed("Failed To Close Session")
+                        }
+                    } else {
+                        _classroomSessionEvent.value = ClassroomSessionEvent.CloseSessionFailed("Session Already Closed")
+                    }
+                } else {
+                    _classroomSessionEvent.value = ClassroomSessionEvent.CloseSessionFailed("Session Not Found")
                 }
             }
         })
