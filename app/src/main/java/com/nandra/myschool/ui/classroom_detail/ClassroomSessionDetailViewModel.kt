@@ -70,24 +70,52 @@ class ClassroomSessionDetailViewModel(app: Application) : AndroidViewModel(app) 
     fun submitAttendance(subjectCode: String, sessionKey: String, grade: String) {
 
         val userId = RainbowSdk.instance().myProfile().connectedUser.id ?: ""
-        repository.getUserDatabaseReference(userId).addListenerForSingleValueEvent(object : ValueEventListener{
-            override fun onCancelled(p0: DatabaseError) {
-                Log.d(LOG_DEBUG_TAG, "Submit Attendance Failed")
+        val userReference = repository.getUserDatabaseReference(userId)
+        val sessionStatusReference = FirebaseDatabase.getInstance().reference.child("session").child(grade).child(subjectCode).child(sessionKey)
+            .child("session_status")
+
+        sessionStatusReference.addListenerForSingleValueEvent(object : ValueEventListener{
+            override fun onCancelled(error: DatabaseError) {
+                Log.d(LOG_DEBUG_TAG, "ClassroomSessionDetailViewModel Canceled, sessionRef : ${error.message}")
             }
 
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val name = nameBuilder(RainbowSdk.instance().myProfile().connectedUser)
-                val date = getCurrentStringDate()
-                val key = FirebaseDatabase.getInstance().reference.child("session").child("third_grade").child(subjectCode)
-                    .child(sessionKey).child("session_attendance").push().key
-                val path = "/session/third_grade/$subjectCode/$sessionKey/session_attendance/$key"
+            //TODO: NEED OPTIMIZATION, FIX THIS
+            override fun onDataChange(sessionDataSnapshot: DataSnapshot) {
+                val sessionStatusValue = sessionDataSnapshot.value as String?
+                if (sessionStatusValue != null) {
+                    if (sessionStatusValue == "Open") {
+                        userReference.addListenerForSingleValueEvent(object : ValueEventListener{
+                            override fun onCancelled(error: DatabaseError) {
+                                Log.d(LOG_DEBUG_TAG, "ClassroomSessionDetailViewModel Canceled, userRef : ${error.message}")
+                            }
 
-                key?.run {
-                    val sessionAttendance = SessionAttendance(name, dataSnapshot.getValue(User::class.java)!!.profile_picture_storage_path, date, sessionKey
-                        ,this, grade, subjectCode)
-                    val childUpdate = HashMap<String, Any>()
-                    childUpdate[path] = sessionAttendance
-                    FirebaseDatabase.getInstance().reference.updateChildren(childUpdate)
+                            override fun onDataChange(userDataSnapshot: DataSnapshot) {
+                                val name = nameBuilder(RainbowSdk.instance().myProfile().connectedUser)
+                                val date = getCurrentStringDate()
+                                val key = FirebaseDatabase.getInstance().reference.child("session").child("third_grade").child(subjectCode)
+                                    .child(sessionKey).child("session_attendance").push().key
+                                val path = "/session/third_grade/$subjectCode/$sessionKey/session_attendance/$key"
+
+                                if (key != null) {
+                                    val sessionAttendance = SessionAttendance(name, userDataSnapshot
+                                        .getValue(User::class.java)!!.profile_picture_storage_path, date, sessionKey, key, grade, subjectCode)
+                                    val childUpdate = HashMap<String, Any>()
+                                    childUpdate[path] = sessionAttendance
+                                    FirebaseDatabase.getInstance().reference.updateChildren(childUpdate).addOnSuccessListener {
+                                        _classroomSessionEvent.value = ClassroomSessionEvent.SubmitAttendanceSuccess
+                                    }.addOnFailureListener {
+                                        _classroomSessionEvent.value = ClassroomSessionEvent.SubmitAttendanceFailed("Submit Attendance To Server Failed")
+                                    }
+                                } else {
+                                    _classroomSessionEvent.value = ClassroomSessionEvent.SubmitAttendanceFailed("Cannot Submit Attendance, Key Cannot Created")
+                                }
+                            }
+                        })
+                    } else {
+                        _classroomSessionEvent.value = ClassroomSessionEvent.SubmitAttendanceFailed("Cannot Submit Attendance, Session Already Closed")
+                    }
+                } else {
+                    _classroomSessionEvent.value = ClassroomSessionEvent.SubmitAttendanceFailed("Session Not Found")
                 }
             }
         })

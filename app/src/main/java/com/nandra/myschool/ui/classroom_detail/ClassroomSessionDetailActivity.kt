@@ -142,6 +142,14 @@ class ClassroomSessionDetailActivity : AppCompatActivity() {
                 Toast.makeText(this, event.errorMessage, Toast.LENGTH_SHORT).show()
                 classroomSessionDetailViewModel.resetClassroomEvent()
             }
+            ClassroomSessionEvent.SubmitAttendanceSuccess -> {
+                Toast.makeText(this, "Submit Attendance Success", Toast.LENGTH_SHORT).show()
+                classroomSessionDetailViewModel.resetClassroomEvent()
+            }
+            is ClassroomSessionEvent.SubmitAttendanceFailed -> {
+                Toast.makeText(this, event.errorMessage, Toast.LENGTH_SHORT).show()
+                classroomSessionDetailViewModel.resetClassroomEvent()
+            }
             ClassroomSessionEvent.Idle -> {}
         }
     }

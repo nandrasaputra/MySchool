@@ -120,6 +120,8 @@ object Utility {
         class SessionDeleteFailed(val errorMessage: String) : ClassroomSessionEvent()
         object CloseSessionSuccess : ClassroomSessionEvent()
         class CloseSessionFailed(val errorMessage: String) : ClassroomSessionEvent()
+        object SubmitAttendanceSuccess : ClassroomSessionEvent()
+        class SubmitAttendanceFailed(val errorMessage: String) : ClassroomSessionEvent()
         object Idle : ClassroomSessionEvent()
     }
 }
