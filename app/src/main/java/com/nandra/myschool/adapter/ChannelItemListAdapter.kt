@@ -50,7 +50,7 @@ private val onFailureCallback: () -> Unit
 
                 if(channelItem.imageList.size > 0) {
                     itemView.classroom_detail_feed_item_content_photo.visibility = View.VISIBLE
-                    //TODO: FIX THIS
+                    //FIX THIS
                     Glide.with(itemView.context)
                         .load(channelItem.imageList[0].image)
                         .into(itemView.classroom_detail_feed_item_content_photo)
@@ -77,7 +77,6 @@ private val onFailureCallback: () -> Unit
                 return oldItem == newItem
             }
 
-            //TODO: Optimize?
             override fun areContentsTheSame(oldItem: ChannelItem, newItem: ChannelItem): Boolean {
                 return oldItem.id == newItem.id
             }

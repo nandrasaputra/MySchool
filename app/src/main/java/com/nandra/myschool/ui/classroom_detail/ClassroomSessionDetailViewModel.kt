@@ -79,7 +79,7 @@ class ClassroomSessionDetailViewModel(app: Application) : AndroidViewModel(app) 
                 Log.d(LOG_DEBUG_TAG, "ClassroomSessionDetailViewModel Canceled, sessionRef : ${error.message}")
             }
 
-            //TODO: NEED OPTIMIZATION, FIX THIS
+            //NEED OPTIMIZATION, FIX THIS
             override fun onDataChange(sessionDataSnapshot: DataSnapshot) {
                 val sessionStatusValue = sessionDataSnapshot.value as String?
                 if (sessionStatusValue != null) {

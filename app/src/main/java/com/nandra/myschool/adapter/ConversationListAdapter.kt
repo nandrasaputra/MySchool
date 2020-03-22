@@ -78,7 +78,7 @@ class ConversationListAdapter : ListAdapter<IRainbowConversation, ConversationLi
                 view.context.startActivity(intent)
             }
 
-            //TODO: Optimize These Two
+            //NEED TO BE OPTIMIZED
             val unreadMessageCount = conversation.unreadMsgNb
             if (unreadMessageCount != 0) {
                 itemView.fragment_chat_conversation_unread_count_tv.visibility = View.VISIBLE
