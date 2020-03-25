@@ -11,6 +11,7 @@ import android.os.Environment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.MimeTypeMap
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -71,14 +72,14 @@ class ClassroomMaterialFragment : Fragment() {
                     PackageManager.PERMISSION_GRANTED) {
                 activity?.requestPermissions(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), storagePermissionCode)
             } else {
-                downloadFileFromUrl(currentMaterial.material_download_url)
+                downloadFileFromUrl(currentMaterial.material_download_url, MimeTypeMap.getSingleton().getExtensionFromMimeType(currentMaterial.material_mime))
             }
         } else {
-            downloadFileFromUrl(currentMaterial.material_download_url)
+            downloadFileFromUrl(currentMaterial.material_download_url, MimeTypeMap.getSingleton().getExtensionFromMimeType(currentMaterial.material_mime))
         }
     }
 
-    private fun downloadFileFromUrl(stringUrl: String) {
+    private fun downloadFileFromUrl(stringUrl: String, fileExtension: String?) {
         val request = DownloadManager.Request(Uri.parse(stringUrl))
         request.apply {
             setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE or DownloadManager.Request.NETWORK_WIFI)
@@ -86,7 +87,11 @@ class ClassroomMaterialFragment : Fragment() {
             setDescription("The File Is Downloading...")
             allowScanningByMediaScanner()
             setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
-            setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "${System.currentTimeMillis()}")
+            if (fileExtension != null) {
+                setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "${currentMaterial.material_name}_" + "${System.currentTimeMillis()}" + ".$fileExtension")
+            } else {
+                setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "${currentMaterial.material_name}_" + "${System.currentTimeMillis()}")
+            }
 
             val manager = activity?.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
             manager.enqueue(request)
@@ -97,7 +102,7 @@ class ClassroomMaterialFragment : Fragment() {
         when(requestCode) {
             storagePermissionCode -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    downloadFileFromUrl(currentMaterial.material_download_url)
+                    downloadFileFromUrl(currentMaterial.material_download_url, MimeTypeMap.getSingleton().getExtensionFromMimeType(currentMaterial.material_mime))
                 } else {
                     Toast.makeText(activity, "Permission Denied!", Toast.LENGTH_SHORT).show()
                 }
