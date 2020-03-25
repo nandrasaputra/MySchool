@@ -53,6 +53,7 @@ class ClassroomListAdapter : ListAdapter<Subject, ClassroomListAdapter.Classroom
             itemView.fragment_classroom_item_content_description.text = subject.subject_description
             Glide.with(itemView.context)
                 .load(storage.getReferenceFromUrl(subject.cover_path))
+                .placeholder(R.drawable.img_subject_cover_placeholder)
                 .into(itemView.fragment_classroom_item_class_image)
             val teachers = subject.teachers
             when (teachers.size) {
@@ -62,6 +63,7 @@ class ClassroomListAdapter : ListAdapter<Subject, ClassroomListAdapter.Classroom
                     itemView.fragment_classroom_item_teacher_3.visibility = View.GONE
                     Glide.with(itemView.context)
                         .load(storage.getReferenceFromUrl(teachers[0].profile_picture_storage_path))
+                        .placeholder(R.drawable.ic_profile)
                         .into(itemView.fragment_classroom_item_teacher_1)
                 }
                 2 -> {
@@ -70,9 +72,11 @@ class ClassroomListAdapter : ListAdapter<Subject, ClassroomListAdapter.Classroom
                     itemView.fragment_classroom_item_teacher_3.visibility = View.GONE
                     Glide.with(itemView.context)
                         .load(storage.getReferenceFromUrl(teachers[0].profile_picture_storage_path))
+                        .placeholder(R.drawable.ic_profile)
                         .into(itemView.fragment_classroom_item_teacher_1)
                     Glide.with(itemView.context)
                         .load(storage.getReferenceFromUrl(teachers[1].profile_picture_storage_path))
+                        .placeholder(R.drawable.ic_profile)
                         .into(itemView.fragment_classroom_item_teacher_2)
                 }
                 3 -> {
@@ -81,12 +85,15 @@ class ClassroomListAdapter : ListAdapter<Subject, ClassroomListAdapter.Classroom
                     itemView.fragment_classroom_item_teacher_3.visibility = View.VISIBLE
                     Glide.with(itemView.context)
                         .load(storage.getReferenceFromUrl(teachers[0].profile_picture_storage_path))
+                        .placeholder(R.drawable.ic_profile)
                         .into(itemView.fragment_classroom_item_teacher_1)
                     Glide.with(itemView.context)
                         .load(storage.getReferenceFromUrl(teachers[1].profile_picture_storage_path))
+                        .placeholder(R.drawable.ic_profile)
                         .into(itemView.fragment_classroom_item_teacher_2)
                     Glide.with(itemView.context)
                         .load(storage.getReferenceFromUrl(teachers[2].profile_picture_storage_path))
+                        .placeholder(R.drawable.ic_profile)
                         .into(itemView.fragment_classroom_item_teacher_3)
                 }
             }
