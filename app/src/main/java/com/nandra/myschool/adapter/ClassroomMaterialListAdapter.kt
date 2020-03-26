@@ -1,18 +1,23 @@
 package com.nandra.myschool.adapter
 
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.nandra.myschool.R
 import com.nandra.myschool.model.Material
+import com.nandra.myschool.utils.Utility.ClassroomMaterialCallback
 import kotlinx.android.synthetic.main.classroom_material_fragment_item.view.*
 
 class ClassroomMaterialListAdapter(
-    val clickDownloadCallback : (Material) -> Unit
+    private val hamburgerClickCallback : (ClassroomMaterialCallback) -> Unit
 ) : ListAdapter<Material, ClassroomMaterialListAdapter.ClassroomMaterialViewHolder>(classroomMaterialDiffCallback) {
+
+    private var currentMaterial = Material()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ClassroomMaterialViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.classroom_material_fragment_item, parent, false)
@@ -25,12 +30,30 @@ class ClassroomMaterialListAdapter(
 
     inner class ClassroomMaterialViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         fun bind(material: Material) {
+            currentMaterial = Material()
             itemView.apply {
                 fragment_classroom_material_item_date.text = material.material_upload_date
                 fragment_classroom_material_item_file_name.text = material.material_name
             }
-            itemView.fragment_classroom_material_item_download.setOnClickListener {
-                clickDownloadCallback(material)
+            itemView.fragment_classroom_material_item_hamburger.setOnClickListener {
+                PopupMenu(itemView.context, it).apply {
+                    this.menuInflater.inflate(R.menu.classroom_material_popup_menu, this.menu)
+
+                    this.setOnMenuItemClickListener {menuItem ->
+                        return@setOnMenuItemClickListener when(menuItem.itemId) {
+                            R.id.classroom_material_download_menu_item -> {
+                                hamburgerClickCallback.invoke(ClassroomMaterialCallback.onDownloadClicked(material))
+                                true
+                            }
+                            R.id.classroom_material_delete_menu_item -> {
+                                true
+                            }
+                            else -> {
+                                false
+                            }
+                        }
+                    }
+                }.show()
             }
         }
     }
@@ -45,6 +68,6 @@ class ClassroomMaterialListAdapter(
                 return oldItem.material_name == newItem.material_name
             }
         }
-    }
 
+    }
 }

@@ -9,18 +9,22 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.MimeTypeMap
+import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.nandra.myschool.R
 import com.nandra.myschool.adapter.ClassroomMaterialListAdapter
 import com.nandra.myschool.model.Material
 import com.nandra.myschool.ui.classroom_detail.ClassroomDetailViewModel
+import com.nandra.myschool.utils.Utility.ClassroomMaterialCallback
 import com.nandra.myschool.utils.Utility.DataLoadState
 import kotlinx.android.synthetic.main.classroom_material_fragment.*
 
@@ -47,7 +51,7 @@ class ClassroomMaterialFragment : Fragment() {
         classroomMaterialListAdapter = ClassroomMaterialListAdapter(::downloadClickCallback)
         fragment_classroom_material_recycler_view.apply {
             adapter = classroomMaterialListAdapter
-            layoutManager = GridLayoutManager(activity, 3)
+            layoutManager = LinearLayoutManager(activity)
         }
     }
 
@@ -65,7 +69,18 @@ class ClassroomMaterialFragment : Fragment() {
         }
     }
 
-    private fun downloadClickCallback(material: Material) {
+    private fun downloadClickCallback(callback: ClassroomMaterialCallback) {
+        when(callback) {
+            is ClassroomMaterialCallback.onDownloadClicked -> {
+                attemptDownloadMaterial(callback.material)
+            }
+            ClassroomMaterialCallback.onDeleteClicked -> {
+
+            }
+        }
+    }
+
+    private fun attemptDownloadMaterial(material: Material) {
         currentMaterial = material
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (activity?.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
@@ -78,6 +93,8 @@ class ClassroomMaterialFragment : Fragment() {
             downloadFileFromUrl(currentMaterial.material_download_url, MimeTypeMap.getSingleton().getExtensionFromMimeType(currentMaterial.material_mime))
         }
     }
+
+
 
     private fun downloadFileFromUrl(stringUrl: String, fileExtension: String?) {
         val request = DownloadManager.Request(Uri.parse(stringUrl))

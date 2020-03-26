@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/classroom_material_download_menu_item"
+        android:title="Download" />
+    <item android:id="@+id/classroom_material_delete_menu_item"
+        android:title="Delete" />
+</menu>

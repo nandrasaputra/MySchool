@@ -4,6 +4,7 @@ import android.app.Application
 import android.net.Uri
 import android.webkit.MimeTypeMap
 import com.ale.infra.contact.IRainbowContact
+import com.nandra.myschool.model.Material
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -123,5 +124,10 @@ object Utility {
         object SubmitAttendanceSuccess : ClassroomSessionEvent()
         class SubmitAttendanceFailed(val errorMessage: String) : ClassroomSessionEvent()
         object Idle : ClassroomSessionEvent()
+    }
+
+    sealed class ClassroomMaterialCallback {
+        class onDownloadClicked(val material: Material) : ClassroomMaterialCallback()
+        object onDeleteClicked : ClassroomMaterialCallback()
     }
 }
