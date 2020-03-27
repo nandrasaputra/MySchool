@@ -1,7 +1,7 @@
 package com.nandra.myschool.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
@@ -10,11 +10,13 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.nandra.myschool.R
 import com.nandra.myschool.model.Material
-import com.nandra.myschool.utils.Utility.ClassroomMaterialCallback
+import com.nandra.myschool.utils.Utility.ClassroomDetailPopupMenuCallback
+import com.nandra.myschool.utils.Utility.LOG_DEBUG_TAG
 import kotlinx.android.synthetic.main.classroom_material_fragment_item.view.*
 
 class ClassroomMaterialListAdapter(
-    private val hamburgerClickCallback : (ClassroomMaterialCallback) -> Unit
+    private val hamburgerClickCallback : (ClassroomDetailPopupMenuCallback) -> Unit,
+    private val isTeacherAccount: Boolean
 ) : ListAdapter<Material, ClassroomMaterialListAdapter.ClassroomMaterialViewHolder>(classroomMaterialDiffCallback) {
 
     private var currentMaterial = Material()
@@ -35,25 +37,30 @@ class ClassroomMaterialListAdapter(
                 fragment_classroom_material_item_date.text = material.material_upload_date
                 fragment_classroom_material_item_file_name.text = material.material_name
             }
-            itemView.fragment_classroom_material_item_hamburger.setOnClickListener {
-                PopupMenu(itemView.context, it).apply {
-                    this.menuInflater.inflate(R.menu.classroom_material_popup_menu, this.menu)
+            if (isTeacherAccount) {
+                itemView.fragment_classroom_material_item_hamburger.visibility = View.VISIBLE
+                itemView.fragment_classroom_material_item_hamburger.setOnClickListener {
+                    PopupMenu(itemView.context, it).apply {
+                        this.menuInflater.inflate(R.menu.classroom_material_popup_menu, this.menu)
 
-                    this.setOnMenuItemClickListener {menuItem ->
-                        return@setOnMenuItemClickListener when(menuItem.itemId) {
-                            R.id.classroom_material_download_menu_item -> {
-                                hamburgerClickCallback.invoke(ClassroomMaterialCallback.onDownloadClicked(material))
-                                true
-                            }
-                            R.id.classroom_material_delete_menu_item -> {
-                                true
-                            }
-                            else -> {
-                                false
+                        this.setOnMenuItemClickListener {menuItem ->
+                            return@setOnMenuItemClickListener when(menuItem.itemId) {
+                                R.id.classroom_material_download_menu_item -> {
+                                    hamburgerClickCallback.invoke(ClassroomDetailPopupMenuCallback.OnDownloadClicked(material))
+                                    true
+                                }
+                                R.id.classroom_material_delete_menu_item -> {
+                                    true
+                                }
+                                else -> {
+                                    false
+                                }
                             }
                         }
-                    }
-                }.show()
+                    }.show()
+                }
+            } else {
+                itemView.fragment_classroom_material_item_hamburger.visibility = View.GONE
             }
         }
     }

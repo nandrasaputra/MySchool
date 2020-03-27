@@ -9,22 +9,19 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.MimeTypeMap
-import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.nandra.myschool.R
 import com.nandra.myschool.adapter.ClassroomMaterialListAdapter
 import com.nandra.myschool.model.Material
 import com.nandra.myschool.ui.classroom_detail.ClassroomDetailViewModel
-import com.nandra.myschool.utils.Utility.ClassroomMaterialCallback
+import com.nandra.myschool.utils.Utility.ClassroomDetailPopupMenuCallback
 import com.nandra.myschool.utils.Utility.DataLoadState
 import kotlinx.android.synthetic.main.classroom_material_fragment.*
 
@@ -48,7 +45,8 @@ class ClassroomMaterialFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        classroomMaterialListAdapter = ClassroomMaterialListAdapter(::downloadClickCallback)
+        val isTeacherAccount = classroomDetailViewModel.userRole == "user_teacher"
+        classroomMaterialListAdapter = ClassroomMaterialListAdapter(::hamburgerClickCallback, isTeacherAccount)
         fragment_classroom_material_recycler_view.apply {
             adapter = classroomMaterialListAdapter
             layoutManager = LinearLayoutManager(activity)
@@ -69,12 +67,12 @@ class ClassroomMaterialFragment : Fragment() {
         }
     }
 
-    private fun downloadClickCallback(callback: ClassroomMaterialCallback) {
+    private fun hamburgerClickCallback(callback: ClassroomDetailPopupMenuCallback) {
         when(callback) {
-            is ClassroomMaterialCallback.onDownloadClicked -> {
-                attemptDownloadMaterial(callback.material)
+            is ClassroomDetailPopupMenuCallback.OnDownloadClicked -> {
+                attemptDownloadMaterial(callback.item)
             }
-            ClassroomMaterialCallback.onDeleteClicked -> {
+            is ClassroomDetailPopupMenuCallback.OnDeleteClicked -> {
 
             }
         }

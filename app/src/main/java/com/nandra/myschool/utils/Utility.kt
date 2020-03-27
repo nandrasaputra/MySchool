@@ -126,8 +126,8 @@ object Utility {
         object Idle : ClassroomSessionEvent()
     }
 
-    sealed class ClassroomMaterialCallback {
-        class onDownloadClicked(val material: Material) : ClassroomMaterialCallback()
-        object onDeleteClicked : ClassroomMaterialCallback()
+    sealed class ClassroomDetailPopupMenuCallback {
+        class OnDownloadClicked(val item: Material) : ClassroomDetailPopupMenuCallback()
+        class OnDeleteClicked(val item: Any) : ClassroomDetailPopupMenuCallback()
     }
 }

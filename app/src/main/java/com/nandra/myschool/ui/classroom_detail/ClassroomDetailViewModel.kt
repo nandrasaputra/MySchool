@@ -64,7 +64,7 @@ class ClassroomDetailViewModel(app: Application) : AndroidViewModel(app) {
 
     var isChannelItemListenerRegistered: Boolean = false
 
-    var channelFeedItemList = listOf<ChannelItem>()
+    var classroomFeedItemList = listOf<ChannelItem>()
 
     var currentChannel: Channel? = null
     private val channelFetchItemListener = object : IChannelProxy.IChannelFetchItemsListener {
@@ -194,7 +194,7 @@ class ClassroomDetailViewModel(app: Application) : AndroidViewModel(app) {
         newChannelItemList.sortByDescending {
             it.date
         }
-        channelFeedItemList = newChannelItemList
+        classroomFeedItemList = newChannelItemList
         _detailSubjectDataLoadState.postValue(DataLoadState.LOADED)
     }
 

@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView
+<androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardCornerRadius="8dp"
-    android:layout_marginTop="4dp"
-    android:layout_marginBottom="4dp"
-    android:layout_marginStart="8dp"
-    android:layout_marginEnd="8dp"
-    app:cardBackgroundColor="#377C98"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="8dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -20,19 +19,16 @@
             android:layout_height="0dp"
             android:padding="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintDimensionRatio="H, 6:1"
+            app:layout_constraintDimensionRatio="H, 5:1"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0">
+            app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
                 android:id="@+id/fragment_classroom_material_item_hamburger"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:src="@drawable/ic_hamburger"
-                android:tint="@color/iconColorSecondary"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -46,7 +42,6 @@
                 android:layout_marginEnd="8dp"
                 android:maxLines="2"
                 android:text="Reklaitis.pdf"
-                android:textColor="@color/iconColorSecondary"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toTopOf="@id/fragment_classroom_material_item_date"
                 app:layout_constraintEnd_toStartOf="@+id/fragment_classroom_material_item_hamburger"
@@ -61,8 +56,8 @@
                 android:ellipsize="end"
                 android:maxLines="2"
                 android:text="20/02/2000"
-                android:textColor="@color/iconColorSecondary"
-                android:textSize="8sp"
+                android:textSize="9sp"
+                app:layout_constraintTop_toBottomOf="@id/fragment_classroom_material_item_file_name"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
@@ -71,4 +66,4 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</com.google.android.material.card.MaterialCardView>
+</androidx.cardview.widget.CardView>

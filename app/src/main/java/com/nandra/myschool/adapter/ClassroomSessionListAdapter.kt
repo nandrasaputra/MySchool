@@ -14,7 +14,7 @@ import com.nandra.myschool.utils.Utility
 import kotlinx.android.synthetic.main.classroom_session_item.view.*
 
 class ClassroomSessionListAdapter(
-    val userRole: String
+    private val userRole: String
 ) : ListAdapter<Session, ClassroomSessionListAdapter.ClassroomSessionViewHolder>(classroomSessionDiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ClassroomSessionViewHolder {

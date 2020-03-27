@@ -4,6 +4,7 @@ import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -11,13 +12,16 @@ import com.ale.infra.manager.channel.ChannelItem
 import com.ale.rainbowsdk.RainbowSdk
 import com.bumptech.glide.Glide
 import com.nandra.myschool.R
-import com.nandra.myschool.utils.Utility
+import com.nandra.myschool.utils.Utility.ClassroomDetailPopupMenuCallback
 import com.nandra.myschool.utils.Utility.convertToString
+import com.nandra.myschool.utils.Utility.nameBuilder
 import kotlinx.android.synthetic.main.classroom_detail_feed_item.view.*
 
-class ChannelItemListAdapter(
-private val onFailureCallback: () -> Unit
-) : ListAdapter<ChannelItem, ChannelItemListAdapter.ChannelItemViewHolder>(homeDiffCallback) {
+class ClassroomFeedListAdapter(
+private val onFailureCallback: () -> Unit,
+private val hamburgerClickCallback : (ClassroomDetailPopupMenuCallback) -> Unit,
+private val isTeacherAccount: Boolean
+) : ListAdapter<ChannelItem, ClassroomFeedListAdapter.ChannelItemViewHolder>(homeDiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChannelItemViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.classroom_detail_feed_item, parent, false)
@@ -31,8 +35,7 @@ private val onFailureCallback: () -> Unit
     inner class ChannelItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         fun bind(channelItem: ChannelItem) {
             if (channelItem.contact != null) {
-                val contactName = Utility.nameBuilder(RainbowSdk.instance().contacts().getContactFromId(channelItem.contact.id))
-                val channel = RainbowSdk.instance().channels().getChannel(channelItem.channelId)
+                val contactName = nameBuilder(RainbowSdk.instance().contacts().getContactFromId(channelItem.contact.id))
                 itemView.classroom_detail_feed_item_publisher_name.text = contactName
                 if (!channelItem.title.isNullOrEmpty()) {
                     itemView.classroom_detail_feed_item_content_title.visibility = View.VISIBLE
@@ -62,6 +65,28 @@ private val onFailureCallback: () -> Unit
                         .load(channelItem.contact.photo)
                         .placeholder(R.drawable.ic_profile)
                         .into(itemView.classroom_detail_feed_item_photo)
+                }
+                if (isTeacherAccount) {
+                    itemView.classroom_detail_feed_item_item_hamburger.visibility = View.VISIBLE
+                    itemView.classroom_detail_feed_item_item_hamburger.setOnClickListener {
+                        PopupMenu(itemView.context, it).apply {
+                            this.menuInflater.inflate(R.menu.classroom_feed_popup_menu, this.menu)
+
+                            this.setOnMenuItemClickListener {menuItem ->
+                                return@setOnMenuItemClickListener when(menuItem.itemId) {
+                                    R.id.classroom_feed_delete_menu_item -> {
+                                        hamburgerClickCallback.invoke(ClassroomDetailPopupMenuCallback.OnDeleteClicked(channelItem))
+                                        true
+                                    }
+                                    else -> {
+                                        false
+                                    }
+                                }
+                            }
+                        }.show()
+                    }
+                } else {
+                    itemView.classroom_detail_feed_item_item_hamburger.visibility = View.GONE
                 }
             } else {
                 //RetryLoad
