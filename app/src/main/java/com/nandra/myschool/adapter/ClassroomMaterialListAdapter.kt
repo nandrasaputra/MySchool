@@ -35,31 +35,30 @@ class ClassroomMaterialListAdapter(
                 fragment_classroom_material_item_date.text = material.material_upload_date
                 fragment_classroom_material_item_file_name.text = material.material_name
             }
-            if (isTeacherAccount) {
-                itemView.fragment_classroom_material_item_hamburger.visibility = View.VISIBLE
-                itemView.fragment_classroom_material_item_hamburger.setOnClickListener {
-                    PopupMenu(itemView.context, it).apply {
-                        this.menuInflater.inflate(R.menu.classroom_material_popup_menu, this.menu)
+            itemView.fragment_classroom_material_item_hamburger.setOnClickListener {
+                PopupMenu(itemView.context, it).apply {
+                    if (isTeacherAccount) {
+                        this.menuInflater.inflate(R.menu.classroom_material_teacher_popup_menu, this.menu)
+                    } else {
+                        this.menuInflater.inflate(R.menu.classroom_material_student_popup_menu, this.menu)
+                    }
 
-                        this.setOnMenuItemClickListener {menuItem ->
-                            return@setOnMenuItemClickListener when(menuItem.itemId) {
-                                R.id.classroom_material_download_menu_item -> {
-                                    hamburgerClickCallback.invoke(ClassroomDetailPopupMenuCallback.OnDownloadClicked(material))
-                                    true
-                                }
-                                R.id.classroom_material_delete_menu_item -> {
-                                    hamburgerClickCallback.invoke(ClassroomDetailPopupMenuCallback.OnDeleteClicked(material))
-                                    true
-                                }
-                                else -> {
-                                    false
-                                }
+                    this.setOnMenuItemClickListener {menuItem ->
+                        return@setOnMenuItemClickListener when(menuItem.itemId) {
+                            R.id.classroom_material_download_menu_item -> {
+                                hamburgerClickCallback.invoke(ClassroomDetailPopupMenuCallback.OnDownloadClicked(material))
+                                true
+                            }
+                            R.id.classroom_material_delete_menu_item -> {
+                                hamburgerClickCallback.invoke(ClassroomDetailPopupMenuCallback.OnDeleteClicked(material))
+                                true
+                            }
+                            else -> {
+                                false
                             }
                         }
-                    }.show()
-                }
-            } else {
-                itemView.fragment_classroom_material_item_hamburger.visibility = View.GONE
+                    }
+                }.show()
             }
         }
     }

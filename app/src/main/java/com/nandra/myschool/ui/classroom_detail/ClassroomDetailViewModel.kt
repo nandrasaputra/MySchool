@@ -40,6 +40,10 @@ class ClassroomDetailViewModel(app: Application) : AndroidViewModel(app) {
         get() = _classroomMaterialEvent
     private val _classroomMaterialEvent = MutableLiveData<ClassroomMaterialEvent>(ClassroomMaterialEvent.Idle)
 
+    val classroomFeedEvent: LiveData<ClassroomFeedEvent>
+        get() = _classroomFeedEvent
+    private val _classroomFeedEvent = MutableLiveData<ClassroomFeedEvent>(ClassroomFeedEvent.Idle)
+
     private var fetchMaterialDatabaseReferenceJob: Job? = null
     val materialDataLoadState: LiveData<DataLoadState>
         get() = _materialDataLoadState
@@ -58,7 +62,6 @@ class ClassroomDetailViewModel(app: Application) : AndroidViewModel(app) {
         get() = _uploadFileState
     private val _uploadFileState = MutableLiveData(UploadFileState.IDLE)
     private var currentUploadTask: UploadTask? = null
-
 
     private var fetchDetailSubjectDatabaseReferenceJob: Job? = null
     private val repository = MySchoolRepository()
@@ -90,6 +93,10 @@ class ClassroomDetailViewModel(app: Application) : AndroidViewModel(app) {
 
     fun resetClassroomMaterialEvent() {
         _classroomMaterialEvent.value = ClassroomMaterialEvent.Idle
+    }
+
+    fun resetClassroomFeedEvent() {
+        _classroomFeedEvent.value = ClassroomFeedEvent.Idle
     }
 
     private suspend fun fetchSessionList() {
@@ -343,11 +350,33 @@ class ClassroomDetailViewModel(app: Application) : AndroidViewModel(app) {
         database.reference.updateChildren(childUpdate)
     }
 
+    fun deleteFeed(channelItem: ChannelItem) {
+        if (currentChannel != null && detailSubjectDataLoadState.value == DataLoadState.LOADED) {
+            RainbowSdk.instance().channels().deleteItem(currentChannel!!.id, channelItem.id, object : IChannelProxy.IChannelDeleteItemListener {
+                override fun onDeleteItemFailed(exception: RainbowServiceException?) {
+                    _classroomFeedEvent.postValue(ClassroomFeedEvent.DeleteFeedFailed("Error : ${exception?.detailsMessage}"))
+                }
+
+                override fun onDeleteItemSuccess() {
+                    _classroomFeedEvent.postValue(ClassroomFeedEvent.DeleteFeedSuccess)
+                }
+            })
+        } else {
+            _classroomFeedEvent.value = ClassroomFeedEvent.DeleteFeedFailed("Error Retrieving Channel")
+        }
+    }
+
     companion object {
         sealed class ClassroomMaterialEvent {
             object DeleteMaterialSuccess : ClassroomMaterialEvent()
             class DeleteMaterialFailed(val errorMessage: String) : ClassroomMaterialEvent()
             object Idle : ClassroomMaterialEvent()
+        }
+
+        sealed class ClassroomFeedEvent {
+            object DeleteFeedSuccess : ClassroomFeedEvent()
+            class DeleteFeedFailed(val errorMessage: String) : ClassroomFeedEvent()
+            object Idle : ClassroomFeedEvent()
         }
     }
 

@@ -4,13 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.ale.infra.manager.channel.ChannelItem
 import com.nandra.myschool.R
 import com.nandra.myschool.adapter.ClassroomFeedListAdapter
 import com.nandra.myschool.ui.classroom_detail.ClassroomDetailViewModel
+import com.nandra.myschool.ui.classroom_detail.ClassroomDetailViewModel.Companion.ClassroomFeedEvent
 import com.nandra.myschool.utils.Utility
 import com.nandra.myschool.utils.Utility.DataLoadState
 import kotlinx.android.synthetic.main.classroom_feed_fragment.*
@@ -28,6 +31,9 @@ class ClassroomFeedFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         classroomDetailViewModel.detailSubjectDataLoadState.observe(viewLifecycleOwner, Observer {
             handleDetailLoadState(it)
+        })
+        classroomDetailViewModel.classroomFeedEvent.observe(viewLifecycleOwner, Observer {
+            handleClassroomFeedEvent(it)
         })
     }
 
@@ -70,10 +76,25 @@ class ClassroomFeedFragment : Fragment() {
         }
     }
 
+    private fun handleClassroomFeedEvent(event: ClassroomFeedEvent) {
+        when(event) {
+            ClassroomFeedEvent.DeleteFeedSuccess -> {
+                Toast.makeText(activity, "Item Deleted", Toast.LENGTH_SHORT).show()
+                classroomDetailViewModel.resetClassroomFeedEvent()
+            }
+            is ClassroomFeedEvent.DeleteFeedFailed -> {
+                Toast.makeText(activity, event.errorMessage, Toast.LENGTH_SHORT).show()
+                classroomDetailViewModel.resetClassroomFeedEvent()
+            }
+            ClassroomFeedEvent.Idle -> {}
+        }
+    }
+
     private fun hamburgerClickCallback(callback: Utility.ClassroomDetailPopupMenuCallback) {
         when(callback) {
             is Utility.ClassroomDetailPopupMenuCallback.OnDeleteClicked -> {
-
+                val channelItem = callback.item as ChannelItem
+                classroomDetailViewModel.deleteFeed(channelItem)
             }
         }
     }
