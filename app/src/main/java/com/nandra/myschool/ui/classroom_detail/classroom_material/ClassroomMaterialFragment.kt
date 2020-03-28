@@ -21,6 +21,7 @@ import com.nandra.myschool.R
 import com.nandra.myschool.adapter.ClassroomMaterialListAdapter
 import com.nandra.myschool.model.Material
 import com.nandra.myschool.ui.classroom_detail.ClassroomDetailViewModel
+import com.nandra.myschool.ui.classroom_detail.ClassroomDetailViewModel.Companion.ClassroomMaterialEvent
 import com.nandra.myschool.utils.Utility.ClassroomDetailPopupMenuCallback
 import com.nandra.myschool.utils.Utility.DataLoadState
 import kotlinx.android.synthetic.main.classroom_material_fragment.*
@@ -40,6 +41,9 @@ class ClassroomMaterialFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         classroomDetailViewModel.materialDataLoadState.observe(viewLifecycleOwner, Observer {
             handleMaterialLoadState(it)
+        })
+        classroomDetailViewModel.classroomMaterialEvent.observe(viewLifecycleOwner, Observer {
+            handleClassroomMaterialEvent(it)
         })
     }
 
@@ -67,13 +71,29 @@ class ClassroomMaterialFragment : Fragment() {
         }
     }
 
+    private fun handleClassroomMaterialEvent(event: ClassroomMaterialEvent) {
+        when(event) {
+            ClassroomMaterialEvent.DeleteMaterialSuccess -> {
+                Toast.makeText(activity, "Material Deleted", Toast.LENGTH_SHORT).show()
+                classroomDetailViewModel.resetClassroomMaterialEvent()
+            }
+            is ClassroomMaterialEvent.DeleteMaterialFailed -> {
+                Toast.makeText(activity, "Error : ${event.errorMessage}", Toast.LENGTH_SHORT).show()
+                classroomDetailViewModel.resetClassroomMaterialEvent()
+            }
+            ClassroomMaterialEvent.Idle -> {
+
+            }
+        }
+    }
+
     private fun hamburgerClickCallback(callback: ClassroomDetailPopupMenuCallback) {
         when(callback) {
             is ClassroomDetailPopupMenuCallback.OnDownloadClicked -> {
                 attemptDownloadMaterial(callback.item)
             }
             is ClassroomDetailPopupMenuCallback.OnDeleteClicked -> {
-
+                classroomDetailViewModel.deleteMaterial(callback.item as Material)
             }
         }
     }

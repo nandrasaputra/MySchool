@@ -2,6 +2,7 @@ package com.nandra.myschool.ui.classroom_detail
 
 import android.app.Application
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -20,6 +21,7 @@ import com.nandra.myschool.model.Session
 import com.nandra.myschool.model.Subject
 import com.nandra.myschool.repository.MySchoolRepository
 import com.nandra.myschool.utils.Utility.DataLoadState
+import com.nandra.myschool.utils.Utility.LOG_DEBUG_TAG
 import com.nandra.myschool.utils.Utility.UploadFileState
 import com.nandra.myschool.utils.Utility.getCurrentStringDate
 import com.nandra.myschool.utils.Utility.nameBuilder
@@ -33,6 +35,10 @@ class ClassroomDetailViewModel(app: Application) : AndroidViewModel(app) {
     var subjectCode = ""
     private val storage = FirebaseStorage.getInstance()
     private val database = FirebaseDatabase.getInstance()
+
+    val classroomMaterialEvent: LiveData<ClassroomMaterialEvent>
+        get() = _classroomMaterialEvent
+    private val _classroomMaterialEvent = MutableLiveData<ClassroomMaterialEvent>(ClassroomMaterialEvent.Idle)
 
     private var fetchMaterialDatabaseReferenceJob: Job? = null
     val materialDataLoadState: LiveData<DataLoadState>
@@ -80,6 +86,10 @@ class ClassroomDetailViewModel(app: Application) : AndroidViewModel(app) {
         viewModelScope.launch {
             fetchSessionList()
         }
+    }
+
+    fun resetClassroomMaterialEvent() {
+        _classroomMaterialEvent.value = ClassroomMaterialEvent.Idle
     }
 
     private suspend fun fetchSessionList() {
@@ -254,7 +264,8 @@ class ClassroomDetailViewModel(app: Application) : AndroidViewModel(app) {
 
     fun uploadFileToFirebase(uri: Uri, materialName: String, mimeType: String, fileExtension: String) {
         val fileName: String = System.currentTimeMillis().toString() + "." + fileExtension
-        val subjectRef = storage.reference.child("material").child("third_grade").child(subjectCode)
+        val path = "material/third_grade/$subjectCode"
+        val subjectRef = storage.reference.child(path)
         val fullRef = subjectRef.child(fileName)
 
         currentUploadTask = fullRef.putFile(uri)
@@ -264,13 +275,33 @@ class ClassroomDetailViewModel(app: Application) : AndroidViewModel(app) {
                 _uploadFileState.value = UploadFileState.FAILED
             }.addOnSuccessListener {
                 fullRef.downloadUrl.addOnSuccessListener {
-                    val databaseRef = database.reference.child("material").child("third_grade").child(subjectCode)
-                    val material = Material(materialName, mimeType, getCurrentStringDate(), it.toString())
-                    postMaterial(material, databaseRef)
+                    val key = FirebaseDatabase.getInstance().reference.child(path).push().key
+                    val completePath = "$path/$key"
+                    val material = Material(materialName, mimeType, getCurrentStringDate(), it.toString(), key!!, path, fullRef.path)
+
+                    val childUpdate = HashMap<String, Any>()
+                    childUpdate[completePath] = material
+                    FirebaseDatabase.getInstance().reference.updateChildren(childUpdate).addOnCompleteListener {
+                        _uploadFileState.value = UploadFileState.UPLOADED
+                    }.addOnFailureListener {
+                        _uploadFileState.value = UploadFileState.FAILED
+                    }
                 }.addOnFailureListener {
                     _uploadFileState.value = UploadFileState.FAILED
                 }
             }
+        }
+    }
+
+    fun deleteMaterial(material: Material) {
+        storage.reference.child(material.material_storage_path).delete().addOnSuccessListener {
+            database.reference.child(material.material_database_path).child(material.material_key).removeValue().addOnSuccessListener {
+                _classroomMaterialEvent.value = ClassroomMaterialEvent.DeleteMaterialSuccess
+            }.addOnFailureListener {
+                _classroomMaterialEvent.value = ClassroomMaterialEvent.DeleteMaterialFailed(it.message ?: "Unknown Error")
+            }
+        }.addOnFailureListener {
+            _classroomMaterialEvent.value = ClassroomMaterialEvent.DeleteMaterialFailed(it.message ?: "Unknown Error")
         }
     }
 
@@ -287,14 +318,6 @@ class ClassroomDetailViewModel(app: Application) : AndroidViewModel(app) {
 
     fun isUploadInProgress() : Boolean {
         return currentUploadTask?.isInProgress ?: false
-    }
-
-    private fun postMaterial(material: Material, reference: DatabaseReference) {
-        reference.push().setValue(material).addOnCompleteListener {
-            _uploadFileState.value = UploadFileState.UPLOADED
-        }.addOnFailureListener {
-            _uploadFileState.value = UploadFileState.FAILED
-        }
     }
 
     fun addNewItemToChannel(message: String) {
@@ -318,6 +341,14 @@ class ClassroomDetailViewModel(app: Application) : AndroidViewModel(app) {
         val childUpdate = HashMap<String, Any>()
         childUpdate[path] = session
         database.reference.updateChildren(childUpdate)
+    }
+
+    companion object {
+        sealed class ClassroomMaterialEvent {
+            object DeleteMaterialSuccess : ClassroomMaterialEvent()
+            class DeleteMaterialFailed(val errorMessage: String) : ClassroomMaterialEvent()
+            object Idle : ClassroomMaterialEvent()
+        }
     }
 
 }

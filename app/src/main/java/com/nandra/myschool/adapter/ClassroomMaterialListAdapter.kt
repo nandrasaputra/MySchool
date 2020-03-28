@@ -1,6 +1,5 @@
 package com.nandra.myschool.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.nandra.myschool.R
 import com.nandra.myschool.model.Material
 import com.nandra.myschool.utils.Utility.ClassroomDetailPopupMenuCallback
-import com.nandra.myschool.utils.Utility.LOG_DEBUG_TAG
 import kotlinx.android.synthetic.main.classroom_material_fragment_item.view.*
 
 class ClassroomMaterialListAdapter(
@@ -50,6 +48,7 @@ class ClassroomMaterialListAdapter(
                                     true
                                 }
                                 R.id.classroom_material_delete_menu_item -> {
+                                    hamburgerClickCallback.invoke(ClassroomDetailPopupMenuCallback.OnDeleteClicked(material))
                                     true
                                 }
                                 else -> {
