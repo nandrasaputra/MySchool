@@ -44,6 +44,7 @@ class ClassroomSessionDetailListAdapter(
             }
             Glide.with(itemView.context)
                 .load(storage.getReferenceFromUrl(sessionAttendance.profile_path))
+                .placeholder(R.drawable.ic_profile)
                 .into(itemView.activity_classroom_session_detail_image)
         }
     }

@@ -48,7 +48,7 @@
         <Button
             android:id="@+id/schedule_dialog_fragment_cancel_button"
             android:layout_width="100dp"
-            android:layout_height="32dp"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:background="@drawable/add_new_channel_item_cancel_button_background"
             android:fontFamily="@font/avenir_next_medium"

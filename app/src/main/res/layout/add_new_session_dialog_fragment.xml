@@ -59,7 +59,7 @@
         <Button
             android:id="@+id/add_new_session_cancel_button"
             android:layout_width="100dp"
-            android:layout_height="32dp"
+            android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/add_new_session_add_button"
@@ -73,7 +73,7 @@
         <Button
             android:id="@+id/add_new_session_add_button"
             android:layout_width="100dp"
-            android:layout_height="32dp"
+            android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/add_new_session_cancel_button"
