@@ -5,7 +5,19 @@
     <string name="menu_home_title">"Home"</string>
     <string name="menu_chat_title">"Chat"</string>
     <string name="menu_classroom_title">"Classroom"</string>
-    <string name="menu_profile_title">"Profile"</string>
+    <string name="menu_account_title">"Account"</string>
     <string name="menu_channel_title">"Channel"</string>
     <string name="add_channel_title">Add Channel</string>
+
+    <string name="preference_key_entries_dark_mode_on">Dark Mode</string>
+    <string name="preference_key_entries_dark_mode_off">Day Mode</string>
+    <string name="preference_key_entries_dark_mode_auto">System Default</string>
+
+    <string name="preference_value_entries_dark_mode_on">dark_on</string>
+    <string name="preference_value_entries_dark_mode_off">dark_off</string>
+    <string name="preference_value_entries_dark_mode_auto">dark_auto</string>
+
+    <string name="preference_title_dark_mode">Set Dark Mode</string>
+    <string name="preference_key_dark_mode">preference_key_dark_mode</string>
+
 </resources>

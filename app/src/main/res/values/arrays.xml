@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="preference_entries_dark_mode">
+        <item>@string/preference_key_entries_dark_mode_on</item>
+        <item>@string/preference_key_entries_dark_mode_off</item>
+        <item>@string/preference_key_entries_dark_mode_auto</item>
+    </string-array>
+
+    <string-array name="preference_entries_value_dark_mode">
+        <item>@string/preference_value_entries_dark_mode_on</item>
+        <item>@string/preference_value_entries_dark_mode_off</item>
+        <item>@string/preference_value_entries_dark_mode_auto</item>
+    </string-array>
+</resources>

@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fancy="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/fragment_account_toolbar"
+            android:theme="@style/MySchoolToolbarTheme"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+                android:text="Account"
+                android:textColor="@color/toolbarFontColor"
+                android:fontFamily="@font/airbnb_cereal_medium" />
+
+        </androidx.appcompat.widget.Toolbar>
+
+        <ImageView
+            android:id="@+id/fragment_account_company_backdrop"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/img_shujin_company_back"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fragment_account_toolbar"
+            app:layout_constraintBottom_toBottomOf="@id/fragment_account_account_layout"/>
+
+        <ImageView
+            android:id="@+id/fragment_account_company_backdrop_veil"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fragment_account_toolbar"
+            app:layout_constraintBottom_toTopOf="@id/fragment_account_account_layout"
+            android:src="@color/colorPureBlack50" />
+
+        <LinearLayout
+            android:id="@+id/fragment_account_company_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            app:layout_constraintTop_toBottomOf="@id/fragment_account_toolbar"
+            app:layout_constraintStart_toStartOf="@id/fragment_account_company_backdrop"
+            app:layout_constraintEnd_toEndOf="@id/fragment_account_company_backdrop"
+            android:paddingTop="24dp">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/fragment_account_company_logo"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/img_shujin_logo" />
+
+            <TextView
+                android:id="@+id/fragment_account_company_name"
+                style="@style/MySchool.TextAppearance.GrandTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Shujin Academy"
+                android:layout_marginTop="8dp"
+                android:textColor="@color/colorPureWhite" />
+        </LinearLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/fragment_account_account_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/fragment_account_company_layout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:paddingTop="24dp"
+            android:layout_marginTop="24dp"
+            android:paddingBottom="24dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:background="@color/colorPureBlack75">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/fragment_account_my_photo"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:src="@drawable/img_shujin_logo"
+                app:civ_border_width="1dp"
+                app:civ_border_color="@color/colorGrey"/>
+
+            <LinearLayout
+                android:id="@+id/fragment_account_my_name_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toEndOf="@id/fragment_account_my_photo"
+                app:layout_constraintTop_toTopOf="@id/fragment_account_my_photo"
+                app:layout_constraintBottom_toBottomOf="@id/fragment_account_my_photo"
+                android:layout_marginStart="8dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/fragment_account_person_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/MySchool.TextAppearance.Title1"
+                    android:text="Ren Amamiya"
+                    android:textColor="@color/colorPureWhite"/>
+                <TextView
+                    android:id="@+id/fragment_account_person_email"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/MySchool.TextAppearance.SubTitle1"
+                    android:text="ren.amamiya@shujin.academy.jp"
+                    android:textColor="@color/colorPureWhite"/>
+
+            </LinearLayout>
+
+            <mehdi.sakout.fancybuttons.FancyButton
+                android:id="@+id/fragment_account_my_logout_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/MySchool.TextAppearance.SubTitle1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/fragment_account_account_layout"
+                app:layout_constraintBottom_toBottomOf="@id/fragment_account_account_layout"
+                android:paddingBottom="5dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:paddingTop="5dp"
+                fancy:fb_text="Logout"
+                fancy:fb_radius="36dp"
+                fancy:fb_defaultColor="#F44336"
+                fancy:fb_focusColor="#80000000"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!--<androidx.fragment.app.FragmentContainerView
+            android:id="@+id/setting_preference_fragment"
+            android:name="com.nandra.myschool.ui.main.account.SettingPreferenceFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@id/fragment_account_account_layout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+        </androidx.fragment.app.FragmentContainerView>-->
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <ListPreference
+        android:key="@string/preference_key_dark_mode"
+        android:defaultValue="@string/preference_value_entries_dark_mode_off"
+        android:entries="@array/preference_entries_dark_mode"
+        android:entryValues="@array/preference_entries_value_dark_mode"
+        android:summary="%s"
+        android:title="@string/preference_title_dark_mode"
+        android:icon="@drawable/ic_moon"/>
+</PreferenceScreen>
