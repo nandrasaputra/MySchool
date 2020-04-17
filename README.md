@@ -12,9 +12,14 @@ Library and Kotlin <a href='https://github.com/Kotlin/kotlinx.coroutines'>Corout
 </p>
 
 ## How To Use
-Login with these user credential
-1. email = sae.niijima@shujin.academy.jp | password = Niijima123! | role = teacher
-1. email = ren.amamiya@shujin.academy.jp | password = Amamiya123! | role = student
+Login with one of these public user account (for demo purposes)
+
+Email  | Password  |  Role
+------------- | ------------- | -------------
+sae.niijima@shujin.academy.jp  | Niijima123!  | Teacher
+ren.amamiya@shujin.academy.jp  | Amamiya123!  | Student
+
+WARNING: Because this is a public account, you may find inappropriate content inside, posted by other people that using this account. I will remove such thing if i find it or you could help me by contacting me if you find something inappropriate.
 
 ## Built With
 
@@ -30,9 +35,11 @@ Login with these user credential
 
 ## Author
 
-Nandra Saputra - <a href='https://www.instagram.com/nandrasptr/'>@nandrasptr</a> on Instagram
+Nandra Saputra
+* <a href='https://www.instagram.com/nandrasptr/'>@nandrasptr</a> on Instagram
+* <a href='https://www.linkedin.com/in/nandra-saputra-b90b78157/'>LinkedIn</a> Account
 
-## APK File
+##  Download Application - APK File
 This app require Android 5.0 - Lolipop or higher to run, <a href='http://www.bit.ly/MySchoolDownload'>Download Link</a>
 
 ## License
