@@ -5,6 +5,10 @@ apply plugin: 'com.google.gms.google-services'
 apply plugin: "androidx.navigation.safeargs.kotlin"
 apply plugin: 'kotlin-kapt'
 
+def apiPropertiesFile = rootProject.file("api.properties")
+def apiProperties = new Properties()
+apiProperties.load(new FileInputStream(apiPropertiesFile))
+
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
@@ -15,6 +19,8 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "RAINBOW_API_APP_ID", apiProperties["RAINBOW_API_APP_ID"])
+        buildConfigField("String", "RAINBOW_API_APP_SECRET", apiProperties["RAINBOW_API_APP_SECRET"])
     }
     buildTypes {
         release {

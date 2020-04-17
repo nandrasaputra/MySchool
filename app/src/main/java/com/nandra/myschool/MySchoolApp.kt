@@ -5,8 +5,8 @@ import com.ale.rainbowsdk.RainbowSdk
 
 class MySchoolApp : Application() {
 
-    private val appID = "***REMOVED***"
-    private val appSecret = "***REMOVED***"
+    private val appID = BuildConfig.RAINBOW_API_APP_ID
+    private val appSecret = BuildConfig.RAINBOW_API_APP_SECRET
 
     override fun onCreate() {
         super.onCreate()
