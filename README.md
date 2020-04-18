@@ -2,7 +2,7 @@
 
 # MySchool
 MySchool is an Android educational app that has chatting, Material Sharing, Attendance and News Feed as the main feature. MySchool is written in Kotlin and built using Android <a href='https://developer.android.com/jetpack'>Jetpack</a>
-Library and Kotlin <a href='https://github.com/Kotlin/kotlinx.coroutines'>Coroutine</a> to perform asyncronous operation. This app is developed in order to participate in <a href='https://www.dicoding.com/challenges/554'>Alcatel-Lucent Enterprise (ALE) Geek Battle Mobile Developer</a>, a <a href='https://www.dicoding.com/'>Dicoding</a> challanges.
+Library and Kotlin <a href='https://github.com/Kotlin/kotlinx.coroutines'>Coroutine</a> to perform asyncronous operation. This app is developed to participate in <a href='https://www.dicoding.com/challenges/554'>Alcatel-Lucent Enterprise (ALE) Geek Battle Mobile Developer</a>, a <a href='https://www.dicoding.com/'>Dicoding</a> challanges.
 
 ## Preview
 <p float="left">
