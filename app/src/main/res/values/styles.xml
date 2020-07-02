@@ -7,6 +7,11 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="preferenceTheme">@style/CustomPreferenceTheme</item>
+        <item name="materialButtonStyle">@style/MySchool.MaterialButton</item>
+    </style>
+
+    <style name="MySchool.MaterialButton" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@color/colorPinkFuchsia</item>
     </style>
 
     <style name="SplashScreenTheme" parent="AppTheme">
@@ -15,11 +20,11 @@
     </style>
 
     <style name="MySchoolToolbarTheme" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar">
-        <item name="android:background">#439CBB</item>
+        <item name="android:background">@color/bottomNavigationViewBackground</item>
     </style>
 
-    <style name="MySchool.BottomNavigationViewStyle" parent="ThemeOverlay.MaterialComponents">
-        <item name="android:background">@color/bottomNavigationViewBackground</item>
+    <style name="PopUpTheme">
+        <item name="android:textColor">@color/colorPureBlack</item>
     </style>
 
     <style name="MySchool.TextAppearance.GrandTitle" parent="TextAppearance.AppCompat.Title">
@@ -61,6 +66,15 @@
 
     <style name="CustomPreferenceTheme" parent="@style/PreferenceThemeOverlay.v14.Material">
         <item name="android:overScrollMode">never</item>
+    </style>
+
+    <style name="CustomFabTheme" parent="Widget.MaterialComponents.FloatingActionButton">
+        <item name="colorSecondary">@color/colorPinkFuchsia</item>
+        <item name="colorOnSecondary">@color/colorPureWhite</item>
+    </style>
+
+    <style name="CustomTabLayoutTheme" parent="ThemeOverlay.MaterialComponents">
+        <item name="colorPrimary">@color/colorPinkFuchsia</item>
     </style>
 
 </resources>

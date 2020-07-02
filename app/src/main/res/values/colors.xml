@@ -20,9 +20,8 @@
     <color name="colorGrey">#707070</color>
     <color name="iconColor">@color/colorPureBlack</color>
     <color name="iconColorSecondary">@color/colorPureWhite</color>
+    <color name="colorPinkFuchsia">#FC3176</color>
 
     <color name="shimmerColorOne">#C9C9C9</color>
     <color name="shimmerColorTwo">#ACACAC</color>
-
-    <color name="fontColorOnSurfaceOne"></color>
 </resources>

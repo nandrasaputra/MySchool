@@ -7,7 +7,9 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/activity_classroom_session_detail_toolbar"
-        android:theme="@style/MySchoolToolbarTheme"
+        android:background="@color/bottomNavigationViewBackground"
+        android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"
+        app:popupTheme="@style/PopUpTheme"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         app:layout_constraintTop_toTopOf="parent">

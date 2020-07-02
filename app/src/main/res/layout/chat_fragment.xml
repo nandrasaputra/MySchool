@@ -25,6 +25,8 @@
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/fragment_chat_tab_layout"
+        android:theme="@style/CustomTabLayoutTheme"
+        app:tabTextAppearance="@style/MySchool.TabLayoutStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/fragment_chat_toolbar"
@@ -54,13 +56,13 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fragment_chat_fab"
+        android:theme="@style/CustomFabTheme"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginBottom="16dp"
         android:layout_marginEnd="16dp"
-        android:theme="@style/Widget.MaterialComponents.FloatingActionButton"
         android:src="@drawable/ic_add_new_chat" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

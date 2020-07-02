@@ -28,6 +28,7 @@
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/activity_classroom_detail_tab_layout"
         app:tabTextAppearance="@style/MySchool.TabLayoutStyle"
+        android:theme="@style/CustomTabLayoutTheme"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/activity_classroom_detail_toolbar"
@@ -63,6 +64,7 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/activity_classroom_detail_fab"
+        android:theme="@style/CustomFabTheme"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
