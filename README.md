@@ -2,14 +2,15 @@
 
 # MySchool
 MySchool is an educational app for Android that has chatting, Material Sharing, Attendance and News Feed as the main feature. MySchool is written in Kotlin and built using Android <a href='https://developer.android.com/jetpack'>Jetpack</a>
-Library and Kotlin <a href='https://github.com/Kotlin/kotlinx.coroutines'>Coroutine</a> to perform asynchronous operation. This app is developed to participate in <a href='https://www.dicoding.com/challenges/554'>Alcatel-Lucent Enterprise (ALE) Geek Battle Mobile Developer</a>, a <a href='https://www.dicoding.com/'>Dicoding</a> challanges.
+Library and Kotlin <a href='https://github.com/Kotlin/kotlinx.coroutines'>Coroutine</a> to perform asynchronous operation. This app is built with MVVM (Model-View-ViewModel) Architecture. This app was developed to participate in <a href='https://www.dicoding.com/challenges/554'>Alcatel-Lucent Enterprise (ALE) Geek Battle Mobile Developer</a>, a <a href='https://www.dicoding.com/'>Dicoding</a> challanges, and became the 1st winner <a href='https://www.dicoding.com/blog/selamat-kepada-para-pemenang-alcatel-lucent-enterprise-ale-geek-battle/'>(link)</a>.
 
 ## Preview
-<p float="left">
-  <img src="docs/myschool_home.jpg" height="550" />
-  <img src="docs/myschool_chat.jpg" height="550" />
-  <img src="docs/myschool_demo_v1.gif" height="550" />
+<p float="center">
+  <img src="docs/MySchool%20Presentation%20V1.png" width="1000" />
 </p>
+
+## Demo
+You can view the app demo on youtube: https://youtu.be/MqnthmJunmI
 
 ## How To Use
 Login with one of these public user account (for demo purposes)
